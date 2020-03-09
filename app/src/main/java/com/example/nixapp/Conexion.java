@@ -4,7 +4,7 @@ import android.os.StrictMode;
 
 import com.mysql.jdbc.Connection;
 
-import java.sql.Connection;
+import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,9 +23,10 @@ public class Conexion {
             StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
             Class.forName("com.mysql.jdbc.Driver");
-            conexion= (Connection) DriverManager.getConnection("jdbc:mysql://34.94.92.8:3306/nixdb","CotaAdmin","1234");
+            conexion= (Connection) DriverManager.getConnection("jdbc:mysql://:3306/nix","root","d4c3b2a11313");
+            //conexion= (Connection) DriverManager.getConnection("jdbc:mysql://192.168.1.74:3306/conarm","root","d4c3b2a11313");
         } catch (Exception e) {
-           //Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
         }
         return conexion;
     }
@@ -56,8 +57,8 @@ public class Conexion {
         return null;
     }
 
-    public boolean validarUsuarios(String email, String password) {
-        String sql = "SELECT * FROM usuarios  WHERE email= '"+email+"' AND contraseña= '"+password+"'";
+    public boolean validarUsuarios(String user, String pass) {
+        String sql = "SELECT * FROM validar  WHERE Usuario= '"+user+"' AND contraseña= '"+ pass+"' AND Observaciones IN ('ADMINISTRADOR','DEPOSITO','USUARIO','PORTACIONES','MUNICIPIOS','CONSULTA') AND Estatus like 'ACTIVO'";
         boolean usuarioEncontrado = false;
         try{
             ps = conexion.prepareStatement(sql);
