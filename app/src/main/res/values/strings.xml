@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NixApp</string>
+    <string name="crear_cuenta" />
+    <string name="iniciar_sesion" />
+    <string name="iniciar_sesio">INICIAR SESION</string>
+    <string name="crear_cuent">CREAR CUENTA</string>
+</resources>
