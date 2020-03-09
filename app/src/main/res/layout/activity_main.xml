@@ -10,7 +10,7 @@
     android:background="@drawable/fondonix"
     android:theme="@android:style/Theme.NoTitleBar"
     android:visibility="visible"
-    tools:context=".MainActivity">
+    tools:context=".UI.MainActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -30,7 +30,7 @@
         app:srcCompat="@drawable/logofinal" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonLogin"
         android:layout_width="308dp"
         android:layout_height="60dp"
         android:layout_below="@+id/imageView2"
@@ -48,7 +48,7 @@
         android:textColor="@drawable/butom_text" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonSignin"
         android:layout_width="308dp"
         android:layout_height="60dp"
         android:layout_below="@+id/imageView2"
