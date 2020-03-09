@@ -1,4 +1,4 @@
-package com.example.nixapp.DB;
+package com.example.nixapp;
 
 import android.os.StrictMode;
 

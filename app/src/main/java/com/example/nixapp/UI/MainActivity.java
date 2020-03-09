@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.nixapp.DB.Conexion;
+import com.example.nixapp.Conexion;
 import com.example.nixapp.R;
 
 public class MainActivity extends AppCompatActivity {
