@@ -1,10 +1,11 @@
-package com.example.nixapp;
+package com.example.nixapp.DB;
 
 import android.os.StrictMode;
 
 import com.mysql.jdbc.Connection;
 
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

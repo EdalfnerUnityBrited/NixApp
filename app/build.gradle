@@ -35,4 +35,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation files('src/lib/mysql-connector-java-5.1.16-bin.jar')
+
 }
