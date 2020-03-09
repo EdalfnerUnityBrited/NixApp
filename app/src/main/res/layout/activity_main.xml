@@ -10,7 +10,7 @@
     android:background="@drawable/fondonix"
     android:theme="@android:style/Theme.NoTitleBar"
     android:visibility="visible"
-    tools:context=".MainActivity">
+    tools:context=".UI.MainActivity">
 
     <ImageView
         android:id="@+id/imageView2"
