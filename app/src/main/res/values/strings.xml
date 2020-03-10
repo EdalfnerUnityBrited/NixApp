@@ -4,4 +4,13 @@
     <string name="iniciar_sesion" />
     <string name="iniciar_sesio">INICIAR SESION</string>
     <string name="crear_cuent">CREAR CUENTA</string>
+    <string name="title_activity_inicio_sesion">Sign in</string>
+    <string name="prompt_email" ><font color="#ffffffff">Email</font></string>
+    <string name="prompt_password"><font color="#ffffffff">Password</font></string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>
