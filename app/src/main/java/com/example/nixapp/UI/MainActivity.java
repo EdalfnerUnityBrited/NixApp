@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -12,7 +13,6 @@ import com.example.nixapp.DB.Conexion;
 import com.example.nixapp.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     private Conexion conne= new Conexion();
     
     Button btnLogin,btnSignup;
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         btnLogin = (Button) findViewById(R.id.buttonLogin);
         btnSignup = (Button) findViewById(R.id.buttonSignup);
