@@ -48,7 +48,7 @@
         android:textColor="@drawable/butom_text" />
 
     <Button
-        android:id="@+id/buttonSignin"
+        android:id="@+id/buttonSignup"
         android:layout_width="308dp"
         android:layout_height="60dp"
         android:layout_below="@+id/imageView2"
