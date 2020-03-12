@@ -99,26 +99,11 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
         app:srcCompat="@drawable/calendar" />
 
-    <TextView
-        android:id="@+id/fecha_nacimiento"
-        android:layout_width="263dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="95dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="16dp"
-        android:hint="Fecha de nacimiento"
-        android:textSize="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arroba"
-        tools:ignore="MissingConstraints" />
-
     <EditText
         android:id="@+id/telefono"
         android:layout_width="263dp"
         android:layout_height="40dp"
         android:layout_marginStart="95dp"
-        android:layout_marginLeft="95dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Telefono"
@@ -130,10 +115,10 @@
         android:id="@+id/contacto"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView6"
         app:layout_constraintEnd_toStartOf="@+id/telefono"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fecha_nacimiento"
+        app:layout_constraintTop_toBottomOf="@+id/calendario"
         app:srcCompat="@drawable/phonebook" />
 
     <EditText
@@ -163,7 +148,7 @@
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonCrearCuenta"
         android:layout_width="155dp"
         android:layout_height="54dp"
         android:layout_marginTop="16dp"
@@ -186,7 +171,7 @@
         app:srcCompat="@drawable/forgot" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/switchProveedor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -194,7 +179,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCrearCuenta"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
 
@@ -206,7 +191,19 @@
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
         android:text="Usuario Provedor"
-        app:layout_constraintEnd_toStartOf="@+id/switch1"
+        app:layout_constraintEnd_toStartOf="@+id/switchProveedor"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
+
+    <EditText
+        android:id="@+id/fecha_nacimiento"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Cumpleaños (aaaa/mm/dd)"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arroba" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
