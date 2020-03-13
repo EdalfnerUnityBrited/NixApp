@@ -204,7 +204,7 @@
         android:layout_marginTop="19dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
-        android:text="Usuario Provedor"
+        android:text="Usuario Proveedor"
         android:textColor="#ffffffff"
         app:layout_constraintEnd_toStartOf="@+id/switchProveedor"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
