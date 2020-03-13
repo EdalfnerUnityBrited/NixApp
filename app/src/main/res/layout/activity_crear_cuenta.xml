@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroundnormal">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="202dp"
+        android:layout_height="202dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logofinal" />
+
+    <ImageView
+        android:id="@+id/icono_contacto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/nombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:srcCompat="@drawable/contact" />
+
+    <EditText
+        android:id="@+id/nombre"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <EditText
+        android:id="@+id/arroba"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Correo"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apellido_materno" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="132dp"
+        app:layout_constraintEnd_toStartOf="@+id/arroba"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icono_contacto"
+        app:srcCompat="@drawable/arroba" />
+
+    <EditText
+        android:id="@+id/apellido_paterno"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Apellido Paterno"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre" />
+
+    <EditText
+        android:id="@+id/apellido_materno"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Apellido Materno"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apellido_paterno" />
+
+    <ImageView
+        android:id="@+id/calendario"
+        android:layout_width="34dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/fecha_nacimiento"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:srcCompat="@drawable/calendar" />
+
+    <EditText
+        android:id="@+id/telefono"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Telefono"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="phone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fecha_nacimiento" />
+
+    <ImageView
+        android:id="@+id/contacto"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView6"
+        app:layout_constraintEnd_toStartOf="@+id/telefono"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendario"
+        app:srcCompat="@drawable/phonebook" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/telefono" />
+
+    <EditText
+        android:id="@+id/passwordConfirmacion"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Confirmacion Password"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="textPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <Button
+        android:id="@+id/buttonCrearCuenta"
+        android:layout_width="155dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@drawable/custombutom2"
+        android:text="Crear Cuenta"
+        android:textColor="@drawable/butom_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="17dp"
+        app:layout_constraintEnd_toStartOf="@+id/password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/telefono"
+        app:srcCompat="@drawable/forgot" />
+
+    <Switch
+        android:id="@+id/switchProveedor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCrearCuenta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="68dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:text="Usuario Proveedor"
+        android:textColor="#ffffffff"
+        app:layout_constraintEnd_toStartOf="@+id/switchProveedor"
+        app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
+
+    <EditText
+        android:id="@+id/fecha_nacimiento"
+        android:layout_width="263dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Cumpleaños (aaaa/mm/dd)"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/arroba" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         btnLogin = (Button) findViewById(R.id.buttonLogin);
         btnSignup = (Button) findViewById(R.id.buttonSignup);
         btnLogin.setOnClickListener(this);
@@ -52,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.buttonSignup:{
+                q = new Intent(view.getContext(),CrearCuenta.class);
+                startActivity(q);
                 break;
             }
         }
