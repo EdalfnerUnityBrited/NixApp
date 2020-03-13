@@ -47,6 +47,9 @@ public class Conexion {
 
 
     public boolean validarEmail(String email) {
+        if(conexion == null){
+            connectionBD();
+        }
         String sqlnueva = "SELECT * FROM usuarios  WHERE email= '"+email+"'";
         boolean usuarioEncontrado = false;
         try{

@@ -3,7 +3,6 @@ package com.example.nixapp.UI;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nixapp.DB.Conexion;
@@ -84,36 +82,46 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
             etPasswordConf.setError("Confirme la contraseña");
         }
         else{
-            if (email.contains("@hotmail.com")){
-                verificarCorreo(email);
+            boolean verificarCorreo=verificarCorreo (email);
+            if (!verificarCorreo){
+
             }
-            else if(email.contains("@gmail.com")){
-                verificarCorreo(email);
-            }
-            else if(email.contains("@outlook.com")){
-                verificarCorreo(email);
-            }
-            else if (email.contains("@yahoo.com")){
-                verificarCorreo(email);
-            }
-            else if (email.contains("@nix.com")){
-                Toast.makeText(getApplicationContext(),email,Toast.LENGTH_LONG).show();
-                verificarCorreo(email);
-            }
-            else {
-                etEmail.setError("El correo no tiene una direccion valida");
-            }
+
         }
 
     }
 
-    private void verificarCorreo(String email) {
+    private boolean verificarCorreo(String email) {
+        boolean verificacion = false;
+        if (email.contains("@hotmail.com")){
+            verificacion=existeCorreo(email);
+        }
+        else if(email.contains("@gmail.com")){
+            verificacion=existeCorreo(email);
+        }
+        else if(email.contains("@outlook.com")){
+
+        }
+        else if (email.contains("@yahoo.com")){
+            verificacion=existeCorreo(email);
+        }
+        else if (email.contains("@nix.com")){
+            verificacion=existeCorreo(email);
+        }
+        else {
+            etEmail.setError("El correo no tiene una direccion valida");
+            verificacion=true;
+        }
+
+    return verificacion;
+    }
+
+    private boolean existeCorreo(String email) {
         boolean emailEncontrado=conne.validarEmail(email);
         if (emailEncontrado==true){
-            Toast.makeText(getApplicationContext(),"Bienvenido",Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(getApplicationContext(),"Vete",Toast.LENGTH_LONG).show();
+            etEmail.setError("El correo ya está registrado");
         }
+        return emailEncontrado;
     }
 
 
