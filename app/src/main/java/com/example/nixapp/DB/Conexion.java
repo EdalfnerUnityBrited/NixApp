@@ -30,21 +30,34 @@ public class Conexion {
         return conexion;
     }
 
-    public boolean validarUsuarios(String user, String pass) {
-        String sql = "SELECT * FROM validar  WHERE Usuario= '" + user + "' AND contraseña= '" + pass + "' AND Observaciones IN ('ADMINISTRADOR','DEPOSITO','USUARIO','PORTACIONES','MUNICIPIOS','CONSULTA') AND Estatus like 'ACTIVO'";
+    public boolean validarUsuarios(String email, String password) {
+        String sql = "SELECT * FROM usuarios  WHERE email= '"+email+"' AND contraseña= '"+password+"'";
         boolean usuarioEncontrado = false;
-        try {
+        try{
             ps = conexion.prepareStatement(sql);
             //ps.setString(1, email);
             rs = ps.executeQuery();
-            if (rs.first())
+            if(rs.first())
                 return true;        //usuario validado correctamente
             else
                 return false;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        }catch(SQLException ex){ex.printStackTrace();}
         return usuarioEncontrado;
     }
 
+
+    public boolean validarEmail(String email) {
+        String sqlnueva = "SELECT * FROM usuarios  WHERE email= '"+email+"'";
+        boolean usuarioEncontrado = false;
+        try{
+            ps = conexion.prepareStatement(sqlnueva);
+            //ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.first())
+                return true;        //usuario validado correctamente
+            else
+                return false;
+        }catch(SQLException ex){ex.printStackTrace();}
+        return usuarioEncontrado;
+    }
 }
