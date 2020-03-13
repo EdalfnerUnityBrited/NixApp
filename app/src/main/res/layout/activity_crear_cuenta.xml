@@ -36,6 +36,8 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Nombre"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
@@ -49,6 +51,8 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Correo"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apellido_materno" />
@@ -72,6 +76,8 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Apellido Paterno"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nombre" />
@@ -85,6 +91,8 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Apellido Materno"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/apellido_paterno" />
@@ -107,6 +115,8 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Telefono"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="phone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fecha_nacimiento" />
@@ -131,6 +141,8 @@
         android:ems="10"
         android:inputType="textPassword"
         android:hint="Password"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/telefono" />
 
@@ -143,6 +155,8 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Confirmacion Password"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
@@ -191,6 +205,7 @@
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
         android:text="Usuario Provedor"
+        android:textColor="#ffffffff"
         app:layout_constraintEnd_toStartOf="@+id/switchProveedor"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
 
@@ -202,6 +217,8 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Cumpleaños (aaaa/mm/dd)"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         android:inputType="date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/arroba" />
