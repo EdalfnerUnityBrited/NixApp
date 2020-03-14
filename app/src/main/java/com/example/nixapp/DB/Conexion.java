@@ -51,7 +51,7 @@ public class Conexion {
             connectionBD();
         }
         String sqlnueva = "SELECT * FROM usuarios  WHERE email= '"+email+"'";
-        boolean usuarioEncontrado = false;
+        boolean emailEncontrado = false;
         try{
             ps = conexion.prepareStatement(sqlnueva);
             //ps.setString(1, email);
@@ -61,6 +61,24 @@ public class Conexion {
             else
                 return false;
         }catch(SQLException ex){ex.printStackTrace();}
-        return usuarioEncontrado;
+        return emailEncontrado;
+    }
+
+    public boolean validarTelefono(String telefono) {
+        if(conexion == null){
+            connectionBD();
+        }
+        String sqlnueva = "SELECT * FROM usuarios  WHERE telefono= '"+telefono+"'";
+        boolean telefonoEncontrado = false;
+        try{
+            ps = conexion.prepareStatement(sqlnueva);
+            //ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.first())
+                return true;        //usuario validado correctamente
+            else
+                return false;
+        }catch(SQLException ex){ex.printStackTrace();}
+        return telefonoEncontrado;
     }
 }

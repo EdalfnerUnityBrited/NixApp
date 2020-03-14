@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import com.example.nixapp.DB.Conexion;
 import com.example.nixapp.R;
+
+import java.util.regex.Pattern;
+
 public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     Switch switchProveedor;
     int proovedor=0;
@@ -84,11 +87,101 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         else{
             boolean verificarCorreo=verificarCorreo (email);
             if (!verificarCorreo){
-
+            boolean verificarNumero= veificarNumero(telefono);
+            if (!verificarNumero) {
+            boolean verificarNombre= verificarNombre(nombre, apellidoMaterno, apellidoPaterno);
+            if (!verificarNombre){
+                boolean verificarContraseña=verificarContraseña(password,passwordConfirmacion);
+                if (!verificarContraseña){
+                    Toast.makeText(getApplicationContext(),"Bienvenido",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+            }
             }
 
         }
 
+    }
+
+    private boolean verificarContraseña(String password, String passwordConfirmacion) {
+        boolean verificarPassword=false;
+        if (password.length()>=8||password.length()>18){
+            if (password.matches("[A-Za-z0-9]+") && password.length() > 2){
+            if (!password.matches(passwordConfirmacion)){
+                etPasswordConf.setError("Las contraseñas no coinciden");
+                verificarPassword=true;
+            }
+            }
+            else {
+                etPassword.setError("La contraseña solo puede tener letras o numeros");
+            }
+        }
+        else {
+            etPassword.setError("La contraseña debe tener un minimo de 8 caracteres " +
+                    "y un maximo de 18");
+            verificarPassword=true;
+        }
+
+        return  verificarPassword;
+    }
+
+    private boolean verificarNombre(String nombre, String apellidoMaterno, String apellidoPaterno) {
+
+        boolean verificacionNombre=false;
+
+        if (nombre.matches("[A-Za-z\\s]+") && nombre.length() > 2){
+            if (apellidoPaterno.matches("[A-Za-z\\s]+") && nombre.length() > 2){
+                if (apellidoMaterno.matches("[A-Za-z\\s]+") && nombre.length() > 2){
+
+                }
+                else{
+                    etApellidoM.setError("Solo puede insertar letras");
+                    verificacionNombre=true;
+                }
+            }
+            else{
+                etApellidoP.setError("Solo puede insertar letras");
+                verificacionNombre=true;
+            }
+        }
+        else{
+            etNombre.setError("Solo puede insertar letras");
+            verificacionNombre=true;
+        }
+        return verificacionNombre;
+    }
+
+    private boolean veificarNumero(String telefono) {
+        boolean verificacionTelefono=false;
+        if (telefono.startsWith("33")){
+            if (telefono.length()==10){
+                if (telefono.matches("[0-9]+") && telefono.length() > 2) {
+                    verificacionTelefono=existeTelefono(telefono);
+                }
+                else {
+                    etTelefono.setError("Ese no es un número valido");
+                    verificacionTelefono=true;
+                }
+            }
+            else{
+                etTelefono.setError("Ese no es un número valido");
+                verificacionTelefono=true;
+            }
+        }
+        else {
+            etTelefono.setError("Ese no es un numero de telefono valido");
+            verificacionTelefono=true;
+        }
+        return verificacionTelefono;
+    }
+
+    private boolean existeTelefono(String telefono) {
+        boolean telefonoEncontrado=conne.validarTelefono(telefono);
+        if (telefonoEncontrado==true){
+            etTelefono.setError("El telefono ya está registrado");
+        }
+        return telefonoEncontrado;
     }
 
     private boolean verificarCorreo(String email) {
