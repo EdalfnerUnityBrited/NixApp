@@ -4,4 +4,7 @@
     <string name="iniciar_sesion" />
     <string name="iniciar_sesio">INICIAR SESION</string>
     <string name="crear_cuent">CREAR CUENTA</string>
+    <string name="title_activity_menu_principal_usuario_general">Map</string>
+    <string name="navigation_draw_open">Abrir menu navegacion</string>
+    <string name="navigation_draw_close">Cerrar menu navegacion</string>
 </resources>
