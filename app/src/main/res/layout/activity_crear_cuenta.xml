@@ -107,6 +107,8 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
         app:srcCompat="@drawable/calendar" />
 
+
+
     <EditText
         android:id="@+id/telefono"
         android:layout_width="263dp"
@@ -209,18 +211,19 @@
         app:layout_constraintEnd_toStartOf="@+id/switchProveedor"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirmacion" />
 
-    <EditText
+    <TextView
         android:id="@+id/fecha_nacimiento"
         android:layout_width="263dp"
         android:layout_height="40dp"
         android:layout_marginStart="95dp"
         android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Cumpleaños (aaaa/mm/dd)"
         android:textColor="#ffffffff"
         android:textColorHint="#ffffffff"
         android:inputType="date"
+        app:layout_constraintTop_toBottomOf="@+id/arroba"
+        android:hint="Fecha de nacimiento"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/arroba" />
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

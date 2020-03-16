@@ -3,19 +3,26 @@ package com.example.nixapp.UI;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nixapp.DB.Conexion;
 import com.example.nixapp.R;
 
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
@@ -25,6 +32,10 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     EditText etNombre, etApellidoP, etApellidoM, etEmail, etTelefono, etFechaNac, etPassword, etPasswordConf;
     Intent intent;
 
+    private static final String TAG = "MainActivity";
+
+    private TextView mDisplayDate;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Conexion conne= new Conexion();
 
     @Override
@@ -41,13 +52,43 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         etApellidoM=findViewById(R.id.apellido_materno);
         etEmail=findViewById(R.id.arroba);
         etTelefono=findViewById(R.id.telefono);
-        etFechaNac=findViewById(R.id.fecha_nacimiento);
         etPasswordConf=findViewById(R.id.passwordConfirmacion);
         btnCrear=findViewById(R.id.buttonCrearCuenta);
         etPassword=findViewById(R.id.password);
 
         switchProveedor.setOnCheckedChangeListener(this);
         btnCrear.setOnClickListener(this);
+        //////////////
+        mDisplayDate = (TextView)findViewById(R.id.fecha_nacimiento);
+        mDisplayDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int mes = cal.get(Calendar.MONTH);
+                int dia = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        CrearCuenta.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year,mes,dia);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
+
+                String date = month + "/" + day + "/" + year;
+                mDisplayDate.setText(date);
+            }
+        };
+        /////////////
     }
 
     @Override
