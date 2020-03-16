@@ -32,6 +32,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     EditText etNombre, etApellidoP, etApellidoM, etEmail, etTelefono, etFechaNac, etPassword, etPasswordConf;
     Intent intent;
 
+
     private static final String TAG = "MainActivity";
 
     private TextView mDisplayDate;
