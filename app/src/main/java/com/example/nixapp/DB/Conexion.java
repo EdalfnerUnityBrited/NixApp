@@ -30,21 +30,71 @@ public class Conexion {
         return conexion;
     }
 
-    public boolean validarUsuarios(String user, String pass) {
-        String sql = "SELECT * FROM validar  WHERE Usuario= '" + user + "' AND contraseña= '" + pass + "' AND Observaciones IN ('ADMINISTRADOR','DEPOSITO','USUARIO','PORTACIONES','MUNICIPIOS','CONSULTA') AND Estatus like 'ACTIVO'";
+    public boolean validarUsuarios(String email, String password) {
+        String sql = "SELECT * FROM usuarios  WHERE email= '"+email+"' AND contraseña= '"+password+"'";
         boolean usuarioEncontrado = false;
-        try {
+        try{
             ps = conexion.prepareStatement(sql);
             //ps.setString(1, email);
             rs = ps.executeQuery();
-            if (rs.first())
+            if(rs.first())
                 return true;        //usuario validado correctamente
             else
                 return false;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        }catch(SQLException ex){ex.printStackTrace();}
         return usuarioEncontrado;
+    }
+
+
+    public boolean validarEmail(String email) {
+        if(conexion == null){
+            connectionBD();
+        }
+        String sqlnueva = "SELECT * FROM usuarios  WHERE email= '"+email+"'";
+        boolean emailEncontrado = false;
+        try{
+            ps = conexion.prepareStatement(sqlnueva);
+            //ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.first())
+                return true;        //usuario validado correctamente
+            else
+                return false;
+        }catch(SQLException ex){ex.printStackTrace();}
+        return emailEncontrado;
+    }
+
+    public boolean validarTelefono(String telefono) {
+        if(conexion == null){
+            connectionBD();
+        }
+        String sqlnueva = "SELECT * FROM usuarios  WHERE telefono= '"+telefono+"'";
+        boolean telefonoEncontrado = false;
+        try{
+            ps = conexion.prepareStatement(sqlnueva);
+            //ps.setString(1, email);
+            rs = ps.executeQuery();
+            if(rs.first())
+                return true;        //usuario validado correctamente
+            else
+                return false;
+        }catch(SQLException ex){ex.printStackTrace();}
+        return telefonoEncontrado;
+    }
+    public int crearCuenta(int proveedor, String nombre, String apellidoP, String apellidoM,
+                           String email, String telefono, String fechaNacimineto,
+                           String password) {
+        int rsu=0;
+        if(conexion == null){
+            connectionBD();
+        }
+        String sqlnueva = "INSERT INTO usuarios values(0,'"+proveedor+"','"+nombre+"','"+apellidoP+"','"+apellidoM+"','"+email+"','"+fechaNacimineto+"','"+password+"','"+telefono+"','5','NULL' ) ";
+        try{
+            ps = conexion.prepareStatement(sqlnueva);
+            //ps.setString(1, email);
+            rsu = ps.executeUpdate();
+        }catch(SQLException ex){ex.printStackTrace();}
+        return rsu;
     }
 
 }

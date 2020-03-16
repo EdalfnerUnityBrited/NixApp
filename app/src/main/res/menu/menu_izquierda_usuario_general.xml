@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_perfil"
+            android:icon="@drawable/ic_perfil"
+            android:title="Mi Perfil"></item>
+        <item
+            android:id="@+id/nav_miseventos"
+            android:icon="@drawable/ic_miseventos"
+            android:title="Mis Eventos"></item>
+        <item
+            android:id="@+id/nav_tendencia"
+            android:icon="@drawable/ic_tendencia"
+            android:title="Tendencias"></item>
+        <item
+            android:id="@+id/nav_calendario"
+            android:icon="@drawable/ic_calendario"
+            android:title="Calendario"></item>
+        <item
+            android:id="@+id/nav_eventosproximos"
+            android:icon="@drawable/ic_eventosproximos"
+            android:title="Eventos Próximos"></item>
+        <item
+            android:id="@+id/nav_ayuda"
+            android:icon="@drawable/ic_ayuda"
+            android:title="Ayuda"></item>
+    </group>
+
+</menu>
