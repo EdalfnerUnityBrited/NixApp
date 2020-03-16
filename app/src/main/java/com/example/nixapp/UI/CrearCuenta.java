@@ -22,7 +22,10 @@ import android.widget.Toast;
 import com.example.nixapp.DB.Conexion;
 import com.example.nixapp.R;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
@@ -31,11 +34,13 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     Button btnCrear;
     EditText etNombre, etApellidoP, etApellidoM, etEmail, etTelefono, etFechaNac, etPassword, etPasswordConf;
     Intent intent;
-
+    private int ano, mes, dia;
+    Date currentTime = Calendar.getInstance().getTime();
+    String date;
 
     private static final String TAG = "MainActivity";
 
-    private TextView mDisplayDate;
+    private TextView mDisplayDate=null;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Conexion conne= new Conexion();
 
@@ -66,14 +71,14 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
-                int mes = cal.get(Calendar.MONTH);
-                int dia = cal.get(Calendar.DAY_OF_MONTH);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         CrearCuenta.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener,
-                        year,mes,dia);
+                        year,month,day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -83,9 +88,11 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
-
-                String date = month + "/" + day + "/" + year;
+                Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "-" + day + "-" + year);
+                ano=year;
+                mes=month;
+                dia=day;
+                date = year + "-" + month + "-" + day;
                 mDisplayDate.setText(date);
             }
         };
@@ -100,7 +107,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         String apellidoPaterno= etApellidoP.getText().toString();
         String apellidoMaterno = etApellidoM.getText().toString();
         String telefono= etTelefono.getText().toString();
-        String fechaNacimiento = etFechaNac.getText().toString();
         String passwordConfirmacion= etPasswordConf.getText().toString();
         if (email.isEmpty()){
             etEmail.setError("Ingrese Email");
@@ -120,7 +126,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         if (telefono.isEmpty()){
             etTelefono.setError("Ingrese Telefono");
         }
-        if (fechaNacimiento.isEmpty()){
+        if (mDisplayDate==null){
             etFechaNac.setError("Ingrese Cumpleaños");
         }
         if (passwordConfirmacion.isEmpty()){
@@ -135,8 +141,21 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
             if (!verificarNombre){
                 boolean verificarContraseña=verificarContraseña(password,passwordConfirmacion);
                 if (!verificarContraseña){
-                    Toast.makeText(getApplicationContext(),"Bienvenido",
-                            Toast.LENGTH_LONG).show();
+                    boolean verificarMayor= verificarCumpleaños(ano, mes, dia);
+                    if (!verificarMayor){
+                    int cuentaCreada= conne.crearCuenta(proovedor, nombre, apellidoPaterno, apellidoMaterno, email, telefono, date, password);
+                    if (cuentaCreada==0){
+                        Toast.makeText(getApplicationContext(),"Error al crear la cuenta",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Cuenta creada exitosamente",
+                                Toast.LENGTH_LONG).show();
+                        Intent intentMainActivity = new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intentMainActivity);
+                        finish();
+                    }
+                    }
                 }
             }
             }
@@ -145,6 +164,26 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         }
 
     }
+
+    private boolean verificarCumpleaños(int year, int month, int day) {
+
+        int diff = (currentTime.getYear()+1900) - year;
+        Log.d(TAG, "Año cumpleaños"+year);
+        Log.d(TAG, "Año actual"+(currentTime.getYear()+1900));
+        if (currentTime.getMonth() > month ||
+                (currentTime.getMonth() == month && currentTime.getDay() >= day)) {
+            diff--;
+        }
+        Log.d(TAG, "Años " + diff);
+        if (diff<13){
+            mDisplayDate.setError("Tienes que ser mayor a 13 años");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 
     private boolean verificarContraseña(String password, String passwordConfirmacion) {
         boolean verificarPassword=false;
@@ -287,13 +326,11 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         {
             avisoCreado.show();
             proovedor=1;
-            Toast.makeText(getApplicationContext(),"Variable proovedor= "+proovedor,
-                    Toast.LENGTH_LONG).show();
+
         }
         else{
             proovedor=0;
-            Toast.makeText(getApplicationContext(),"Variable proovedor= "+proovedor,
-                    Toast.LENGTH_LONG).show();
+
         }
 
 

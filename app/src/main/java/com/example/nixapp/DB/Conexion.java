@@ -81,4 +81,20 @@ public class Conexion {
         }catch(SQLException ex){ex.printStackTrace();}
         return telefonoEncontrado;
     }
+    public int crearCuenta(int proveedor, String nombre, String apellidoP, String apellidoM,
+                           String email, String telefono, String fechaNacimineto,
+                           String password) {
+        int rsu=0;
+        if(conexion == null){
+            connectionBD();
+        }
+        String sqlnueva = "INSERT INTO usuarios values(0,'"+proveedor+"','"+nombre+"','"+apellidoP+"','"+apellidoM+"','"+email+"','"+fechaNacimineto+"','"+password+"','"+telefono+"','5','NULL' ) ";
+        try{
+            ps = conexion.prepareStatement(sqlnueva);
+            //ps.setString(1, email);
+            rsu = ps.executeUpdate();
+        }catch(SQLException ex){ex.printStackTrace();}
+        return rsu;
+    }
+
 }
