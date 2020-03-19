@@ -184,7 +184,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         }
     }
 
-
     private boolean verificarContraseña(String password, String passwordConfirmacion) {
         boolean verificarPassword=false;
         if (password.length()>=8||password.length()>18){
