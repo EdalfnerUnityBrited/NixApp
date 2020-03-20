@@ -16,11 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.ServiciosProximos"
+        <activity android:name=".UI.EventosProximos"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".UI.ServiciosProximos"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".UI.MisEventos"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -28,7 +31,7 @@
 
         <activity
             android:name=".UI.MenuPrincipalUsuarioGeneral"
-            android:label="@string/title_activity_menu_principal_usuario_general"></activity>
+            android:label="@string/title_activity_menu_principal_usuario_general" />
         <activity
             android:name=".UI.CrearCuenta"
             android:screenOrientation="portrait" />
