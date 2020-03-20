@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_eventoscerrados"
         android:icon="@drawable/ic_eventoscerrados"
-        android:title="Eventos Cerrados"></item>
+        android:title="Mis eventos"></item>
     <item android:id="@+id/nav_historial"
-        android:icon="@drawable/ic_historial"
+        android:icon="@drawable/ic_historialeventos"
         android:title="Historial"></item>
 </menu>

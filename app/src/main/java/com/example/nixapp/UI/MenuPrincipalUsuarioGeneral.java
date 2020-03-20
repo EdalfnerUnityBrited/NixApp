@@ -55,10 +55,13 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        menuItem.setChecked(false);
         switch(menuItem.getItemId()){
             case R.id.nav_miseventos:{
                 Intent intentMisEventos = new Intent(this,MisEventos.class);
@@ -66,7 +69,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 break;
             }
         }
-        drawer.closeDrawer(GravityCompat.START);
+        menuItem.setChecked(false);
         return true;
     }
 
