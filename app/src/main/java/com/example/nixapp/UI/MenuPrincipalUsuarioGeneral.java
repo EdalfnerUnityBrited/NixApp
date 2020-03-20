@@ -68,6 +68,11 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 startActivity(intentMisEventos);
                 break;
             }
+            case R.id.nav_serviciosproximos:{
+                Intent intentServiciosProximos = new Intent(this,ServiciosProximos.class);
+                startActivity(intentServiciosProximos);
+                break;
+            }
         }
         menuItem.setChecked(false);
         return true;
