@@ -1,16 +1,27 @@
 package com.example.nixapp.UI;
-import com.example.nixapp.DB.Conexion;
-import com.example.nixapp.R;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.nixapp.DB.Conexion;
+import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.R;
+import com.example.nixapp.conn.NixClient;
+import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.LoginResult;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class InicioSesion extends AppCompatActivity implements View.OnClickListener {
 
@@ -18,6 +29,8 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     TextView tvGoSignUp;
     EditText etEmail, etPassword;
     Intent intent;
+    NixService nixService;
+    NixClient nixClient;
 
     private Conexion conne= new Conexion();
 
@@ -32,7 +45,14 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
 
         btnLogin.setOnClickListener(this);
 
+        retrofitInit();
+
         conne.connectionBD();
+    }
+
+    private void retrofitInit() {
+        nixClient= NixClient.getInstance();
+        nixService= nixClient.getNixService();
     }
 
     @Override
@@ -50,16 +70,46 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             etPassword.setError("Ingrese Password");
         }
         else{
-            boolean usuarioEncontrado=conne.validarUsuarios(email, password);
-            if (usuarioEncontrado==true){
-                Toast.makeText(getApplicationContext(),"Bienvenido",Toast.LENGTH_LONG).show();
-                Intent intentMenuPrincipal = new Intent(getApplicationContext(),MenuPrincipalUsuarioGeneral.class);
-                startActivity(intentMenuPrincipal);
-                finish();
-            }else {
-                Toast.makeText(getApplicationContext(),"Vete",Toast.LENGTH_LONG).show();
-            }
+            goToLogin();
         }
 
     }
+
+    private void goToLogin() {
+        String email= etEmail.getText().toString();
+        String password= etPassword.getText().toString();
+        final RequestUsuarios requestSample = new RequestUsuarios(email, password);
+        Call<LoginResult> call = nixService.login(requestSample);
+        final Call<RequestUsuarios> callData = nixService.getUser();
+
+        call.enqueue(new Callback<LoginResult>() {
+            @Override
+            public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(InicioSesion.this, "Sesion Iniciada", Toast.LENGTH_SHORT).show();
+                    response.body().procesarRespuesta();
+                    Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioGeneral.class);
+                    i.putExtra("usuario", response.body().usuario);
+
+                    Log.i("Sesion Iniciada",response.body().toString());
+                    startActivity(i);
+                    finish();
+                } else {
+                    try {
+                        Log.i("Error",response.errorBody().string().toString());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    Toast.makeText(InicioSesion.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResult> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+
 }

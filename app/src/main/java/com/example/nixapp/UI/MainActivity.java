@@ -1,21 +1,26 @@
 package com.example.nixapp.UI;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.DB.Conexion;
 import com.example.nixapp.R;
+import com.example.nixapp.conn.NixClient;
+import com.example.nixapp.conn.NixService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Conexion conne= new Conexion();
-    
-    Button btnLogin,btnSignup;
+    private Conexion conne = new Conexion();
+
+    Button btnLogin, btnSignup, btnSample;
+    EditText etSample;
+    NixClient nixClient;
+    NixService nixService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +29,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnLogin = (Button) findViewById(R.id.buttonLogin);
         btnSignup = (Button) findViewById(R.id.buttonSignup);
+
         btnLogin.setOnClickListener(this);
         btnSignup.setOnClickListener(this);
 
+
+        retrofitInit();
         conne.connectionBD();
         conexionExitosa();
     }
 
+    private void retrofitInit() {
+        nixClient = NixClient.getInstance();
+        nixService = nixClient.getNixService();
+    }
+
     private void conexionExitosa() {
-        if (conne.conexion!=null){
-            Toast.makeText(getApplicationContext(),"La conexion se ha establecido",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Conexion erronea",Toast.LENGTH_SHORT).show();
+        if (conne.conexion != null) {
+            Toast.makeText(getApplicationContext(), "La conexion se ha establecido", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Conexion erronea", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -44,17 +56,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int i = view.getId();
         Intent q;
-        switch (i){
-            case R.id.buttonLogin:{
-                q = new Intent(view.getContext(),InicioSesion.class);
+        switch (i) {
+            case R.id.buttonLogin: {
+                q = new Intent(view.getContext(), InicioSesion.class);
                 startActivity(q);
                 break;
             }
-            case R.id.buttonSignup:{
-                q = new Intent(view.getContext(),CrearCuenta.class);
+            case R.id.buttonSignup: {
+                q = new Intent(view.getContext(), CrearCuenta.class);
                 startActivity(q);
                 break;
             }
         }
     }
+
+
 }

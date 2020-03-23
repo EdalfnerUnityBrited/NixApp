@@ -18,6 +18,7 @@
         app:civ_border_color="#FF000000"/>
 
     <TextView
+        android:id="@+id/tv_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
@@ -26,6 +27,7 @@
         android:textColor="#ffffffff"></TextView>
 
     <TextView
+        android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="creador@nix.com"></TextView>

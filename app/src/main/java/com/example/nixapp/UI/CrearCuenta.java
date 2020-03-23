@@ -1,7 +1,5 @@
 package com.example.nixapp.UI;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -19,14 +17,22 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nixapp.DB.Conexion;
-import com.example.nixapp.R;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.time.Month;
-import java.time.Year;
+import com.example.nixapp.DB.Conexion;
+import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.R;
+import com.example.nixapp.conn.NixClient;
+import com.example.nixapp.conn.NixService;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Pattern;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     Switch switchProveedor;
@@ -37,6 +43,8 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     private int ano, mes, dia;
     Date currentTime = Calendar.getInstance().getTime();
     String date;
+    NixClient nixClient;
+    NixService nixService;
 
     private static final String TAG = "MainActivity";
 
@@ -97,6 +105,12 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
             }
         };
         /////////////
+        retrofitInit();
+    }
+
+    private void retrofitInit() {
+        nixClient = NixClient.getInstance();
+        nixService = nixClient.getNixService();
     }
 
     @Override
@@ -143,17 +157,47 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                 if (!verificarContraseña){
                     boolean verificarMayor= verificarCumpleaños(ano, mes, dia);
                     if (!verificarMayor){
-                    int cuentaCreada= conne.crearCuenta(proovedor, nombre, apellidoPaterno, apellidoMaterno, email, telefono, date, password);
-                    if (cuentaCreada==0){
-                        Toast.makeText(getApplicationContext(),"Error al crear la cuenta",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Cuenta creada exitosamente",
-                                Toast.LENGTH_LONG).show();
-                        Intent intentMainActivity = new Intent(getApplicationContext(),MainActivity.class);
-                        startActivity(intentMainActivity);
-                        finish();
+                                final RequestUsuarios requestSample = new RequestUsuarios(proovedor,nombre,apellidoPaterno,apellidoMaterno, email, date,password, telefono,5,"",passwordConfirmacion);
+
+
+                                Call<ResponseBody> call = nixService.usuario(requestSample);
+
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(CrearCuenta.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
+                                            Intent i= new Intent(CrearCuenta.this, InicioSesion.class);
+                                            try {
+                                                Log.i("Cuenta Creada",response.body().string().toString());
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            startActivity(i);
+                                            finish();
+
+                                        } else {
+                                            try {
+                                                Log.i("Error",response.errorBody().string().toString());
+                                            } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                            }
+                                            Toast.makeText(CrearCuenta.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                            try {
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                });
+
+
                     }
                     }
                 }
@@ -163,7 +207,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
 
         }
 
-    }
+
 
     private boolean verificarCumpleaños(int year, int month, int day) {
 
@@ -237,7 +281,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         if (telefono.startsWith("33")){
             if (telefono.length()==10){
                 if (telefono.matches("[0-9]+") && telefono.length() > 2) {
-                    verificacionTelefono=existeTelefono(telefono);
+
                 }
                 else {
                     etTelefono.setError("Ese no es un número valido");
@@ -256,30 +300,20 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         return verificacionTelefono;
     }
 
-    private boolean existeTelefono(String telefono) {
-        boolean telefonoEncontrado=conne.validarTelefono(telefono);
-        if (telefonoEncontrado==true){
-            etTelefono.setError("El telefono ya está registrado");
-        }
-        return telefonoEncontrado;
-    }
+
 
     private boolean verificarCorreo(String email) {
         boolean verificacion = false;
         if (email.contains("@hotmail.com")){
-            verificacion=existeCorreo(email);
         }
         else if(email.contains("@gmail.com")){
-            verificacion=existeCorreo(email);
         }
         else if(email.contains("@outlook.com")){
 
         }
         else if (email.contains("@yahoo.com")){
-            verificacion=existeCorreo(email);
         }
         else if (email.contains("@nix.com")){
-            verificacion=existeCorreo(email);
         }
         else {
             etEmail.setError("El correo no tiene una direccion valida");
@@ -287,14 +321,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         }
 
     return verificacion;
-    }
-
-    private boolean existeCorreo(String email) {
-        boolean emailEncontrado=conne.validarEmail(email);
-        if (emailEncontrado==true){
-            etEmail.setError("El correo ya está registrado");
-        }
-        return emailEncontrado;
     }
 
 
