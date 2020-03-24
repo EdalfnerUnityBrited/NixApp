@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_eventosproximos_menu"
-        android:icon="@drawable/ic_eventoscerrados"
-        android:title="Mis Eventos Próximos"></item>
+        android:icon="@drawable/ic_eventosp"
+        android:title="Eventos Próximos"></item>
     <item android:id="@+id/nav_misintereses"
-        android:icon="@drawable/ic_historialeventos"
-        android:title="Mis Intereses"></item>
+        android:icon="@drawable/ic_intereses"
+        android:title="Intereses"></item>
     <item android:id="@+id/nav_misnotificaciones"
-        android:icon="@drawable/ic_historialeventos"
-        android:title="Mis Notificaciones"></item>
+        android:icon="@drawable/ic_notificaciones"
+        android:title="Notificaciones"></item>
 </menu>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_serviciosproximos_menu"
-        android:icon="@drawable/ic_eventoscerrados"
-        android:title="Servicios Próximos"></item>
+        android:icon="@drawable/ic_serviciosproximos"
+        android:title="Servicios"></item>
     <item android:id="@+id/nav_cotizacionesguardadas"
-        android:icon="@drawable/ic_historialeventos"
+        android:icon="@drawable/ic_guardados"
         android:title="Cotizaciones"></item>
     <item android:id="@+id/nav_chats"
-        android:icon="@drawable/ic_historialeventos"
+        android:icon="@drawable/ic_chats"
         android:title="Chats"></item>
 </menu>

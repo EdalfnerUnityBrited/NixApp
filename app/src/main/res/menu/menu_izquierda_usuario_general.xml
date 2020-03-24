@@ -34,6 +34,10 @@
             android:id="@+id/nav_ayuda"
             android:icon="@drawable/ic_ayuda"
             android:title="Ayuda"></item>
+        <item
+            android:id="@+id/nav_salir"
+            android:icon="@drawable/ic_salir"
+            android:title="Cerrar Sesion"></item>
     </group>
 
 </menu>
