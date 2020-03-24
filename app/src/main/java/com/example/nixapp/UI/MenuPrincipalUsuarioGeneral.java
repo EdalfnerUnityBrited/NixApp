@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -82,6 +83,13 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 startActivity(intentEventosProximos);
                 break;
             }
+            case R.id.nav_salir:{
+                TokenController.getToken().delete();
+                Intent intentVuelta = new Intent(this,MainActivity.class);
+                startActivity(intentVuelta);
+                finish();
+                break;
+            }
         }
         menuItem.setChecked(false);
         return true;
@@ -109,7 +117,6 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 requestPermissions(new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
             }
         }
-
         // Add a marker in Sydney and move the camera
         LatLng GDL = new LatLng(20, -103);
         //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
