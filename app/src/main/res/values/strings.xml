@@ -7,4 +7,9 @@
     <string name="title_activity_menu_principal_usuario_general">Map</string>
     <string name="navigation_draw_open">Abrir menu navegacion</string>
     <string name="navigation_draw_close">Cerrar menu navegacion</string>
+    <string name="title_activity_my_events">MyEvents</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_mis_eventos">MisEventos</string>
 </resources>
