@@ -63,7 +63,6 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
 
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         menuItem.setChecked(false);
@@ -88,6 +87,16 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 Intent intentVuelta = new Intent(this,MainActivity.class);
                 startActivity(intentVuelta);
                 finish();
+                break;
+            }
+            case R.id.nav_perfil:{
+                Intent intentMiPerfil = new Intent(this,MiPerfil.class);
+                startActivity(intentMiPerfil);
+                break;
+            }
+            case R.id.nav_ayuda:{
+                Intent intentAyuda = new Intent(this,Ayuda.class);
+                startActivity(intentAyuda);
                 break;
             }
         }

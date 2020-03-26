@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_informacionpersonal"
+        android:icon="@drawable/ic_eventoscerrados"
+        android:title="Personal"></item>
+    <item android:id="@+id/nav_metodospago"
+        android:icon="@drawable/ic_historialeventos"
+        android:title="Métodos Pago"></item>
+</menu>
