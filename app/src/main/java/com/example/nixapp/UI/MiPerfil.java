@@ -14,6 +14,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MiPerfil extends AppCompatActivity {
 
+    boolean estado = true;
+    int seleccion = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,9 @@ public class MiPerfil extends AppCompatActivity {
                 finish();
             }
         });
+
+        /////////////////////////////////////////////////////
+
     }
 
     public void setToolbarTitle(String title) {
@@ -49,15 +54,27 @@ public class MiPerfil extends AppCompatActivity {
                         case R.id.nav_informacionpersonal:{
                             setToolbarTitle("Mi Perfil");
                             selectedFragment = new InformacionPersonalFragment();
+                            seleccion = 0;
                             break;
                         }
                         case R.id.nav_metodospago:{
                             setToolbarTitle("Métodos de Pago");
                             selectedFragment = new MetodosPagoFragment();
+                            seleccion = 1;
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_mi_perfil, selectedFragment).commit();
+                    if(seleccion == 0 && estado != true)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_mi_perfil, selectedFragment).commit();
+                        estado = true;
+                    }
+                    else if (seleccion == 1 && estado != false)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_mi_perfil, selectedFragment).commit();
+                        estado = false;
+                    }
+
                     return true;
                 }
             };
