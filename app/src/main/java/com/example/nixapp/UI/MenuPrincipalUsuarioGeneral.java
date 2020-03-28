@@ -110,6 +110,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 break;
             }
         }
+
         menuItem.setChecked(false);
         return true;
     }
