@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.MisEventos">
+    tools:context=".UI.Ayuda"
+
+    >
 
     <FrameLayout
-        android:id="@+id/fragment_container_mis_eventos"
+        android:id="@+id/fragment_container_ayuda"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/menu_abajo_mis_eventos">
+        android:layout_above="@id/menu_abajo_ayuda">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -19,17 +21,16 @@
             android:background="@color/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Mis Eventos"
+            app:title="Ayuda"
             app:titleTextColor="#ffffffff"></androidx.appcompat.widget.Toolbar>
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/menu_abajo_mis_eventos"
+        android:id="@+id/menu_abajo_ayuda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/menu_abajo_mis_eventos"></com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:menu="@menu/menu_abajo_ayuda"></com.google.android.material.bottomnavigation.BottomNavigationView>
 </RelativeLayout>
