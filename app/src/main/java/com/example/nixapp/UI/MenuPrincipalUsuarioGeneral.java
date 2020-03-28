@@ -99,7 +99,18 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 startActivity(intentAyuda);
                 break;
             }
+            case R.id.nav_calendario:{
+                Intent intentCalendario = new Intent(this,Calendario.class);
+                startActivity(intentCalendario);
+                break;
+            }
+            case R.id.nav_tendencia:{
+                Intent intentTendencia = new Intent(this,Tendencias.class);
+                startActivity(intentTendencia);
+                break;
+            }
         }
+
         menuItem.setChecked(false);
         return true;
     }
