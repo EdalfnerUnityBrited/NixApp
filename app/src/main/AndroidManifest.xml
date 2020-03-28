@@ -16,9 +16,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".UI.EventosProximos"
-            android:screenOrientation="portrait"></activity>
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".UI.Ayuda"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".UI.MiPerfil"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UI.EventosProximos"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.ServiciosProximos"
             android:screenOrientation="portrait" />
