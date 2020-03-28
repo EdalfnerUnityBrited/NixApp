@@ -18,14 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".UI.Calendario"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".UI.Tendencias"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UI.Ayuda"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.MiPerfil"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.EventosProximos"
             android:screenOrientation="portrait" />
