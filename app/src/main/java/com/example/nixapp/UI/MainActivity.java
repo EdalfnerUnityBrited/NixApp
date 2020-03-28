@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         retrofitInit();
         conne.connectionBD();
-        conexionExitosa();
     }
 
     private void retrofitInit() {
@@ -44,13 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nixService = nixClient.getNixService();
     }
 
-    private void conexionExitosa() {
-        if (conne.conexion != null) {
-            Toast.makeText(getApplicationContext(), "La conexion se ha establecido", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "Conexion erronea", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 
     @Override
     public void onClick(View view) {

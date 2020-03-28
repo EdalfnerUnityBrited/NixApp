@@ -26,6 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         UsuarioToken token = TokenController.getToken();
+
         if (token == null)
             pantallaInicioSesion();
         else
