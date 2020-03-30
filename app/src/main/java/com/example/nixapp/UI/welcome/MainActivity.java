@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,13 +8,12 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nixapp.DB.Conexion;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Conexion conne = new Conexion();
+
 
     Button btnLogin, btnSignup, btnSample;
     EditText etSample;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         retrofitInit();
-        conne.connectionBD();
     }
 
     private void retrofitInit() {

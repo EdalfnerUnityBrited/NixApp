@@ -30,7 +30,7 @@
             android:name=".UI.EventosProximos"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.ServiciosProximos"
+            android:name=".UI.serviciosContratados.ServiciosProximos"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UI.MisEventos"
@@ -44,10 +44,10 @@
             android:name=".UI.MenuPrincipalUsuarioGeneral"
             android:label="@string/title_activity_menu_principal_usuario_general" />
         <activity
-            android:name=".UI.CrearCuenta"
+            android:name=".UI.welcome.CrearCuenta"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.WelcomeActivity"
+            android:name=".UI.welcome.WelcomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,11 +56,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.MainActivity"
+            android:name=".UI.welcome.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.InicioSesion"
+            android:name=".UI.welcome.InicioSesion"
             android:screenOrientation="portrait" />
+        <activity android:name=".UI.serviciosContratados.ChatActivity"></activity>
     </application>
 
 </manifest>

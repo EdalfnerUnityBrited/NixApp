@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.welcome;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -19,8 +19,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nixapp.DB.Conexion;
-import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -50,7 +49,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
 
     private TextView mDisplayDate=null;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private Conexion conne= new Conexion();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +155,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                 if (!verificarContraseña){
                     boolean verificarMayor= verificarCumpleaños(ano, mes, dia);
                     if (!verificarMayor){
-                                final RequestUsuarios requestSample = new RequestUsuarios(proovedor,nombre,apellidoPaterno,apellidoMaterno, email, date,password, telefono,5,"",passwordConfirmacion);
+                                final Usuario requestSample = new Usuario(proovedor,nombre,apellidoPaterno,apellidoMaterno, email, date,password, telefono,5,"",passwordConfirmacion);
 
 
                                 Call<ResponseBody> call = nixService.usuario(requestSample);

@@ -17,9 +17,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.welcome.MainActivity;
+import com.example.nixapp.UI.serviciosContratados.ServiciosProximos;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,13 +36,13 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     private GoogleMap mMap;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
     Double EventLatitude, EventLongitude;
-    RequestUsuarios usuario;
+    Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal_usuario_general);
-        usuario = (RequestUsuarios) getIntent().getSerializableExtra("usuario");
+        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout_usuario_general);
@@ -74,6 +76,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
             }
             case R.id.nav_serviciosproximos: {
                 Intent intentServiciosProximos = new Intent(this, ServiciosProximos.class);
+                intentServiciosProximos.putExtra("usuario", usuario);
                 startActivity(intentServiciosProximos);
                 break;
             }
@@ -84,7 +87,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
             }
             case R.id.nav_salir:{
                 TokenController.getToken().delete();
-                Intent intentVuelta = new Intent(this,MainActivity.class);
+                Intent intentVuelta = new Intent(this, MainActivity.class);
                 startActivity(intentVuelta);
                 finish();
                 break;

@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.welcome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nixapp.DB.Conexion;
-import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.LoginResult;
@@ -32,8 +32,6 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     NixService nixService;
     NixClient nixClient;
 
-    private Conexion conne= new Conexion();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +45,6 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
 
         retrofitInit();
 
-        conne.connectionBD();
     }
 
     private void retrofitInit() {
@@ -78,9 +75,8 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     private void goToLogin() {
         String email= etEmail.getText().toString();
         String password= etPassword.getText().toString();
-        final RequestUsuarios requestSample = new RequestUsuarios(email, password);
+        final Usuario requestSample = new Usuario(email, password);
         Call<LoginResult> call = nixService.login(requestSample);
-        final Call<RequestUsuarios> callData = nixService.getUser();
 
         call.enqueue(new Callback<LoginResult>() {
             @Override

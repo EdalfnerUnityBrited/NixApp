@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.modelotablas.UsuarioToken;
@@ -39,10 +40,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         NixClient nixClient = NixClient.getInstance();
         NixService nixService = nixClient.getNixService();
-        Call<RequestUsuarios> call = nixService.getUser();
-        call.enqueue(new Callback<RequestUsuarios>() {
+        Call<Usuario> call = nixService.getUser();
+        call.enqueue(new Callback<Usuario>() {
             @Override
-            public void onResponse(Call<RequestUsuarios> call, Response<RequestUsuarios> response) {
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()) {
                     Intent intent = new Intent(WelcomeActivity.this,
                             MenuPrincipalUsuarioGeneral.class);
@@ -58,7 +59,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RequestUsuarios> call, Throwable t) {
+            public void onFailure(Call<Usuario> call, Throwable t) {
                 Toast.makeText(WelcomeActivity.this,
                         "Revisa tu conexion a internet.\n Intentalo de nuevo mas tarde",
                         Toast.LENGTH_SHORT).show();

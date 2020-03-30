@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.ServiciosProximos">
+    android:paddingTop="?attr/actionBarSize">
 
     <FrameLayout
-        android:id="@+id/fragment_container_servicios_proximos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/menu_abajo_servicios_proximos">
+        android:id="@+id/framLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Servicios Próximos"
-            app:titleTextColor="#ffffffff"></androidx.appcompat.widget.Toolbar>
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/menu_abajo_servicios_proximos"
-        android:layout_width="match_parent"
+        android:id="@+id/nav_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/menu_abajo_servicios_proximos"></com.google.android.material.bottomnavigation.BottomNavigationView>
-</RelativeLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/menu_abajo_servicios_proximos" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

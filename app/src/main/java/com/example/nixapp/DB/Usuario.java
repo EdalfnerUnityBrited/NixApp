@@ -2,7 +2,8 @@ package com.example.nixapp.DB;
 
 import java.io.Serializable;
 
-public class RequestUsuarios implements Serializable {
+public class Usuario implements Serializable {
+    public int id;
     private String password_confirmation;
     private int tipoUsuario;
     public String name;
@@ -15,7 +16,7 @@ public class RequestUsuarios implements Serializable {
     private int calificacion;
     private String fotoPerfil;
 
-    public RequestUsuarios(int tipoUsuario, String nname, String apellidoP, String apellidoM, String email, String fechaNac, String contras, String telefono, int calificacion, String fotoPerfil, String password_confirmation) {
+    public Usuario(int tipoUsuario, String nname, String apellidoP, String apellidoM, String email, String fechaNac, String contras, String telefono, int calificacion, String fotoPerfil, String password_confirmation) {
         this.tipoUsuario = tipoUsuario;
         this.name = nname;
         this.apellidoP = apellidoP;
@@ -29,11 +30,12 @@ public class RequestUsuarios implements Serializable {
         this.password_confirmation=password_confirmation;
     }
 
-    public RequestUsuarios() {
+    public Usuario() {
 
     }
 
-    public RequestUsuarios(String email, String password) {
+    public Usuario(String email, String password) {
+
         this.email = email;
         this.password = password;
     }
