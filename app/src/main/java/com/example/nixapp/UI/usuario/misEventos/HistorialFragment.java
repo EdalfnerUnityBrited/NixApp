@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario.misEventos;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.R;
 
-public class MenuAyudaFragment extends Fragment {
+public class HistorialFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_menu_de_ayuda,container,false);
+        return inflater.inflate(R.layout.fragment_historial,container,false);
     }
 }

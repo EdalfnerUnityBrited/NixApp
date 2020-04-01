@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.UI.usuario.serviciosContratados.chat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nixapp.DB.Messages;
 import com.example.nixapp.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,7 +47,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView twDisplayMessages;
     private FirebaseAuth mAuth;
     private String currentChat, currentDate, currentTime, messageReciverid, messageSenderid, messagesender, myUrl;
-    private final List<com.example.nixapp.UI.serviciosContratados.Messages> messagesList= new ArrayList<>();
+    private final List<Messages> messagesList= new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
     private MessageAdapter messageAdapter;
     private DatabaseReference groupNameRef, groupMessageKeyRef, RootRef;

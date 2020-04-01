@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.UI.usuario.serviciosContratados;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nixapp.DB.Chat;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
+import com.example.nixapp.UI.usuario.serviciosContratados.chat.DashboardFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ServiciosProximos extends AppCompatActivity implements DashboardFragment.OnListFragmentInteractionListener{

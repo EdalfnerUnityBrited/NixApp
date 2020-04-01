@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.DB;
 
 public class Messages {
     public String from, message, type;

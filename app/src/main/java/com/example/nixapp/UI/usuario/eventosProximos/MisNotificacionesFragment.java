@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.UI.usuario.eventosProximos;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.R;
 
-public class ServiciosProximosFragment extends Fragment {
+public class MisNotificacionesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_servicios_proximos,container,false);
+        return inflater.inflate(R.layout.fragment_mis_notificaciones,container,false);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario.eventosProximos;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

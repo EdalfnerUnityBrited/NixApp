@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario.configUsuario;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.R;
 
-public class MisNotificacionesFragment extends Fragment {
+public class MetodosPagoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_mis_notificaciones,container,false);
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.fragment_metodos_pago,container,false);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.DB;
 
 class Chats {
     public int id_usuario, id_proveedor;

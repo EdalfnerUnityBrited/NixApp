@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.MenuPrincipalUsuarioGeneral;
+import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.LoginResult;

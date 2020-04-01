@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario.ayuda;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,16 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.R;
 
-public class HistorialFragment extends Fragment {
+public class TutorialesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_historial,container,false);
+        return inflater.inflate(R.layout.fragment_tutoriales,container,false);
     }
 }

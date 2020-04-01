@@ -1,8 +1,8 @@
-package com.example.nixapp.UI;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.R;
 

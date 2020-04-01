@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,8 +20,12 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
+import com.example.nixapp.UI.usuario.misEventos.MisEventos;
+import com.example.nixapp.UI.usuario.ayuda.Ayuda;
+import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;
+import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.UI.welcome.MainActivity;
-import com.example.nixapp.UI.serviciosContratados.ServiciosProximos;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -93,22 +97,22 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 break;
             }
             case R.id.nav_perfil:{
-                Intent intentMiPerfil = new Intent(this,MiPerfil.class);
+                Intent intentMiPerfil = new Intent(this, MiPerfil.class);
                 startActivity(intentMiPerfil);
                 break;
             }
             case R.id.nav_ayuda:{
-                Intent intentAyuda = new Intent(this,Ayuda.class);
+                Intent intentAyuda = new Intent(this, Ayuda.class);
                 startActivity(intentAyuda);
                 break;
             }
             case R.id.nav_calendario:{
-                Intent intentCalendario = new Intent(this,Calendario.class);
+                Intent intentCalendario = new Intent(this, Calendario.class);
                 startActivity(intentCalendario);
                 break;
             }
             case R.id.nav_tendencia:{
-                Intent intentTendencia = new Intent(this,Tendencias.class);
+                Intent intentTendencia = new Intent(this, Tendencias.class);
                 startActivity(intentTendencia);
                 break;
             }

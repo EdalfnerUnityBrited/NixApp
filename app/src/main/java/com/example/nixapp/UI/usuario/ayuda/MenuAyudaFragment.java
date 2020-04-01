@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.UI.usuario.ayuda;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.R;
 
-public class CotizacionesGuardadasFragment extends Fragment {
+public class MenuAyudaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cotizaciones_guardadas,container,false);
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.fragment_menu_de_ayuda,container,false);
     }
 }

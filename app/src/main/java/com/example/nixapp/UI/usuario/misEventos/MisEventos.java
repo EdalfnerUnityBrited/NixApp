@@ -1,30 +1,30 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario.misEventos;
+
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-
 import com.example.nixapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class EventosProximos extends AppCompatActivity {
+public class MisEventos extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_eventos_proximos);
+        setContentView(R.layout.activity_mis_eventos);
 
-        BottomNavigationView bottomNav = findViewById(R.id.menu_abajo_eventos_proximos);
+        BottomNavigationView bottomNav = findViewById(R.id.menu_abajo_mis_eventos);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setToolbarTitle("Eventos Próximos");
+        setToolbarTitle("Mis eventos");
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_eventos_proximos,new EventosProximosFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_mis_eventos,new EventosCerradosFragment()).commit();
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,7 +32,6 @@ public class EventosProximos extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     public void setToolbarTitle(String title) {
@@ -47,24 +46,23 @@ public class EventosProximos extends AppCompatActivity {
                     Fragment selectedFragment = null;
 
                     switch (menuItem.getItemId()){
-                        case R.id.nav_eventosproximos_menu:{
-                            setToolbarTitle("Eventos Próximos");
-                            selectedFragment = new EventosProximosFragment();
+                        case R.id.nav_eventoscerrados:{
+                            setToolbarTitle("Mis eventos");
+                            selectedFragment = new EventosCerradosFragment();
+
                             break;
                         }
-                        case R.id.nav_misnotificaciones:{
-                            setToolbarTitle("Mis Notificaciones");
-                            selectedFragment = new MisNotificacionesFragment();
-                            break;
-                        }
-                        case R.id.nav_misintereses:{
-                            setToolbarTitle("Mis Intereses");
-                            selectedFragment = new MisInteresesFragment();
+                        case R.id.nav_historial:{
+                            setToolbarTitle("Historial de eventos");
+                            selectedFragment = new HistorialFragment();
+
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_eventos_proximos, selectedFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_mis_eventos, selectedFragment).commit();
                     return true;
                 }
             };
+
+
 }

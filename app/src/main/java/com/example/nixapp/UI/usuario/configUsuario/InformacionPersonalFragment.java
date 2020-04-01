@@ -1,4 +1,4 @@
-package com.example.nixapp.UI;
+package com.example.nixapp.UI.usuario.configUsuario;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;

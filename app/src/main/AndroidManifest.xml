@@ -20,20 +20,20 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".UI.Ayuda"
+            android:name=".UI.usuario.ayuda.Ayuda"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".UI.MiPerfil"
+            android:name=".UI.usuario.configUsuario.MiPerfil"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".UI.EventosProximos"
+            android:name=".UI.usuario.eventosProximos.EventosProximos"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.serviciosContratados.ServiciosProximos"
+            android:name=".UI.usuario.serviciosContratados.ServiciosProximos"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.MisEventos"
+            android:name=".UI.usuario.misEventos.MisEventos"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -41,7 +41,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".UI.MenuPrincipalUsuarioGeneral"
+            android:name=".UI.usuario.MenuPrincipalUsuarioGeneral"
             android:label="@string/title_activity_menu_principal_usuario_general" />
         <activity
             android:name=".UI.welcome.CrearCuenta"
@@ -61,7 +61,9 @@
         <activity
             android:name=".UI.welcome.InicioSesion"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.serviciosContratados.ChatActivity"></activity>
+        <activity android:name=".UI.usuario.serviciosContratados.chat.ChatActivity"></activity>
+        <activity android:name=".UI.usuario.Calendario"></activity>
+        <activity android:name=".UI.usuario.Tendencias"></activity>
     </application>
 
 </manifest>

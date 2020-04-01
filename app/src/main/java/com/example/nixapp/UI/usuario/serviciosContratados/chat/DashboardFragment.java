@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.serviciosContratados;
+package com.example.nixapp.UI.usuario.serviciosContratados.chat;
 
 import android.content.Context;
 import android.os.Bundle;
