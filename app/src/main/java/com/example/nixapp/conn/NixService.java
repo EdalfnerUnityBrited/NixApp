@@ -1,7 +1,9 @@
 package com.example.nixapp.conn;
 
+import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.LoginResult;
 
 import okhttp3.ResponseBody;
@@ -20,6 +22,9 @@ public interface NixService {
 
     @GET("chats")
     Call<ChatResult> chat();
+
+    @POST("eventos")
+    Call<EventosResult> eventos(@Body Eventos eventos);
 
     @GET("auth/user")
     Call<Usuario> getUser();

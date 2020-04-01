@@ -29,15 +29,15 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_serviciosproximos, R.id.nav_cotizacionesguardadas, R.id.nav_chats)
+        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_serviciosproximos_menu, R.id.nav_cotizacionesguardadas, R.id.nav_chats)
                 .build();
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()){
-                    case R.id.nav_serviciosproximos:
+                    case R.id.nav_serviciosproximos_menu:
                     {
                         setFragment(new ServiciosProximosFragment());
                         return true;
