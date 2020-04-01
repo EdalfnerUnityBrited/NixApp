@@ -29,6 +29,7 @@ public class CrearEvento extends AppCompatActivity {
     String hora;
     String lugar;
     String descripcion;
+    int cupo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +42,8 @@ public class CrearEvento extends AppCompatActivity {
         hora="12:00";
         lugar="la santa zapopan jalisco mexico";
         descripcion="hasta que el cuerpo aguante";
-        final Eventos requestSample = new Eventos(nombre_evento, privacidad, categoria_evento, fecha, hora, lugar, descripcion);
+        cupo=300;
+        final Eventos requestSample = new Eventos(nombre_evento, privacidad, categoria_evento, fecha, hora, lugar, descripcion, cupo);
         Call<EventosResult> call = nixService.eventos(requestSample);
         call.enqueue(new Callback<EventosResult>() {
             @Override

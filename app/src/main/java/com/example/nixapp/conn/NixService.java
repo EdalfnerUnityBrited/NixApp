@@ -3,6 +3,7 @@ package com.example.nixapp.conn;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.LoginResult;
 
@@ -25,6 +26,9 @@ public interface NixService {
 
     @POST("eventos")
     Call<EventosResult> eventos(@Body Eventos eventos);
+
+    @GET("eventos/usuario")
+    Call<EventosListResult> eventosUsuario();
 
     @GET("auth/user")
     Call<Usuario> getUser();

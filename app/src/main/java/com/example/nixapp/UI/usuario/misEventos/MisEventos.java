@@ -9,10 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MisEventos extends AppCompatActivity {
+public class MisEventos extends AppCompatActivity implements EventosCerradosFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,5 +65,14 @@ public class MisEventos extends AppCompatActivity {
                 }
             };
 
+    public void onListFragmentInteraction(Eventos item) {
+
+
+        //Intent chatSelected= new Intent(getBaseContext(), ChatActivity.class);
+
+
+        //startActivity(chatSelected);
+
+    }
 
 }

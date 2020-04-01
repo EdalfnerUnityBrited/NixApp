@@ -96,10 +96,6 @@ public class DashboardFragment extends Fragment {
 
         recyclerView= view.findViewById(R.id.recyclerChats);
 
-
-
-
-
     }
 
 
