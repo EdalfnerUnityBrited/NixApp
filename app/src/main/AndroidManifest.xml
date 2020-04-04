@@ -18,24 +18,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.Calendario"
+        <activity android:name=".UI.usuario.misEventos.CrearEvento"></activity>
+        <activity
+            android:name=".UI.usuario.ayuda.Ayuda"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".UI.Tendencias"
-            android:screenOrientation="portrait"/>
         <activity
-            android:name=".UI.Ayuda"
+            android:name=".UI.usuario.configUsuario.MiPerfil"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.MiPerfil"
+            android:name=".UI.usuario.eventosProximos.EventosProximos"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.EventosProximos"
+            android:name=".UI.usuario.serviciosContratados.ServiciosProximos"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.ServiciosProximos"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".UI.MisEventos"
+            android:name=".UI.usuario.misEventos.MisEventos"
             android:screenOrientation="portrait" />
 
         <meta-data
@@ -43,13 +40,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".UI.MenuPrincipalUsuarioGeneral"
+            android:name=".UI.usuario.MenuPrincipalUsuarioGeneral"
             android:label="@string/title_activity_menu_principal_usuario_general" />
         <activity
-            android:name=".UI.CrearCuenta"
+            android:name=".UI.welcome.CrearCuenta"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.WelcomeActivity"
+            android:name=".UI.welcome.WelcomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,11 +55,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.MainActivity"
+            android:name=".UI.welcome.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.InicioSesion"
+            android:name=".UI.welcome.InicioSesion"
             android:screenOrientation="portrait" />
+        <activity android:name=".UI.usuario.serviciosContratados.chat.ChatActivity" />
+        <activity android:name=".UI.usuario.Calendario" />
+        <activity android:name=".UI.usuario.Tendencias" />
     </application>
 
 </manifest>

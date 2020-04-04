@@ -1,6 +1,6 @@
 package com.example.nixapp.conn.results;
 
-import com.example.nixapp.DB.RequestUsuarios;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.modelotablas.UsuarioToken;
 
 public class LoginResult extends RequestResult {
@@ -9,7 +9,7 @@ public class LoginResult extends RequestResult {
     String token_type;
     String expires_at;
 
-    public RequestUsuarios usuario;
+    public Usuario usuario;
 
     public void procesarRespuesta(){
         UsuarioToken tokenUser= new UsuarioToken();

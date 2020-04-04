@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "700011538199",
+    "firebase_url": "https://probarfirebase-9c2dd.firebaseio.com",
+    "project_id": "probarfirebase-9c2dd",
+    "storage_bucket": "probarfirebase-9c2dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700011538199:android:8b0aacdc0fac4f40023952",
+        "android_client_info": {
+          "package_name": "com.example.dashboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700011538199-q6ne4u18tsng6o6eu18qnk616c7cq7b3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXmxQxrAqaZAYnSVHRTqrp7TfaJfncmwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700011538199-q6ne4u18tsng6o6eu18qnk616c7cq7b3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700011538199:android:d5dd2ef448dfaed7023952",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700011538199-q6ne4u18tsng6o6eu18qnk616c7cq7b3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXmxQxrAqaZAYnSVHRTqrp7TfaJfncmwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700011538199-q6ne4u18tsng6o6eu18qnk616c7cq7b3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700011538199:android:9c4f2b171d06101a023952",
+        "android_client_info": {
+          "package_name": "com.example.nixapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700011538199-q6ne4u18tsng6o6eu18qnk616c7cq7b3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXmxQxrAqaZAYnSVHRTqrp7TfaJfncmwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700011538199-q6ne4u18tsng6o6eu18qnk616c7cq7b3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

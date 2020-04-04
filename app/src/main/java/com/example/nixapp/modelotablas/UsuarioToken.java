@@ -26,6 +26,7 @@ public class UsuarioToken extends BaseModel {
     public
     String expires_at;
 
+
     @NonNull
     @Override
     public String toString() {
