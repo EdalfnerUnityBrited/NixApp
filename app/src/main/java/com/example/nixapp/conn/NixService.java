@@ -5,6 +5,7 @@ import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
+import com.example.nixapp.conn.results.EventosTodosResult;
 import com.example.nixapp.conn.results.LoginResult;
 
 import okhttp3.ResponseBody;
@@ -26,6 +27,9 @@ public interface NixService {
 
     @POST("eventos")
     Call<EventosResult> eventos(@Body Eventos eventos);
+
+    @GET("eventos/todos")
+    Call<EventosTodosResult> eventosTodos();
 
     @GET("eventos/usuario")
     Call<EventosListResult> eventosUsuario();

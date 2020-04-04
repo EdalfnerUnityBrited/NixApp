@@ -35,6 +35,14 @@ public class Eventos {
         return fecha;
     }
 
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
