@@ -9,8 +9,9 @@ public class Eventos {
     String lugar;
     String descripcion;
     int cupo;
+    int cover;
 
-    public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo) {
+    public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover) {
         this.nombre_evento = nombre_evento;
         this.privacidad = privacidad;
         this.categoria_evento = categoria_evento;
@@ -19,6 +20,7 @@ public class Eventos {
         this.lugar = lugar;
         this.descripcion = descripcion;
         this.cupo=cupo;
+        this.cover=cover;
     }
 
     public String getNombre_evento() {

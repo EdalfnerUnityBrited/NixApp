@@ -99,7 +99,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="5dp"
-                                android:checkedButton="@+id/offer"
+                                android:checkedButton="@+id/privado"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -114,7 +114,7 @@
                                     tools:ignore="VectorDrawableCompat" />
 
                                 <RadioButton
-                                    android:id="@+id/search"
+                                    android:id="@+id/publico"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
@@ -125,7 +125,7 @@
                                     android:textColor="@color/white" />
 
                                 <RadioButton
-                                    android:id="@+id/offer"
+                                    android:id="@+id/privado"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
@@ -280,6 +280,7 @@
                                 android:backgroundTint="@color/white"
                                 android:hint="10/02/2004"
                                 android:inputType="textPersonName"
+                                android:text="10/02/2004"
                                 android:textColor="#FFFFFF"
                                 android:textColorHint="#FFFFFF"
                                 android:textSize="20sp" />
@@ -620,7 +621,7 @@
                             android:gravity="center">
 
                             <Button
-                                android:id="@+id/button2"
+                                android:id="@+id/buttonImagen"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:background="@drawable/agregar_imagen" />

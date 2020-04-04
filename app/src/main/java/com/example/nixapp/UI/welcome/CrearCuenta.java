@@ -194,8 +194,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                                         t.printStackTrace();
                                     }
                                 });
-
-
                     }
                     }
                 }
