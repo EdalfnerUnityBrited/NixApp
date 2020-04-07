@@ -24,17 +24,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewNombre"
+        android:id="@+id/textViewFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="TextView"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="@+id/textViewDireccion"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDireccion" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/imageViewEvento"
         android:layout_width="160dp"
         android:layout_height="100dp"
         android:layout_marginTop="45dp"
@@ -46,8 +46,8 @@
         app:srcCompat="@drawable/ejemplo1" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        android:id="@+id/textViewDireccion"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -57,26 +57,23 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewNo_temporada" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewCupo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="200 personas max."
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/textViewNombre"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNombre" />
+        app:layout_constraintStart_toStartOf="@+id/textViewFecha"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFecha" />
 
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/textViewPrivacidad"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="1dp"
-        android:text="Evento Publico"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
+        app:layout_constraintStart_toStartOf="@+id/imageViewEvento"
         app:layout_constraintTop_toTopOf="@+id/textViewNo_temporada" />
 
 

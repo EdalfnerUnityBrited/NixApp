@@ -127,6 +127,14 @@
                             android:visibility="gone"
                             tools:visibility="gone">
 
+                            <EditText
+                                android:id="@+id/ap_pat_user"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:inputType="textPersonName"
+                                android:textColor="#ffffffff" />
+
                             <ImageView
                                 android:id="@+id/invima"
                                 android:layout_width="20dp"
@@ -135,15 +143,6 @@
                                 android:visibility="invisible"
                                 app:srcCompat="@drawable/user"
                                 tools:visibility="invisible" />
-
-                            <EditText
-                                android:id="@+id/ap_pat_user"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@null"
-                                android:hint="Apellido paterno usuario"
-                                android:inputType="textPersonName"
-                                android:textColor="#ffffffff" />
                         </TableRow>
 
                         <View
@@ -354,7 +353,7 @@
 
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/buttonGuardar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -362,6 +361,12 @@
                         android:padding="5dp"
                         android:text="Guardar cambios"
                         android:textColor="@drawable/butom_text" />
+
+                    <Button
+                        android:id="@+id/buttonPass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CambiarContraseña" />
                 </LinearLayout>
             </LinearLayout>
 

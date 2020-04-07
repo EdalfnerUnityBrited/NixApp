@@ -1,7 +1,10 @@
 package com.example.nixapp.UI.usuario.misEventos;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -19,6 +22,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.DB.Eventos;
@@ -26,6 +31,14 @@ import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +53,9 @@ import retrofit2.Response;
 
 public class CrearEvento extends AppCompatActivity implements View.OnClickListener {
 
+    private StorageReference mStorage;
+    private ProgressDialog mProgressDialog;
+    private static final int GALLERY_INTENT=1;
     DatePickerDialog picker;
     EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento;
     private ArrayList<EventosItems> mEventsList;
@@ -50,11 +66,12 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     Switch simpleSwitch1;
     CheckBox cover;
 
+    String downloadUrl;
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName;
-    Button terminar, insertar, enables, info;
+    Button terminar, insertar, enables, info, imagen;
     int cupo;
     RadioButton r1,r2;
     @Override
@@ -66,7 +83,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
         terminar.setOnClickListener(this);
         //////////////////////
-
+        mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
+        mProgressDialog= new ProgressDialog(this);
         eTextFecha.setInputType(InputType.TYPE_NULL);
         eTextFecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +107,14 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+        imagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent,GALLERY_INTENT);
+            }
+        });
 
         eTextHora.setInputType(InputType.TYPE_NULL);
         eTextHora.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +234,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         cupoEvento= findViewById(R.id.cupo);
         coverEvento=findViewById(R.id.cover_valor);
         descripcionEvento= findViewById(R.id.descripcion);
+        imagen= findViewById(R.id.buttonImagen);
+        downloadUrl="";
     }
 
     private boolean validarEmail(String email) {
@@ -275,7 +303,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
-                final Eventos requestSample = new Eventos(nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover);
+                final Eventos requestSample = new Eventos(nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, downloadUrl);
                 Call<EventosResult> call= nixService.eventos(requestSample);
                 call.enqueue(new Callback<EventosResult>() {
                     @Override
@@ -346,4 +374,50 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode== GALLERY_INTENT&&resultCode== -1){
+            mProgressDialog.setTitle("Subiendo...");
+            mProgressDialog.setMessage("Subiendo foto a firebase");
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+            Uri uri= data.getData();
+            final StorageReference filePath= mStorage.child(uri.getLastPathSegment());
+            final UploadTask uploadTask = filePath.putFile(uri);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    String message= e.toString();
+                    Toast.makeText(CrearEvento.this, "Error: "+message, Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(CrearEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                    Task<Uri> urlTask= uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()){
+                                throw task.getException();
+                            }
+                            downloadUrl= filePath.getDownloadUrl().toString();
+                            return filePath.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            downloadUrl= task.getResult().toString();
+                            mProgressDialog.dismiss();
+
+                        }
+                    });
+
+
+                }
+            });
+        }
+    }
+
 }

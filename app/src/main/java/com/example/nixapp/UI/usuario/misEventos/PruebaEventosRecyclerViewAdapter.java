@@ -3,14 +3,19 @@ package com.example.nixapp.UI.usuario.misEventos;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
 
 import java.util.List;
+
+import static com.example.nixapp.R.drawable.ic_privado;
+import static com.example.nixapp.R.drawable.ic_public;
 
 public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<PruebaEventosRecyclerViewAdapter.ViewHolder> {
 
@@ -34,8 +39,21 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.id_usuario.setText(String.valueOf(holder.mItem.getNombre_evento()));
+        holder.nombre.setText(String.valueOf(holder.mItem.getNombre_evento()));
         holder.statusUsuario.setText(String.valueOf(holder.mItem.getFecha()));
+        holder.direccion.setText(String.valueOf(holder.mItem.getLugar()));
+        holder.cupo.setText(String.valueOf(holder.mItem.getCupo())+" Personas");
+        if (holder.mItem.getPrivacidad()==0){
+            holder.privacidad.setImageResource(ic_public);
+        }
+        else {
+            holder.privacidad.setImageResource(ic_privado);
+        }
+        Glide.with(holder.eventImage)
+                .load(String.valueOf(holder.mItem.getImagen()))
+                .fitCenter()
+                .centerCrop()
+                .into(holder.eventImage);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,15 +76,21 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView id_usuario;
-        public final TextView statusUsuario;
+        public final TextView nombre;
+        public final TextView statusUsuario, direccion, cupo;
+        public final ImageView eventImage, privacidad;
         public Eventos mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-           id_usuario = view.findViewById(R.id.textViewNo_temporada);
-           statusUsuario= view.findViewById(R.id.textViewNombre);
+           nombre = view.findViewById(R.id.textViewNo_temporada);
+           statusUsuario= view.findViewById(R.id.textViewFecha);
+           direccion=view.findViewById(R.id.textViewDireccion);
+           privacidad= view.findViewById(R.id.textViewPrivacidad);
+           cupo= view.findViewById(R.id.textViewCupo);
+        eventImage=view.findViewById(R.id.imageViewEvento);
+
 
         }
 
@@ -74,7 +98,7 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
 
         @Override
         public String toString() {
-            return super.toString() + " '" + id_usuario.getText() + "'";
+            return super.toString() + " '" + nombre.getText() + "'";
         }
 
     }
