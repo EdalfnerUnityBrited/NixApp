@@ -14,7 +14,7 @@ public class UsuarioToken extends BaseModel {
 
     @PrimaryKey
     public // at least one primary key required
-            String id;
+    String id;
 
     @Column
     public

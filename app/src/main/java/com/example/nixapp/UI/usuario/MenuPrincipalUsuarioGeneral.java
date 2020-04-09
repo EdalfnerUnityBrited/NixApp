@@ -199,7 +199,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 if (response.isSuccessful()) {
                     for (final Eventos x: response.body().eventos) {
                         String direccion = x.getLugar();
-                        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPIKFMqDYeUhtKytpXannMCEQd_yC7C8I",direccion);
+                        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",direccion);
                         OkHttpClient client = new OkHttpClient();
                         Request request = new Request.Builder()
                                 .url(url)
@@ -218,7 +218,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                                     MenuPrincipalUsuarioGeneral.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            double ltEvento, lnEvento;
+                                           double ltEvento, lnEvento;
                                             String[] ltEvento1Json = myResponse.split("\"lat\"+ +:+ ");
                                             String[] lnEvento1Json = myResponse.split("\"lng\"+ +:+ ");
                                             String[] ltEventoFinalJson = ltEvento1Json[1].split(",");
