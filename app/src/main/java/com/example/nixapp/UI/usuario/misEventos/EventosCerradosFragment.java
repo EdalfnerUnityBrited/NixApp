@@ -2,6 +2,7 @@ package com.example.nixapp.UI.usuario.misEventos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,8 +58,9 @@ public class EventosCerradosFragment extends Fragment implements View.OnClickLis
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
                 else{
-                    Toast.makeText(getActivity(), "Eventos Obtenidos incorrectamente",
+                    Toast.makeText(getActivity(), response.errorBody().toString(),
                             Toast.LENGTH_SHORT).show();
+                    Log.i("Error:" ,response.errorBody().toString());
                 }
             }
 
@@ -66,6 +68,7 @@ public class EventosCerradosFragment extends Fragment implements View.OnClickLis
             public void onFailure(Call<EventosListResult> call, Throwable t) {
                 Toast.makeText(getActivity(), "Eventos Obtenidos incorrectamente",
                         Toast.LENGTH_SHORT).show();
+
             }
         });
         FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.nuevo_evento);

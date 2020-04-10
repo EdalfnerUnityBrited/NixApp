@@ -50,7 +50,7 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
             holder.privacidad.setImageResource(ic_privado);
         }
         Glide.with(holder.eventImage)
-                .load(String.valueOf(holder.mItem.getImagen()))
+                .load(String.valueOf(holder.mItem.getFotoPrincipal()))
                 .fitCenter()
                 .centerCrop()
                 .into(holder.eventImage);

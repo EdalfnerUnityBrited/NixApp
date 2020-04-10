@@ -1,6 +1,7 @@
 package com.example.nixapp.DB;
 
 public class Eventos {
+    String id;
     String nombre_evento;
     int privacidad;
     int categoria_evento;
@@ -10,7 +11,7 @@ public class Eventos {
     String descripcion;
     int cupo;
     int cover;
-    String imagen;
+    String fotoPrincipal;
 
     public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String foto) {
         this.nombre_evento = nombre_evento;
@@ -22,15 +23,15 @@ public class Eventos {
         this.descripcion = descripcion;
         this.cupo=cupo;
         this.cover=cover;
-        this.imagen =foto;
+        this.fotoPrincipal =foto;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getFotoPrincipal() {
+        return fotoPrincipal;
     }
 
     public void setImagen(String imagen) {
-        this.imagen = imagen;
+        this.fotoPrincipal= fotoPrincipal;
     }
 
     public int getPrivacidad() {
@@ -71,5 +72,13 @@ public class Eventos {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

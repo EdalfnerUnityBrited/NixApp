@@ -27,7 +27,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
@@ -44,9 +46,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,16 +66,17 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     private EventosAdapter mAdapter;
     TimePickerDialog picker2;
     Date currentTime = Calendar.getInstance().getTime();
+    List<String> fotos;
 
     Switch simpleSwitch1;
     CheckBox cover;
 
-    String downloadUrl;
+    String downloadUrl, imagenPrincipal;
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName;
-    Button terminar, insertar, enables, info, imagen;
+    Button terminar, insertar, enables, info, imagen, catalogo;
     int cupo;
     RadioButton r1,r2;
     @Override
@@ -235,7 +240,18 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         coverEvento=findViewById(R.id.cover_valor);
         descripcionEvento= findViewById(R.id.descripcion);
         imagen= findViewById(R.id.buttonImagen);
+        catalogo=findViewById(R.id.buttonIrCatalogo);
+        catalogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i= new Intent(CrearEvento.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
         downloadUrl="";
+        imagenPrincipal="";
+        fotos= new ArrayList<>();
+
     }
 
     private boolean validarEmail(String email) {
@@ -268,6 +284,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         String hora=(eTextHora.getText().toString())+":00";
         String cupo= cupoEvento.getText().toString();
         String precio= coverEvento.getText().toString();
+        final List<ImagenEventos> imagenEventos= new ArrayList<>();
+
 
         String[] fechanueva= fecha.split("/");
                 dia=Integer.parseInt(fechanueva[0]);
@@ -303,14 +321,39 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
-                final Eventos requestSample = new Eventos(nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, downloadUrl);
+                final Eventos requestSample = new Eventos(nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal);
                 Call<EventosResult> call= nixService.eventos(requestSample);
                 call.enqueue(new Callback<EventosResult>() {
                     @Override
                     public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
                         if (response.isSuccessful()){
                             Toast.makeText(CrearEvento.this, "Crear evento correcto", Toast.LENGTH_SHORT).show();
+                            Eventos eventos= response.body().eventos;
+                            String id= eventos.getId();
+                            if (!fotos.isEmpty()){
 
+                                for (String imagenes: fotos){
+                                   ImagenEventos image= new ImagenEventos(imagenes.toString(), id);
+                                   imagenEventos.add(image);
+                                }
+                                Call<ResponseBody> callImagen=nixService.image(imagenEventos);
+                                callImagen.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()){
+                                            Toast.makeText(CrearEvento.this, "Imagenes añadidas correctamente", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(CrearEvento.this, "Error al añadir las imagenes", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                    }
+                                });
+                            }
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
@@ -377,7 +420,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+    int length= fotos.size();
+    if (length<7){
         if (requestCode== GALLERY_INTENT&&resultCode== -1){
             mProgressDialog.setTitle("Subiendo...");
             mProgressDialog.setMessage("Subiendo foto a firebase");
@@ -409,6 +453,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             downloadUrl= task.getResult().toString();
+                            if (fotos.isEmpty()){
+                                imagenPrincipal=downloadUrl;
+                            }
+                            fotos.add(downloadUrl);
                             mProgressDialog.dismiss();
 
                         }
@@ -418,6 +466,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 }
             });
         }
+    }
+    else {
+        Toast.makeText(this, "Solo puede agregar 7 fotos", Toast.LENGTH_SHORT).show();
+    }
     }
 
 }
