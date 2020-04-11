@@ -2,6 +2,7 @@ package com.example.nixapp.UI.usuario.configUsuario;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,11 +19,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +33,23 @@ import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.internal.SignInButtonImpl;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,6 +70,21 @@ import retrofit2.Response;
 
 public class InformacionPersonalFragment extends Fragment {
 
+    private ProfileTracker profileTracker;
+    CallbackManager callbackManager;
+    LoginButton loginButton = null;
+    AccessTokenTracker accessTokenTracker;
+    GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount account ;
+    SignInButtonImpl signInButton;
+    Button salir, fake, recaptcha;
+    TextView nombreG, apG, correoG, cumpleG,given;
+    ImageView fotoperfil;
+    int ApiActivada = 0;
+    int RC_SIGN_IN = 9001;
+    boolean imagen_agregada = false;
+    Button VGoo;
+////////////////////////////////////
     private static final int GALLERY_INTENT=1;
     private StorageReference mStorage;
     private static final String TAG = "MainActivity";
@@ -347,78 +382,273 @@ public class InformacionPersonalFragment extends Fragment {
 
             }
         });
+
+
+        //////////////////////////////////Vericar y cambiar los botones de vinculacion
+        //Facebook Stuff Inicio de Sesion
+        callbackManager = CallbackManager.Factory.create();
+        //Boton falso
+        loginButton = (LoginButton) view.findViewById(R.id.faceprueba);
+        loginButton.setVisibility(View.INVISIBLE);
+        loginButton.setFragment(this);
+        fake = view.findViewById(R.id.Vface);
+        fake.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                loginButton.performClick();
+
+            }
+        });
+        ///////////////////////////////////////////////////
+        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions("user_birthday");
+        //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged (Profile oldProfile, Profile currentProfile) {
+                if (currentProfile != null) {
+
+                }
+            }
+        };
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                Toast.makeText(getActivity(),"Vinculacion con facebook exitosa",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+                Toast.makeText(getActivity(),"Intento Cancelado",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                Toast.makeText(getActivity(),"Error al intentar iniciar sesion",Toast.LENGTH_SHORT).show();
+            }
+        });
+        final Button VFace = view.findViewById(R.id.Vface);
+        VGoo = view.findViewById(R.id.Vgoogle);
+        //PA salir de la sincronizacion de facebook LoginManager.getInstance().logOut();
+        //AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        //boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                                                       AccessToken currentAccessToken) {
+                if (currentAccessToken == null) {
+                    //write your code here what to do when user clicks on facebook logout
+                    Toast.makeText(getActivity(),"Cuenta Desvinculada",Toast.LENGTH_SHORT).show();
+                    VFace.setBackgroundResource(R.drawable.custombutom2);
+                }
+                else
+                {
+                    VFace.setBackgroundResource(R.drawable.custombutom);
+                }
+            }
+        };
+        //Chequeo Inicial
+        if(AccessToken.getCurrentAccessToken()==null)
+        {
+            VFace.setBackgroundResource(R.drawable.custombutom2);
+        }
+        else
+        {
+            VFace.setBackgroundResource(R.drawable.custombutom);
+        }
+        /////////////////////////////////////////////////////////Api de google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity().getApplicationContext(), gso);
+        signInButton = view.findViewById(R.id.Vgoogle);
+        //signInButton.setSize(SignInButton.SIZE_WIDE);
+        final AlertDialog.Builder dialogo1 = new AlertDialog.Builder(getActivity());
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("¿ Quiere desvincular su cuenta de google ?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                signOut();
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                //cancelar();
+            }
+        });
+        signInButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+                if(account != null)
+                {
+                    dialogo1.show();
+                }
+                else
+                {
+                    ApiActivada = 2;
+                    signIn();
+
+                }
+
+            }
+        });
         return view;
     }
 
+/////////////////////////////////////////////API Facebook
+//Destructor del profile cuando existe un "error"
+@Override
+public void onDestroy() {
+    super.onDestroy();
+    profileTracker.stopTracking();
+}
 
+/////////////////////////////////////////////API Google
+//Validacion de la cuenta y de la activacion de API en servers de google
+private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    try {
+        GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+        // Signed in successfully, show authenticated UI.
+        Toast.makeText(getActivity(),"Vinculacion exitosa",Toast.LENGTH_LONG).show();
+        VGoo.setBackgroundResource(R.drawable.custombutom);
+
+    } catch (ApiException e) {
+        // The ApiException status code indicates the detailed failure reason.
+        // Please refer to the GoogleSignInStatusCodes class reference for more information.
+        Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+        Toast.makeText(getActivity(),"Inicio Interrumpido",Toast.LENGTH_LONG).show();
+    }
+}
+
+    //Cerrar sesion de la cuenta de Google
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // [START_EXCLUDE]
+                        VGoo.setBackgroundResource(R.drawable.custombutom2);
+                        Toast.makeText(getActivity(),"Saliste de la sesion " ,Toast.LENGTH_LONG).show();
+                        // [END_EXCLUDE]
+                    }
+                });
+    }
+
+
+    //Mensajes de estado acerca de si se conecto o no con google
+    public void  updateUI(GoogleSignInAccount account){
+        if(account != null){
+
+        }else {
+            Toast.makeText(getActivity(),"Faild",Toast.LENGTH_LONG).show();
+        }
+    }
+    //Inicio de sesion con Cuenta de Google
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+
+    //////////////////////////////////////////
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode== GALLERY_INTENT&&resultCode== -1){
-            mProgressDialog.setTitle("Subiendo...");
-            mProgressDialog.setMessage("Subiendo foto a firebase");
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-            Uri uri= data.getData();
-            final StorageReference filePath= mStorage.child(uri.getLastPathSegment());
-            final UploadTask uploadTask = filePath.putFile(uri);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    String message= e.toString();
-                    Toast.makeText(getActivity(), "Error: "+message, Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getActivity(), "Subida Exitosa", Toast.LENGTH_SHORT).show();
-                    Task<Uri> urlTask= uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()){
-                                throw task.getException();
+        if(ApiActivada == 0){ // Facebook API
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == GALLERY_INTENT && resultCode == -1) {
+                mProgressDialog.setTitle("Subiendo...");
+                mProgressDialog.setMessage("Subiendo foto a firebase");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+                Uri uri = data.getData();
+                final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
+                final UploadTask uploadTask = filePath.putFile(uri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String message = e.toString();
+                        Toast.makeText(getActivity(), "Error: " + message, Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(getActivity(), "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
+                                downloadUrl = filePath.getDownloadUrl().toString();
+                                return filePath.getDownloadUrl();
                             }
-                            downloadUrl= filePath.getDownloadUrl().toString();
-                            return filePath.getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            downloadUrl= task.getResult().toString();
-                            mProgressDialog.dismiss();
-                            Glide.with(fotoPerfil)
-                                    .load(downloadUrl)
-                                    .fitCenter()
-                                    .centerCrop()
-                                    .into(fotoPerfil);
-                            final Usuario requestSample = new Usuario(downloadUrl);
-                            Call<ResponseBody> call = nixService.foto(requestSample);
-                            call.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.isSuccessful()){
-                                        Toast.makeText(getActivity(), "Cambio de foto correcto",
-                                                Toast.LENGTH_SHORT).show();
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                downloadUrl = task.getResult().toString();
+                                mProgressDialog.dismiss();
+                                Glide.with(fotoPerfil)
+                                        .load(downloadUrl)
+                                        .fitCenter()
+                                        .centerCrop()
+                                        .into(fotoPerfil);
+                                final Usuario requestSample = new Usuario(downloadUrl);
+                                Call<ResponseBody> call = nixService.foto(requestSample);
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Cambio de foto correcto",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getActivity(), "Error en los datos",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                    else{
-                                        Toast.makeText(getActivity(), "Error en los datos",
-                                                Toast.LENGTH_SHORT).show();
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
                                     }
-                                }
+                                });
 
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                }
-                            });
-
-                        }
-                    });
+                            }
+                        });
 
 
-                }
-            });
+                    }
+                });
+        }
+
+        }
+        else if (ApiActivada == 2) // Google API
+        {
+            //Mensaje
+            super.onActivityResult(requestCode, resultCode, data);
+
+            // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+            if (requestCode == RC_SIGN_IN) {
+                // The Task returned from this call is always completed, no need to attach
+                // a listener.
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+                ApiActivada = 0;
+            }
+            ApiActivada = 0;
         }
     }
 

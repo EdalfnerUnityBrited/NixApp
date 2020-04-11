@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -26,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
@@ -33,6 +38,12 @@ import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
+import com.facebook.AccessToken;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareButtonBase;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,6 +54,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,7 +73,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     private ProgressDialog mProgressDialog;
     private static final int GALLERY_INTENT=1;
     DatePickerDialog picker;
-    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento;
+    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail;
     private ArrayList<EventosItems> mEventsList;
     private EventosAdapter mAdapter;
     TimePickerDialog picker2;
@@ -70,14 +82,19 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
     Switch simpleSwitch1;
     CheckBox cover;
-
+    TextView correosAgregados;
     String downloadUrl, imagenPrincipal;
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName;
-    Button terminar, insertar, enables, info, imagen, catalogo;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir;
     int cupo;
+    boolean correoagregado = false, imagen_lista = false;
+    int ApiActivada = 0;
+    Uri imagen_enviar;
+    ImageView InvitacionSeleccionada;
+    ShareButton shareButton;
     RadioButton r1,r2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +229,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                     if(validarEmail(correos.getText().toString()))
                     {
                         mostrarCorreos.setText(mostrarCorreos.getText()+"\n" + correos.getText());
+                        correoagregado = true;
                         correos.setText("");
                     }
                     else
@@ -221,9 +239,129 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
-        /////////////////////
+        /////////////////////Buscar Imagen
+        buscar_imagen = (Button) findViewById(R.id.buttonBuscarInvitacion);
+        InvitacionSeleccionada = findViewById(R.id.verInvitacion);
+        InvitacionSeleccionada.setVisibility(View.GONE);
+        buscar_imagen.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                agregarImagen();
+            }
+        });
+        ///////////////////// Enviar Correos
+        /*imagen_enviar = imageUri;
+                    imagen_lista = true;*/
+        descripcionEventoEmail = findViewById(R.id.descripcion);
+        correosAgregados = findViewById(R.id.mostrarCorreos);
+        botonEmail = (Button) findViewById(R.id.EnviarCorreo);
+        botonEmail.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //Llamamos al metodo enviarEmail
+                if(imagen_lista  == false)
+                {
+                    Toast.makeText(CrearEvento.this, "Ingresa la invitacion para continuar", Toast.LENGTH_SHORT).show();
+                }
+                else if(correoagregado== false)
+                {
+                    Toast.makeText(CrearEvento.this, "Ingresa minimo una direccion de correo para poder poder enviar la invtacion", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    enviarEmail();
+                }
+
+            }
+        });
+        ////////////////////////////////Compartir facebook
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                .build();
+        fakecompartir = findViewById(R.id.face);
+
+        shareButton = (ShareButton)findViewById(R.id.fb_share_button);
+        shareButton.setEnabled(true);
+
+        fakecompartir.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                shareButton.performClick();
+            }
+        });
+        shareButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(AccessToken.getCurrentAccessToken()==null)
+                {
+                    Toast.makeText(getApplicationContext(),"No tienes tu cuenta vinculada para compartir con facebook" ,Toast.LENGTH_LONG).show();
+
+                }
+                else if(imagen_enviar == null)
+                {
+                    Toast.makeText(getApplicationContext(),"No has elegido la invitacion para compartir" ,Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    SharePhoto photo = new SharePhoto.Builder()
+                            .setImageUrl(Uri.parse(imagen_enviar.toString()))
+                            .build();
+                    SharePhotoContent contents = new SharePhotoContent.Builder()
+                            .addPhoto(photo)
+                            .build();
+                    shareButton.setShareContent(contents);
+                }
+
+            }
+        });
+
+    }
+    private void enviarEmail(){
+        //Instanciamos un Intent del tipo ACTION_SEND
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        //Aqui definimos la tipologia de datos del contenido dle Email en este caso text/html
+        emailIntent.setType("text/html");
+        // Indicamos con un Array de tipo String las direcciones de correo a las cuales enviar
+        String direcciones = correosAgregados.getText().toString();
+        String[] correos = direcciones.split("\n");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, correos);
+        // Aqui definimos un titulo para el Email
+        emailIntent.putExtra(android.content.Intent.EXTRA_TITLE, "Invitacion del evento: " + nombreEvento.getText());
+        // Aqui definimos un Asunto para el Email
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Invitacion al evento: '"+nombreEvento.getText()+"' Te esperamos...");
+        // Aqui obtenemos la referencia al texto y lo pasamos al Email Intent
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, descripcionEventoEmail.getText());
+        //Agregar una imagen
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imagen_enviar.toString()));
+        try {
+            //Enviamos el Correo iniciando una nueva Activity con el emailIntent.
+            startActivity(Intent.createChooser(emailIntent, "Enviar Correo..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "No hay ningun cliente de correo instalado.", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    ///////////////////////////////////////////
+    public void agregarImagen()
+    {
+        ApiActivada = 4;
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, "Seleccione una imagen"),
+                1);
+
+    }
+    /////////////////////////////
     private void iniciarcomponentes() {
         r1=findViewById(R.id.publico);
         r2=findViewById(R.id.privado);
@@ -419,57 +557,81 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    int length= fotos.size();
-    if (length<7){
-        if (requestCode== GALLERY_INTENT&&resultCode== -1){
-            mProgressDialog.setTitle("Subiendo...");
-            mProgressDialog.setMessage("Subiendo foto a firebase");
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-            Uri uri= data.getData();
-            final StorageReference filePath= mStorage.child(uri.getLastPathSegment());
-            final UploadTask uploadTask = filePath.putFile(uri);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    String message= e.toString();
-                    Toast.makeText(CrearEvento.this, "Error: "+message, Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(CrearEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
-                    Task<Uri> urlTask= uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+        if(ApiActivada == 0) {
+            super.onActivityResult(requestCode, resultCode, data);
+            int length = fotos.size();
+            if (length < 7) {
+                if (requestCode == GALLERY_INTENT && resultCode == -1) {
+                    mProgressDialog.setTitle("Subiendo...");
+                    mProgressDialog.setMessage("Subiendo foto a firebase");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+                    Uri uri = data.getData();
+                    final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
+                    final UploadTask uploadTask = filePath.putFile(uri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()){
-                                throw task.getException();
-                            }
-                            downloadUrl= filePath.getDownloadUrl().toString();
-                            return filePath.getDownloadUrl();
+                        public void onFailure(@NonNull Exception e) {
+                            String message = e.toString();
+                            Toast.makeText(CrearEvento.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                         }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            downloadUrl= task.getResult().toString();
-                            if (fotos.isEmpty()){
-                                imagenPrincipal=downloadUrl;
-                            }
-                            fotos.add(downloadUrl);
-                            mProgressDialog.dismiss();
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(CrearEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+                                    downloadUrl = filePath.getDownloadUrl().toString();
+                                    return filePath.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    downloadUrl = task.getResult().toString();
+                                    if (fotos.isEmpty()) {
+                                        imagenPrincipal = downloadUrl;
+                                    }
+                                    fotos.add(downloadUrl);
+                                    mProgressDialog.dismiss();
+
+                                }
+                            });
+
 
                         }
                     });
-
-
                 }
-            });
+            }
+            else {
+                Toast.makeText(this, "Solo puede agregar 7 fotos", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
-    else {
-        Toast.makeText(this, "Solo puede agregar 7 fotos", Toast.LENGTH_SHORT).show();
-    }
+        else
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    imagen_enviar = imageUri;
+                    imagen_lista = true;
+                    Glide.with(this).load(imagen_enviar) .diskCacheStrategy(DiskCacheStrategy.RESOURCE) .into(InvitacionSeleccionada);
+                    InvitacionSeleccionada.setVisibility(View.VISIBLE);
+                    Toast.makeText(this, "Imagen Agregada", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+            ApiActivada = 0;
+        }
+
     }
 
 }
+

@@ -36,15 +36,14 @@
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/custombutom2"
+        android:text="Iniciar Sesion"
         android:textColor="@drawable/butom_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.717"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
-        app:layout_constraintVertical_bias="1.0"
-        android:text="Iniciar Sesion"
-        />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
         android:id="@+id/loading"
@@ -99,8 +98,18 @@
         app:layout_constraintVertical_bias="0.532"
         app:srcCompat="@drawable/forgot" />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_facebook"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCrearCuenta"
+        android:visibility="invisible"/>
+
     <Button
-        android:id="@+id/buttonCrearCuenta"
+        android:id="@+id/buttonFacebook"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginBottom="31dp"
@@ -112,8 +121,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.977" />
 
-    <Button
-        android:id="@+id/buttonImagen"
+    <com.google.android.gms.common.internal.SignInButtonImpl
+        android:id="@+id/googleInicio"
         android:layout_width="54dp"
         android:layout_height="54dp"
         android:background="@drawable/googlebl"

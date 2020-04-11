@@ -17,12 +17,19 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -36,7 +43,7 @@ import retrofit2.Response;
 public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     Switch switchProveedor;
     int proovedor=0;
-    Button btnCrear;
+    Button btnCrear,recaptcha;
     EditText etNombre, etApellidoP, etApellidoM, etEmail, etTelefono, etFechaNac, etPassword, etPasswordConf;
     Intent intent;
     private int ano, mes, dia;
@@ -44,6 +51,10 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     String date;
     NixClient nixClient;
     NixService nixService;
+    boolean RECaptcha = false;
+
+    String SITE_KEY = "6LcKU-gUAAAAAJnQRFaoXEBKD2DicwGKYu19EOI6";
+    String SECRET_KEY = "6LcKU-gUAAAAABBdaP82YT7e4Sr8ZZtFWB2O93mc";
 
     private static final String TAG = "MainActivity";
 
@@ -104,6 +115,57 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         };
         /////////////
         retrofitInit();
+        ///////////////////////////////Recaptcha
+        recaptcha = (Button) findViewById(R.id.reCatcha);
+        recaptcha.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // Showing reCAPTCHA dialog
+                try {
+                    SafetyNet.getClient(getApplicationContext()).verifyWithRecaptcha(SITE_KEY)
+                            .addOnSuccessListener(new OnSuccessListener<SafetyNetApi.RecaptchaTokenResponse>() {
+                                @Override
+                                public void onSuccess(SafetyNetApi.RecaptchaTokenResponse response) {
+                                    // Indicates communication with reCAPTCHA service was
+                                    // successful.
+
+                                    String userResponseToken = response.getTokenResult();
+                                    if(userResponseToken != null){
+                                        Toast.makeText(getApplicationContext(),"Bienvenido Humano" ,Toast.LENGTH_LONG).show();
+                                        RECaptcha = true;
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"Ni lo intentes Robot" ,Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    if (e instanceof ApiException) {
+                                        // An error occurred when communicating with the
+                                        // reCAPTCHA service. Refer to the status code to
+                                        // handle the error appropriately.
+                                        ApiException apiException = (ApiException) e;
+                                        int statusCode = apiException.getStatusCode();
+                                        Toast.makeText(getApplicationContext(),"Error: " + CommonStatusCodes
+                                                .getStatusCodeString(statusCode) ,Toast.LENGTH_LONG).show();
+                                    } else {
+                                        // A different, unknown type of error occurred.
+                                        Toast.makeText(getApplicationContext(),"Error: " + e.getMessage() ,Toast.LENGTH_LONG).show();
+
+                                    }
+                                }
+                            });
+                }catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),"Error: " + e,Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
     }
 
     private void retrofitInit() {
@@ -143,6 +205,10 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         }
         if (passwordConfirmacion.isEmpty()){
             etPasswordConf.setError("Confirme la contraseña");
+        }
+        if(RECaptcha == false)
+        {
+            Toast.makeText(getApplicationContext(),"Porfavor, verifica no ser un bot" ,Toast.LENGTH_LONG).show();
         }
         else{
             boolean verificarCorreo=verificarCorreo (email);
