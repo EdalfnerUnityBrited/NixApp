@@ -251,7 +251,7 @@
                         android:id="@+id/reCatcha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="   Eres Humano?"
+                        android:text="   ¿Eres Humano?"
                         android:padding="10dp"
                         android:drawableLeft="@drawable/ic_recaptchalogo"
                         android:background="@drawable/custombutom2"
