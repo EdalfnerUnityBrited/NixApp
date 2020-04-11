@@ -34,6 +34,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.CreadorDeInvitaciones;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -88,7 +89,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
     int cupo;
     boolean correoagregado = false, imagen_lista = false;
     int ApiActivada = 0;
@@ -239,6 +240,14 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+        /////////////////////CREAR INVITACIÓN
+        crear_invitacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent irInvitacionIntent = new Intent(CrearEvento.this, CreadorDeInvitaciones.class);
+                startActivity(irInvitacionIntent);
+            }
+        });
         /////////////////////Buscar Imagen
         buscar_imagen = (Button) findViewById(R.id.buttonBuscarInvitacion);
         InvitacionSeleccionada = findViewById(R.id.verInvitacion);
@@ -376,6 +385,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         lugarEvento= findViewById(R.id.direcc);
         cupoEvento= findViewById(R.id.cupo);
         coverEvento=findViewById(R.id.cover_valor);
+        crear_invitacion = (Button) findViewById(R.id.buttonIrInvitacion);
         descripcionEvento= findViewById(R.id.descripcion);
         imagen= findViewById(R.id.buttonImagen);
         catalogo=findViewById(R.id.buttonIrCatalogo);

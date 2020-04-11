@@ -68,4 +68,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     ////////////Implementacion de reCAPTCHA (safetynet)
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
+    ////////////Editor de fotos
+    implementation 'com.karumi:dexter:4.1.0'
+    implementation 'info.androidhive:imagefilters:1.0.7'
+    implementation 'ja.burhanrashid52:photoeditor:0.2.1'
+    implementation 'com.github.rockerhieu:emojicon:v1.4.2'//para este tambien se agrega en el otro gradle
+    implementation 'com.github.yalantis:ucrop:2.2.2-native' //agregar la activity del manifesta  nix
 }
