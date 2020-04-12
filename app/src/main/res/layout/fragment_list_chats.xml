@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewPhoto" />
 
     <TextView
-        android:id="@+id/textViewNombre"
+        android:id="@+id/textViewFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"

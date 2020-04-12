@@ -66,7 +66,7 @@ public class PruebaChatsRecyclerViewAdapter extends RecyclerView.Adapter<PruebaC
             super(view);
             mView = view;
            id_usuario = view.findViewById(R.id.textViewNo_temporada);
-           statusUsuario= view.findViewById(R.id.textViewNombre);
+           statusUsuario= view.findViewById(R.id.textViewFecha);
 
         }
 

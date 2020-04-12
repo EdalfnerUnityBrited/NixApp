@@ -22,14 +22,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
-import com.example.nixapp.UI.usuario.misEventos.MisEventos;
 import com.example.nixapp.UI.usuario.ayuda.Ayuda;
+import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
 import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;
+import com.example.nixapp.UI.usuario.misEventos.MisEventos;
 import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
@@ -46,6 +47,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Call;
@@ -77,6 +79,12 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         View hView = navigationView.getHeaderView(0);
         TextView tv_nombre = hView.findViewById(R.id.tv_nombre);
         TextView tv_email = hView.findViewById(R.id.tv_email);
+        CircleImageView profile=hView.findViewById(R.id.profile_image);
+        Glide.with(profile)
+                .load(usuario.fotoPerfil)
+                .fitCenter()
+                .centerCrop()
+                .into(profile);
         tv_nombre.setText(usuario.name);
         tv_email.setText(usuario.email);
 
@@ -120,6 +128,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
             }
             case R.id.nav_perfil:{
                 Intent intentMiPerfil = new Intent(this, MiPerfil.class);
+                intentMiPerfil.putExtra("usuario", usuario);
                 startActivity(intentMiPerfil);
                 break;
             }
@@ -190,7 +199,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 if (response.isSuccessful()) {
                     for (final Eventos x: response.body().eventos) {
                         String direccion = x.getLugar();
-                        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPIKFMqDYeUhtKytpXannMCEQd_yC7C8I",direccion);
+                        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",direccion);
                         OkHttpClient client = new OkHttpClient();
                         Request request = new Request.Builder()
                                 .url(url)
@@ -209,7 +218,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                                     MenuPrincipalUsuarioGeneral.this.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            double ltEvento, lnEvento;
+                                           double ltEvento, lnEvento;
                                             String[] ltEvento1Json = myResponse.split("\"lat\"+ +:+ ");
                                             String[] lnEvento1Json = myResponse.split("\"lng\"+ +:+ ");
                                             String[] ltEventoFinalJson = ltEvento1Json[1].split(",");

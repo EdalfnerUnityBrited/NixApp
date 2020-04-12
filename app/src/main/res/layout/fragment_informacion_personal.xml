@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -141,9 +141,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@null"
-                                android:hint="Apellido paterno usuario"
                                 android:inputType="textPersonName"
                                 android:textColor="#ffffffff" />
+
+
                         </TableRow>
 
                         <View
@@ -263,7 +264,27 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <Button
+                        android:id="@+id/buttonGuardar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/custombutom2"
+                        android:padding="5dp"
+                        android:text="Guardar cambios"
+                        android:textColor="@drawable/butom_text" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -346,23 +367,90 @@
 
                     </TableLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:orientation="vertical">
 
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/buttonPass"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
+                        android:text="Cambiar Contraseña"
                         android:background="@drawable/custombutom2"
+                        android:layout_gravity="center_horizontal"
                         android:padding="5dp"
-                        android:text="Guardar cambios"
-                        android:textColor="@drawable/butom_text" />
+                        android:textColor="@drawable/butom_text"/>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/vinculacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Vinculacion con:"
+                        android:textStyle="bold">
+
+                    </TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
+
+                    <TableRow
+                        android:id="@+id/vinculaciones"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow"
+                        android:gravity="center_horizontal">
+
+
+                        <com.google.android.gms.common.internal.SignInButtonImpl
+                            android:id="@+id/Vgoogle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="   Vincular"
+                            android:padding="10dp"
+                            android:background="@drawable/custombutom2"
+                            android:textColor="@drawable/butom_text"
+                            android:drawableLeft="@drawable/ic_google"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <Button
+                            android:id="@+id/Vface"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:drawableLeft="@drawable/ic_facebook_account"
+                            android:padding="10dp"
+                            android:text="   Vinculado"
+                            android:textColor="@drawable/butom_text"
+                            android:background="@drawable/custombutom"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"/>
+                        <com.facebook.login.widget.LoginButton
+                            android:id="@+id/faceprueba"
+                            android:layout_width="2dp"
+                            android:layout_height="2dp"/>
+                    </TableRow>
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>

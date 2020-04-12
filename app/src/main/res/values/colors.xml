@@ -6,4 +6,8 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffffff</color>
     <color name="nopress">#D1A8EC</color>
+    <color name="selected_filter">#221f20</color>
+    <color name="normal_filter">#8a8889</color>
+    <color name="color_option_menu_invitacion">#FF3990</color>
+    <color name="card_editor_backgroud">#333639</color>
 </resources>

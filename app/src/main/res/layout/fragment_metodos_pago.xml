@@ -62,34 +62,58 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="20dp">
 
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/buttonGuardar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/custombutom2"
                         android:padding="5dp"
-                        android:text="Le voy a agregar un boton bonito"
+                        android:drawableTop="@drawable/ic_paypal_seeklogo"
+                        android:background="@drawable/custombutom2"
+
                         android:textColor="@drawable/butom_text" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:layout_marginTop="30dp">
+                    <TextView
+                        android:id="@+id/metodosregistrados"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Metodos de pago Registrados"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                    <View
+                        android:layout_height="1dip"
+                        android:background="@color/colorPrimary"
+                        android:layout_width="match_parent" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="15dp">
 
+                    <Button
+                        android:id="@+id/buttonCuenta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:drawableLeft="@drawable/ic_paypal_cuentas"
+                        android:text="az0511258@gmail.com"
+                        android:textAllCaps="false"
+                        android:background="@drawable/custombutom2"
 
+                        android:textColor="@drawable/butom_text" />
                 </LinearLayout>
 
 

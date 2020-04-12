@@ -1,6 +1,7 @@
 package com.example.nixapp.conn;
 
 import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventosListResult;
@@ -8,11 +9,14 @@ import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
 import com.example.nixapp.conn.results.LoginResult;
 
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface NixService {
 
@@ -37,4 +41,15 @@ public interface NixService {
     @GET("auth/user")
     Call<Usuario> getUser();
 
+    @PUT("auth/foto")
+    Call<ResponseBody> foto(@Body Usuario usuario);
+
+    @PUT("auth/user")
+    Call<ResponseBody> datos(@Body Usuario usuario);
+
+    @PUT("auth/password")
+    Call<ResponseBody> pass(@Body Usuario usuario);
+
+    @POST("imagen")
+    Call<ResponseBody> image(@Body List<ImagenEventos> imagenEventos);
 }

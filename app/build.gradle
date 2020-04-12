@@ -57,5 +57,21 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
-
+    //////Implementacion de Glide (poder manipular imagenes en view)
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    ////// Implementaciones para facebook accoun y share
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'com.facebook.android:facebook-share:[5,6)'
+    ////////////Google Log-In Implementacion
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    ////////////Implementacion de reCAPTCHA (safetynet)
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
+    ////////////Editor de fotos
+    implementation 'com.karumi:dexter:4.1.0'
+    implementation 'info.androidhive:imagefilters:1.0.7'
+    implementation 'ja.burhanrashid52:photoeditor:0.2.1'
+    implementation 'com.github.rockerhieu:emojicon:v1.4.2'//para este tambien se agrega en el otro gradle
+    implementation 'com.github.yalantis:ucrop:2.2.2-native' //agregar la activity del manifesta  nix
 }
