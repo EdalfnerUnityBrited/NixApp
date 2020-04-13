@@ -15,6 +15,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
@@ -52,4 +53,7 @@ public interface NixService {
 
     @POST("imagen")
     Call<ResponseBody> image(@Body List<ImagenEventos> imagenEventos);
+
+    @HTTP(method = "DELETE", path = "eventos", hasBody = true)
+    Call<ResponseBody> deleteEvent(@Body Eventos eventos);
 }

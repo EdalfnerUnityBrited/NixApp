@@ -1,5 +1,6 @@
 package com.example.nixapp.UI.usuario.misEventos;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.serviciosContratados.chat.DashboardFragment;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
@@ -97,5 +99,23 @@ public class EventosCerradosFragment extends Fragment implements View.OnClickLis
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Eventos item);
+        void onClickDelete(Eventos item);
+        void onClickEdit(Eventos item);
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof EventosCerradosFragment.OnListFragmentInteractionListener) {
+            mListener = (EventosCerradosFragment.OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 }
