@@ -16,4 +16,7 @@
     <string name="facebook_app_id">358574745068866</string>
     <string name="fb_login_protocol_scheme">fb358574745068866</string>
     <string name="server_client_id">223065753491-99o1c771j64969fb2u7f94g6itjh4q66.apps.googleusercontent.com</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

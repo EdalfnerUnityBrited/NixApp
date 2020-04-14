@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".common.MyApp"
@@ -20,11 +20,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/> <activity android:name="com.facebook.FacebookActivity" android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" /> <activity android:name="com.facebook.CustomTabActivity" android:exported="true"> <intent-filter> <action android:name="android.intent.action.VIEW" /> <category android:name="android.intent.category.DEFAULT" /> <category android:name="android.intent.category.BROWSABLE" /> <data android:scheme="@string/fb_login_protocol_scheme" /> </intent-filter> </activity>
-        <activity android:name=".UI.usuario.misEventos.CrearEvento"></activity>
+        <activity android:name=".UI.usuario.InfoEventoExpandida"></activity>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".UI.usuario.misEventos.CrearEvento" />
         <activity
             android:name=".UI.usuario.ayuda.Ayuda"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.usuario.configUsuario.MiPerfil"
             android:screenOrientation="portrait" />
@@ -37,10 +58,10 @@
         <activity
             android:name=".UI.usuario.misEventos.MisEventos"
             android:screenOrientation="portrait" />
-
-        <activity android:name="com.yalantis.ucrop.UCropActivity"
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -61,10 +82,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.usuario.creadorInvitaciones.CreadorDeInvitaciones"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name=".UI.usuario.creadorInvitaciones.CreadorDeInvitaciones"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen"></activity>
         <activity
             android:name=".UI.welcome.MainActivity"
             android:screenOrientation="portrait" />
@@ -75,9 +96,10 @@
         <activity android:name=".UI.usuario.Calendario" />
         <activity android:name=".UI.usuario.Tendencias" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider358574745068866"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider358574745068866"
+            android:exported="true" />
     </application>
 
 </manifest>
