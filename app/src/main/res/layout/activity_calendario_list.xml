@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="4dp"
     android:layout_marginRight="4dp"
     android:layout_marginBottom="10dp"
@@ -12,7 +12,7 @@
 
 
     <TextView
-        android:id="@+id/textViewNo_temporada"
+        android:id="@+id/titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,7 +21,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@+id/textViewFecha"
@@ -43,7 +44,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ejemplo1" />
+        app:srcCompat="@drawable/compromisos"
+        android:layout_marginRight="8dp" />
 
     <TextView
         android:id="@+id/textViewDireccion"
@@ -54,7 +56,8 @@
         android:text="Direccion"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNo_temporada" />
+        app:layout_constraintTop_toBottomOf="@+id/titulo"
+        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@+id/textViewCupo"
@@ -66,34 +69,14 @@
         app:layout_constraintStart_toStartOf="@+id/textViewFecha"
         app:layout_constraintTop_toBottomOf="@+id/textViewFecha" />
 
-
-    <ImageView
-        android:id="@+id/textViewPrivacidad"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toStartOf="@+id/imageViewEvento"
-        app:layout_constraintTop_toTopOf="@+id/textViewNo_temporada" />
-
-    <Button
-        android:id="@+id/buttonDelete"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/botonborrar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/botonedit"
-        app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/estado_asistencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/textViewCupo"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCupo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

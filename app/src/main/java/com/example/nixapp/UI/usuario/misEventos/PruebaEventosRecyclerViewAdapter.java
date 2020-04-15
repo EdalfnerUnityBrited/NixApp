@@ -52,8 +52,6 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
         }
         Glide.with(holder.eventImage)
                 .load(String.valueOf(holder.mItem.getFotoPrincipal()))
-                .fitCenter()
-                .centerCrop()
                 .into(holder.eventImage);
 
         holder.nombre.setOnClickListener(new View.OnClickListener() {

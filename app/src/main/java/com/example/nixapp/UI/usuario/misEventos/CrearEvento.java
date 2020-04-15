@@ -630,7 +630,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                     final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                     imagen_enviar = imageUri;
                     imagen_lista = true;
-                    Glide.with(this).load(imagen_enviar) .diskCacheStrategy(DiskCacheStrategy.RESOURCE) .into(InvitacionSeleccionada);
+                    Glide.with(this).load(imagen_enviar).into(InvitacionSeleccionada);
                     InvitacionSeleccionada.setVisibility(View.VISIBLE);
                     Toast.makeText(this, "Imagen Agregada", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {

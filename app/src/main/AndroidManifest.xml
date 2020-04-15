@@ -93,7 +93,7 @@
             android:name=".UI.welcome.InicioSesion"
             android:screenOrientation="portrait" />
         <activity android:name=".UI.usuario.serviciosContratados.chat.ChatActivity" />
-        <activity android:name=".UI.usuario.Calendario" />
+        <activity android:name=".UI.usuario.Calendario.Calendario" />
         <activity android:name=".UI.usuario.Tendencias" />
 
         <provider

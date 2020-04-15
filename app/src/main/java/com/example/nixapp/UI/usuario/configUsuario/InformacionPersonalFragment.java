@@ -215,8 +215,6 @@ public class InformacionPersonalFragment extends Fragment {
         fotoPerfil= view.findViewById(R.id.profile_image);
         Glide.with(fotoPerfil)
                 .load(usuario.fotoPerfil)
-                .fitCenter()
-                .centerCrop()
                 .into(fotoPerfil);
         fotoPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -603,8 +601,6 @@ private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
                                 mProgressDialog.dismiss();
                                 Glide.with(fotoPerfil)
                                         .load(downloadUrl)
-                                        .fitCenter()
-                                        .centerCrop()
                                         .into(fotoPerfil);
                                 final Usuario requestSample = new Usuario(downloadUrl);
                                 Call<ResponseBody> call = nixService.foto(requestSample);

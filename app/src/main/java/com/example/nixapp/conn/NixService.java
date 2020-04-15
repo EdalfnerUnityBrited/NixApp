@@ -60,4 +60,7 @@ public interface NixService {
 
     @HTTP(method = "DELETE", path = "eventos", hasBody = true)
     Call<ResponseBody> deleteEvent(@Body Eventos eventos);
+
+    @GET("eventos/asistencia")
+    Call<EventosListResult> eventosAsistenciaUsuario();
 }

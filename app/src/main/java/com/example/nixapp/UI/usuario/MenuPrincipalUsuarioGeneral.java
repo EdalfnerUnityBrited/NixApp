@@ -27,6 +27,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.Calendario.Calendario;
 import com.example.nixapp.UI.usuario.Interfaces.InfoEventoFragmentListener;
 import com.example.nixapp.UI.usuario.ayuda.Ayuda;
 import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
@@ -36,7 +37,6 @@ import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
-import com.example.nixapp.conn.results.EventosEspecificoResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,10 +47,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +56,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,8 +90,6 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         CircleImageView profile=hView.findViewById(R.id.profile_image);
         Glide.with(profile)
                 .load(usuario.fotoPerfil)
-                .fitCenter()
-                .centerCrop()
                 .into(profile);
         tv_nombre.setText(usuario.name);
         tv_email.setText(usuario.email);
