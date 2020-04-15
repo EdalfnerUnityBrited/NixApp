@@ -81,4 +81,12 @@ public class Eventos {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
 }

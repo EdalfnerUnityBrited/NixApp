@@ -27,6 +27,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.Interfaces.InfoEventoFragmentListener;
 import com.example.nixapp.UI.usuario.ayuda.Ayuda;
 import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
 import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;
@@ -35,6 +36,7 @@ import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.EventosEspecificoResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,21 +44,29 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
+public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener, InfoEventoFragmentListener {
     private DrawerLayout drawer;
     private GoogleMap mMap;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
@@ -64,6 +74,8 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Usuario usuario;
     private NixService nixService;
     private NixClient nixClient;
+
+    private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +261,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
 
             }
         });
+        mMap.setOnMarkerClickListener(this);
     }
 
     private void retrofitinit() {
@@ -272,5 +285,88 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 break;
             }
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Call<JsonObject> calle = nixService.eventoBuscar(marker.getTitle());
+        calle.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, final Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    MenuPrincipalUsuarioGeneral.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bundle data = new Bundle();
+                            String[] ayuda = String.valueOf(response.body()).split("\"fecha\"+:+\"+");//1
+                            String[] ayudaFinal = ayuda[1].split("\"");
+                            data.putString("fecha",ayudaFinal[0]);
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"hora\"+:+\"+");//2
+                            ayudaFinal = ayuda[1].split("\"");
+                            data.putString("hora",ayudaFinal[0]);
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"nombre_evento\"+:+\"+");//3
+                            ayudaFinal = ayuda[1].split("\"");
+                            data.putString("nombre",ayudaFinal[0]);
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"lugar\"+:+\"+");//4
+                            ayudaFinal = ayuda[1].split("\"");
+                            data.putString("lugar",ayudaFinal[0]);
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+
+                            ayuda = String.valueOf(response.body()).split("\"privacidad\"+:");//5
+                            ayudaFinal = ayuda[1].split(",");
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"categoria_evento\"+:");//6
+                            ayudaFinal = ayuda[1].split(",");
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"descripcion\"+:+\"+");//7
+                            ayudaFinal = ayuda[1].split("\"");
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"cupo\"+:");//8
+                            ayudaFinal = ayuda[1].split(",");
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"cover\"+:");//9
+                            ayudaFinal = ayuda[1].split(",");
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            ayuda = String.valueOf(response.body()).split("\"fotoPrincipal\"+:+\"+");//10
+                            ayudaFinal = ayuda[1].split("\"");
+                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+
+                            InfoEventoFragment infoEventoFragment = InfoEventoFragment.getInstance();
+                            infoEventoFragment.setListener(MenuPrincipalUsuarioGeneral.this);
+                            infoEventoFragment.setArguments(data);
+                            infoEventoFragment.show(getSupportFragmentManager(),infoEventoFragment.getTag());
+                        }
+                    });
+
+                }
+                else{
+                    Toast.makeText(MenuPrincipalUsuarioGeneral.this, "Fallo en Response", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(MenuPrincipalUsuarioGeneral.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        return false;
+    }
+
+    @Override
+    public void onMoreInfoClickListener() {
+        Intent intentInfoExpandida = new Intent(MenuPrincipalUsuarioGeneral.this,InfoEventoExpandida.class);
+        intentInfoExpandida.putExtra("nombre",infoCompletaEventoEspecifico.get(2));
+        intentInfoExpandida.putExtra("privacidad",infoCompletaEventoEspecifico.get(4));
+        intentInfoExpandida.putExtra("categoria",infoCompletaEventoEspecifico.get(5));
+        intentInfoExpandida.putExtra("fecha",infoCompletaEventoEspecifico.get(0));
+        intentInfoExpandida.putExtra("hora",infoCompletaEventoEspecifico.get(1));
+        intentInfoExpandida.putExtra("lugar",infoCompletaEventoEspecifico.get(3));
+        intentInfoExpandida.putExtra("descripcion",infoCompletaEventoEspecifico.get(6));
+        intentInfoExpandida.putExtra("cupo",infoCompletaEventoEspecifico.get(7));
+        intentInfoExpandida.putExtra("cover",infoCompletaEventoEspecifico.get(8));
+        intentInfoExpandida.putExtra("fotoPrincipal",infoCompletaEventoEspecifico.get(9));
+        startActivity(intentInfoExpandida);
     }
 }
