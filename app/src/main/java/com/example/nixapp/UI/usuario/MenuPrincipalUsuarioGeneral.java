@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Usuario usuario;
     private NixService nixService;
     private NixClient nixClient;
+    Button buscar;
 
     private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
@@ -102,7 +104,15 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        buscar = findViewById(R.id.buscarEventos);
+        buscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentBusqueda = new Intent(getApplicationContext(), BuscarEventos.class);
+                intentBusqueda.putExtra("usuario", usuario);
+                startActivity(intentBusqueda);
+            }
+        });
     }
 
     @Override
@@ -283,7 +293,8 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Call<JsonObject> calle = nixService.eventoBuscar(marker.getTitle());
+        Eventos event =new Eventos(marker.getTitle());
+        Call<JsonObject> calle = nixService.eventoBuscar(event);
         calle.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, final Response<JsonObject> response) {

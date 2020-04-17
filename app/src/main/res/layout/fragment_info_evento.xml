@@ -3,43 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".UI.usuario.InfoEventoFragment">
+    tools:context=".UI.usuario.InfoEventoFragment"
+    android:background="@color/colorAccent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/txt_fecha_info_reducida"
-            android:text="Fecha: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/borderrow2"
+        android:orientation="vertical"
+        android:padding="8dp"
+        >
 
         <TextView
             android:id="@+id/txt_nombre_info_reducida"
-            android:text="Nombre del evento: "
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></TextView>
+            android:layout_height="wrap_content"
+            android:text="Nombre del evento: "
+            android:textSize="18sp"
+            android:textColor="@color/selected_filter"></TextView>
+
+        <TextView
+            android:id="@+id/txt_fecha_info_reducida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha: "
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/selected_filter"></TextView>
 
         <TextView
             android:id="@+id/txt_hora_info_reducida"
-            android:text="Hora: "
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></TextView>
+            android:layout_height="wrap_content"
+            android:text="Hora: "
+            android:textSize="15sp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/selected_filter"></TextView>
 
         <TextView
             android:id="@+id/txt_lugar_info_reducida"
-            android:text="Lugar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></TextView>
+            android:layout_height="wrap_content"
+            android:text="Lugar"
+            android:layout_marginTop="4dp"
+            android:textSize="15sp"
+            android:textColor="@color/selected_filter"></TextView>
 
         <Button
             android:id="@+id/btn_ver_mas_evento"
-            android:text="Ver más"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></Button>
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/custombutom2"
+            android:text="Más detalles..."
+            android:textColor="@drawable/butom_text"></Button>
 
     </LinearLayout>
 

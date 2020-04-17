@@ -27,6 +27,11 @@ public class Eventos {
         this.fotoPrincipal =foto;
     }
 
+    public Eventos(String nombre_evento)
+    {
+        this.nombre_evento = nombre_evento;
+    }
+
     public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String foto,String estado)
     {
         this.nombre_evento = nombre_evento;
@@ -112,5 +117,13 @@ public class Eventos {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getCategoria_evento() {
+        return categoria_evento;
+    }
+
+    public void setCategoria_evento(int categoria_evento) {
+        this.categoria_evento = categoria_evento;
     }
 }

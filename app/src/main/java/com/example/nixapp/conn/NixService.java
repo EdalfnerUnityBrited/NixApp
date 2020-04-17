@@ -7,6 +7,7 @@ import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
+import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
 import com.google.gson.JsonObject;
 
@@ -55,12 +56,15 @@ public interface NixService {
     @POST("imagen")
     Call<ResponseBody> image(@Body List<ImagenEventos> imagenEventos);
 
-    @POST ("eventos/buscar")
-    Call<JsonObject> eventoBuscar(@Body String ingresar);
+    @POST ("eventos/buscarEvento")
+    Call<JsonObject> eventoBuscar(@Body Eventos ingresar);
 
     @HTTP(method = "DELETE", path = "eventos", hasBody = true)
     Call<ResponseBody> deleteEvent(@Body Eventos eventos);
 
     @GET("eventos/asistencia")
     Call<EventosListResult> eventosAsistenciaUsuario();
+
+    @POST("eventos/evento")
+    Call<ImagenResult> buscarImagenes(@Body Eventos evento_imagenes);
 }

@@ -75,4 +75,6 @@ dependencies {
 //para este tambien se agrega en el otro gradle
     implementation 'com.github.yalantis:ucrop:2.2.2-native' //agregar la activity del manifesta  nix
     implementation 'com.applandeo:material-calendar-view:1.4.0' //Calendario
+    implementation 'com.github.smarteist:autoimageslider:1.3.5'//Visualizar imagenes
+
 }

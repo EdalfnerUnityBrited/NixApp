@@ -320,7 +320,6 @@
                     android:layout_marginTop="40dp"
                     android:orientation="vertical">
 
-
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -343,6 +342,7 @@
                             android:inputType="numberSigned"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
+                            android:textSize="20sp"
                             android:backgroundTint="@color/white"/>
                         <TextView
                             android:id="@+id/personas_text"
@@ -370,7 +370,7 @@
                             android:id="@+id/cover"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="Cover: $"
+                            android:text="Cover: "
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="8dp"
                             android:layout_marginLeft="12dp"
@@ -434,15 +434,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="20dp">
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
 
+                        <TextView
+                            android:id="@+id/imag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:text="Imagenes del evento: "
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
 
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="300dp"
+                    </TableRow>
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        app:srcCompat="@drawable/ejemplo1" />
+                        android:layout_marginBottom="8dp"/>
+
+
                 </LinearLayout>
 
 

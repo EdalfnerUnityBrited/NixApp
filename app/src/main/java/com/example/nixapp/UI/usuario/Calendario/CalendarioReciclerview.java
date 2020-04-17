@@ -75,9 +75,9 @@ public class CalendarioReciclerview extends RecyclerView.Adapter<CalendarioRecic
         int dia = fecha.get(Calendar.DAY_OF_MONTH);
         holder.titulo.setText(nombre);
         holder.direccion.setText(direcc);
-        holder.cupo.setText(String.valueOf(cupo));
+        holder.cupo.setText(String.valueOf(cupo)+ " personas");
         holder.fecha.setText(dia+"/"+(mes+1)+"/"+year);
-        if(EventosC.get(position).estado_asistencia.equals("Creador"))
+        if(EventosC.get(position).estado_asistencia.equals("creador"))
         {
             holder.asistencia.setText("Tu lo creaste");
             holder.asistencia.setTextColor(Color.parseColor("#1C8FD6"));
@@ -92,52 +92,10 @@ public class CalendarioReciclerview extends RecyclerView.Adapter<CalendarioRecic
             holder.asistencia.setText("Asistiras");
             holder.asistencia.setTextColor(Color.parseColor("#3CDA3C"));
         }
-        switch (EventosC.get(position).categoria)
-        {
-            case 1:
-            {
-                Glide.with(holder.tipo_evento)
-                        .load(R.drawable.festejos)
-                        .into(holder.tipo_evento);
-            }
-            break;
-            case 2:
-            {
-                Glide.with(holder.tipo_evento)
-                        .load(R.drawable.mega)
-                        .into(holder.tipo_evento);
-            }
-            break;
-            case 3:
-            {
-                Glide.with(holder.tipo_evento)
-                        .load(R.drawable.galas)
-                        .into(holder.tipo_evento);
-            }
-            break;
-            case 4:
-            {
-                Glide.with(holder.tipo_evento)
-                        .load(R.drawable.empresariales)
-                        .into(holder.tipo_evento);
-            }
-            break;
-            case 5:
-            {
-                Glide.with(holder.tipo_evento)
-                        .load(R.drawable.religiosos)
-                        .into(holder.tipo_evento);
-            }
-            break;
-            case 6:
-            {
-                Glide.with(holder.tipo_evento)
-                        .load(R.drawable.compromisos)
-                        .into(holder.tipo_evento);
-            }
-            break;
 
-        }
+        Glide.with(holder.tipo_evento)
+                .load(EventosC.get(position).imagen)
+                .into(holder.tipo_evento);
 
     }
 

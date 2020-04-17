@@ -10,4 +10,7 @@
     <color name="normal_filter">#8a8889</color>
     <color name="color_option_menu_invitacion">#FF3990</color>
     <color name="card_editor_backgroud">#333639</color>
+    <item name="modal_background" type="color">#22000000</item>
+    <color name="sheet">#186289</color>
+    <color name="sheetDark">#0d4360</color>
 </resources>
