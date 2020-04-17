@@ -57,10 +57,10 @@ public class InfoEventoExpandida extends AppCompatActivity {
         lugar = (String) getIntent().getSerializableExtra("lugar");
         descripcion = (String) getIntent().getSerializableExtra("descripcion");
         fotoPrincipal = (String) getIntent().getSerializableExtra("fotoPrincipal");
-        privacidad = Integer.parseInt((String) getIntent().getSerializableExtra("privacidad"));
-        categoria = Integer.parseInt((String) getIntent().getSerializableExtra("categoria"));
-        cupo = Integer.parseInt((String) getIntent().getSerializableExtra("cupo"));
-        cover = Integer.parseInt((String) getIntent().getSerializableExtra("cover"));
+        privacidad = (int) getIntent().getSerializableExtra("privacidad");
+        categoria = (int) getIntent().getSerializableExtra("categoria");
+        cupo = (int) getIntent().getSerializableExtra("cupo");
+        cover = (int) getIntent().getSerializableExtra("cover");
         setToolbarTitle(nombre);
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         String[] fechaSeparada = fecha.split("-");

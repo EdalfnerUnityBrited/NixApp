@@ -56,8 +56,8 @@ public interface NixService {
     @POST("imagen")
     Call<ResponseBody> image(@Body List<ImagenEventos> imagenEventos);
 
-    @POST ("eventos/buscarEvento")
-    Call<JsonObject> eventoBuscar(@Body Eventos ingresar);
+    @POST ("eventos/buscar")
+    Call<EventosResult> eventoBuscar(@Body Eventos ingresar);
 
     @HTTP(method = "DELETE", path = "eventos", hasBody = true)
     Call<ResponseBody> deleteEvent(@Body Eventos eventos);

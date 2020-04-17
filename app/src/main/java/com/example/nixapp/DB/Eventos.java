@@ -27,6 +27,26 @@ public class Eventos {
         this.fotoPrincipal =foto;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public int getCover() {
+        return cover;
+    }
+
+    public void setCover(int cover) {
+        this.cover = cover;
+    }
+
+    public void setFotoPrincipal(String fotoPrincipal) {
+        this.fotoPrincipal = fotoPrincipal;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     public Eventos(String nombre_evento)
     {
         this.nombre_evento = nombre_evento;
