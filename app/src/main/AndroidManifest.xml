@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.usuario.BuscarEventos"></activity>
+        <activity android:name=".UI.usuario.BusquedaEventos.BusquedaFiltros"></activity>
+        <activity android:name=".UI.usuario.BusquedaEventos.BuscarEventos"></activity>
         <activity android:name=".UI.usuario.InfoEventoExpandida"></activity>
 
         <meta-data

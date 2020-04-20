@@ -47,7 +47,38 @@
         <item>Noviembre</item>
         <item>Deciembre</item>
     </array>
+    <string name="listaBase">Elige un municipio</string>
+    <string-array name="listaMunicipios" >
+        <item>Acatic</item>
+        <item>Ameca</item>
+        <item>Arandas</item>
+        <item>Atotonilco el alto</item>
+        <item>Chapala</item>
+        <item>Cocula</item>
+        <item>El Arenal</item>
+        <item>El Salto</item>
+        <item>Guachinango</item>
+        <item>Guadalajara</item>
+        <item>Jocotepec</item>
+        <item>La Barca</item>
+        <item>Lagos de Moreno</item>
+        <item>Mascota</item>
+        <item>Mazamitla</item>
+        <item>Mezquitic</item>
+        <item>Puerto Vallarta</item>
+        <item>San Juan de los Lagos</item>
+        <item>Tlaquepaque</item>
+        <item>Sayula</item>
+        <item>Tala</item>
+        <item>Tapalpa</item>
+        <item>Tequila</item>
+        <item>Tlajomulco de Zuñiga</item>
+        <item>Tonala</item>
+        <item>Tototlan</item>
+        <item>Zapopan</item>
+        <item>Zapotlanejo</item>
 
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

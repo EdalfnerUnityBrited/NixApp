@@ -13,4 +13,6 @@
     <item name="modal_background" type="color">#22000000</item>
     <color name="sheet">#186289</color>
     <color name="sheetDark">#0d4360</color>
+    <color name="colorfiltros">#E6C5F9</color>
+    <color name="colorDistancia">#B04AEA</color>
 </resources>
