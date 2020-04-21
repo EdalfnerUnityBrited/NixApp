@@ -48,7 +48,7 @@
         <item>Deciembre</item>
     </array>
     <string name="listaBase">Elige un municipio</string>
-    <string-array name="listaMunicipios" >
+    <string-array name="listaMunicipios">
         <item>Acatic</item>
         <item>Ameca</item>
         <item>Arandas</item>

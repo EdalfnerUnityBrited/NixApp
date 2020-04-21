@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_misservicios_proveedor"
+            android:icon="@drawable/ic_miseventos"
+            android:title="Mis Servicios"
+            ></item>
+        <item
+            android:id="@+id/nav_calendario_proveedor"
+            android:icon="@drawable/ic_calendario"
+            android:title="Calendario"></item>
+        <item
+            android:id="@+id/nav_serviciosproximos_proveedor"
+            android:icon="@drawable/ic_serviciosproximos"
+            android:title="Servicios Proximos"></item>
+        <item
+            android:id="@+id/nav_ayuda_proveedor"
+            android:icon="@drawable/ic_ayuda"
+            android:title="Ayuda"></item>
+        <item
+            android:id="@+id/nav_salir"
+            android:icon="@drawable/ic_salir"
+            android:title="Cerrar Sesion"></item>
+    </group>
+
+</menu>
