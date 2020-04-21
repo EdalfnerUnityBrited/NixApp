@@ -2,6 +2,7 @@ package com.example.nixapp.conn;
 
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
+import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventosListResult;
@@ -67,4 +68,7 @@ public interface NixService {
 
     @POST("eventos/evento")
     Call<ImagenResult> buscarImagenes(@Body Eventos evento_imagenes);
+
+    @POST("auth/pagar")
+    Call<ResponseBody> pagar(@Body Pagos pagos);
 }
