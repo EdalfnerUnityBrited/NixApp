@@ -5,17 +5,8 @@
     tools:context=".UI.usuario.BusquedaEventos.BuscarEventos">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/action_search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
-    <!-- MENU -->
-
-    <item
         android:id="@+id/filter_button"
-        android:title="Filtros"
+        android:title="Aplicar filtros"
         app:showAsAction="always"
-        android:icon="@drawable/filter"
         />
 </menu>

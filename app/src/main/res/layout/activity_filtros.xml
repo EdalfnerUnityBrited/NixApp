@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.usuario.BusquedaEventos.BusquedaFiltros"
+    android:background="@color/colorfiltros">
+    <androidx.appcompat.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Filtrar por:"
+        app:titleTextColor="#ffffffff">
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <View
+                    android:layout_height="1dip"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/filtroLugar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lugar:"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="30dp">
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/listaMunicipios"
+                    android:prompt="@string/listaBase"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:background="@drawable/borderrow"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <View
+                    android:layout_height="1dip"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/filtrofecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha:"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:padding="5dp">
+
+                <EditText
+                    android:id="@+id/fechadesde"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="3"
+                    android:inputType="textPersonName"
+                    android:text="08/04/20"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:backgroundTint="#FFFFFF"
+                    android:layout_marginLeft="12dp"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hasta:"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:textColor="#FFFF"/>
+
+                <EditText
+                    android:id="@+id/fechahasta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="3"
+                    android:inputType="textPersonName"
+                    android:text="11/04/2020"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:backgroundTint="#FFFFFF"
+                    android:layout_marginRight="12dp"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <View
+                    android:layout_height="1dip"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/filtroCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cover Máximo:"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" $50 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip80"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" $80 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip100"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" $100 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip150"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" $150 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:closeIcon="@drawable/ic_check"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal" >
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip200"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" $200 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip250"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" $250 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip300"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" +$350 "
+                    app:rippleColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:closeIcon="@drawable/ic_check"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <View
+                    android:layout_height="1dip"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/filtroDistancia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Distancia a la redonda (km):"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+            <LinearLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp">
+                <com.warkiz.widget.IndicatorSeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isb_max="200"
+                    app:isb_min="0"
+                    app:isb_progress="0"
+                    app:isb_seek_smoothly="true"
+                    app:isb_ticks_count="2"
+                    app:isb_show_tick_marks_type="oval"
+                    app:isb_tick_marks_size="13dp"
+                    app:isb_show_tick_texts="true"
+                    app:isb_tick_texts_size="15sp"
+                    app:isb_tick_texts_color="#FFFF"
+                    app:isb_thumb_color="@color/colorPrimary"
+                    app:isb_tick_marks_color="@color/colorPrimaryDark"
+                    app:isb_thumb_size="20dp"
+                    app:isb_show_indicator="rounded_rectangle"
+                    app:isb_indicator_color="@color/colorDistancia"
+                    app:isb_indicator_text_color="#FFFF"
+                    app:isb_indicator_text_size="20sp"
+                    app:isb_track_background_color="@color/colorAccent"
+                    app:isb_track_background_size="2dp"
+                    app:isb_track_progress_color="@color/colorAccent"
+                    app:isb_track_progress_size="4dp"
+                    app:isb_only_thumb_draggable="false"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View
+                    android:layout_height="1dip"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/filtroCupo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cupo Máximo (personas):"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip50p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 50p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip100p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 100p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip200p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 200p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip300p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 300p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip400p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 400p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip500p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 500p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip800p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" +800p "
+                    app:rippleColor="@color/colorPrimary"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    app:closeIcon="@drawable/ic_check"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View
+                    android:layout_height="1dip"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" />
+                <TextView
+                    android:id="@+id/filtroCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Categoria del evento:"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="30dp">
+
+                <Spinner
+                    android:id="@+id/spinnercategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

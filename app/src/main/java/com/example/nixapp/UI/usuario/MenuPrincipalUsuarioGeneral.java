@@ -28,6 +28,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.BusquedaEventos.BuscarEventos;
 import com.example.nixapp.UI.usuario.Calendario.Calendario;
 import com.example.nixapp.UI.usuario.Interfaces.InfoEventoFragmentListener;
 import com.example.nixapp.UI.usuario.ayuda.Ayuda;
@@ -49,7 +50,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.ArrayList;

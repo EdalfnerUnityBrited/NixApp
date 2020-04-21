@@ -1,5 +1,6 @@
-package com.example.nixapp.UI.usuario;
+package com.example.nixapp.UI.usuario.BusquedaEventos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,15 +35,19 @@ public class BuscarEventos extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+
             }
         });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(getApplicationContext(), "Proximamente te llevare a filtros", Toast.LENGTH_SHORT).show();
+                Intent intentBusqueda = new Intent(getApplicationContext(), BusquedaFiltros.class);
+                startActivity(intentBusqueda);
+                overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
                 return false;
             }
         });
+
 
     }
     @Override
