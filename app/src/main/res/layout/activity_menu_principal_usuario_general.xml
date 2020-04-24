@@ -32,6 +32,23 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 >
             </androidx.appcompat.widget.Toolbar>
+            <Button
+                android:id="@+id/buscarEventos"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/custombutom2"
+                android:textColor="@drawable/butom_text"
+                android:text="   ¿Qué haremos?..."
+                android:padding="10dp"
+                android:drawableLeft="@drawable/ic_busquedaevento"
+                android:textAllCaps="false"
+                android:layout_marginTop="90dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:textSize="20sp"
+                android:gravity="center_vertical">
+            </Button>
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:map="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"

@@ -4,5 +4,4 @@ import com.example.nixapp.DB.Eventos;
 
 public class EventosResult extends RequestResult {
     public Eventos eventos;
-
 }

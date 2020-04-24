@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.proveedor.MenuPrincipalUsuarioProveedor;
 import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -323,12 +324,23 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                 if (response.isSuccessful()) {
                     Toast.makeText(InicioSesion.this, "Sesion Iniciada", Toast.LENGTH_SHORT).show();
                     response.body().procesarRespuesta();
+                    Usuario usuario= response.body().usuario;
+                    if (usuario.tipoUsuario==0){
                     Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioGeneral.class);
                     i.putExtra("usuario", response.body().usuario);
 
                     Log.i("Sesion Iniciada",response.body().toString());
                     startActivity(i);
                     finish();
+                    }
+                    else if(usuario.tipoUsuario==1) {
+                        Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioProveedor.class);
+                        i.putExtra("usuario", response.body().usuario);
+
+                        Log.i("Sesion Iniciada",response.body().toString());
+                        startActivity(i);
+                        finish();
+                    }
                 } else {
                     try {
                         Log.i("Error",response.errorBody().string().toString());

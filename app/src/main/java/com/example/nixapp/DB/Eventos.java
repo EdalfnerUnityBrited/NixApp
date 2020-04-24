@@ -12,6 +12,7 @@ public class Eventos {
     int cupo;
     int cover;
     String fotoPrincipal;
+    String estado;
 
     public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String foto) {
         this.nombre_evento = nombre_evento;
@@ -24,6 +25,46 @@ public class Eventos {
         this.cupo=cupo;
         this.cover=cover;
         this.fotoPrincipal =foto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public int getCover() {
+        return cover;
+    }
+
+    public void setCover(int cover) {
+        this.cover = cover;
+    }
+
+    public void setFotoPrincipal(String fotoPrincipal) {
+        this.fotoPrincipal = fotoPrincipal;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Eventos(String nombre_evento)
+    {
+        this.nombre_evento = nombre_evento;
+    }
+
+    public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String foto,String estado)
+    {
+        this.nombre_evento = nombre_evento;
+        this.privacidad = privacidad;
+        this.categoria_evento = categoria_evento;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.lugar = lugar;
+        this.descripcion = descripcion;
+        this.cupo=cupo;
+        this.cover=cover;
+        this.fotoPrincipal =foto;
+        this.estado = estado;
     }
 
     public String getFotoPrincipal() {
@@ -88,5 +129,21 @@ public class Eventos {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public int getCategoria_evento() {
+        return categoria_evento;
+    }
+
+    public void setCategoria_evento(int categoria_evento) {
+        this.categoria_evento = categoria_evento;
     }
 }

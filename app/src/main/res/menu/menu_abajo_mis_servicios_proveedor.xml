@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_crearservicios"
+        android:icon="@drawable/ic_eventoscerrados"
+        android:title="Mis Servicios"></item>
+    <item android:id="@+id/nav_historial_proveedor"
+        android:icon="@drawable/ic_historialeventos"
+        android:title="Historial"></item>
+</menu>

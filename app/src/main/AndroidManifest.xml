@@ -20,7 +20,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.usuario.InfoEventoExpandida"></activity>
+        <activity android:name=".UI.proveedor.serviciosProximos.ServiciosProximosProveedor"
+            android:screenOrientation="portrait" ></activity>
+        <activity android:name=".UI.proveedor.misServicios.MisServiciosProveedor"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UI.proveedor.calendario.CalendarioProveedor"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UI.proveedor.ayuda.AyudaProveedor"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UI.proveedor.MenuPrincipalUsuarioProveedor"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UI.usuario.BusquedaEventos.BusquedaFiltros"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UI.usuario.BusquedaEventos.BuscarEventos"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UI.usuario.InfoEventoExpandida"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -85,7 +100,7 @@
         <activity
             android:name=".UI.usuario.creadorInvitaciones.CreadorDeInvitaciones"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen"></activity>
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
         <activity
             android:name=".UI.welcome.MainActivity"
             android:screenOrientation="portrait" />
@@ -93,7 +108,7 @@
             android:name=".UI.welcome.InicioSesion"
             android:screenOrientation="portrait" />
         <activity android:name=".UI.usuario.serviciosContratados.chat.ChatActivity" />
-        <activity android:name=".UI.usuario.Calendario" />
+        <activity android:name=".UI.usuario.Calendario.Calendario" />
         <activity android:name=".UI.usuario.Tendencias" />
 
         <provider

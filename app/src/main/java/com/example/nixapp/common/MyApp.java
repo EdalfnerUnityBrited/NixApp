@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.stripe.android.PaymentConfiguration;
 
 
 @Database(name = MyApp.NAME, version = MyApp.VERSION)
@@ -27,6 +28,10 @@ public class MyApp extends Application {
         instance =this;
         super.onCreate();
         FlowManager.init(this);
+        PaymentConfiguration.init(
+                getApplicationContext(),
+                "pk_test_uEw78gmtZWNU79dgLkZNN27R00XrpoHI4c"
+        );
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.nixapp.UI.usuario;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,13 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.Interfaces.InfoEventoFragmentListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.smarteist.autoimageslider.SliderViewAdapter;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,10 +60,9 @@ public class InfoEventoFragment extends BottomSheetDialogFragment {
         hora = (TextView) itemView.findViewById(R.id.txt_hora_info_reducida);
         lugar = (TextView) itemView.findViewById(R.id.txt_lugar_info_reducida);
         verMas = (Button) itemView.findViewById(R.id.btn_ver_mas_evento);
-
-        fecha.setText(getArguments().getString("fecha"));
+        fecha.setText("Fecha: "+getArguments().getString("fecha"));
         nombre.setText(getArguments().getString("nombre"));
-        hora.setText(getArguments().getString("hora"));
+        hora.setText("Hora: " + getArguments().getString("hora"));
         lugar.setText(getArguments().getString("lugar"));
 
         verMas.setOnClickListener(new View.OnClickListener() {

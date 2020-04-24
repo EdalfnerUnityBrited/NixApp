@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.BusquedaEventos.BuscarEventos;
+import com.example.nixapp.UI.usuario.Calendario.Calendario;
 import com.example.nixapp.UI.usuario.Interfaces.InfoEventoFragmentListener;
 import com.example.nixapp.UI.usuario.ayuda.Ayuda;
 import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
@@ -36,7 +39,7 @@ import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
-import com.example.nixapp.conn.results.EventosEspecificoResult;
+import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,10 +50,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,6 +72,8 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Usuario usuario;
     private NixService nixService;
     private NixClient nixClient;
+    Button buscar;
+    Eventos eventos;
 
     private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
@@ -94,8 +94,6 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         CircleImageView profile=hView.findViewById(R.id.profile_image);
         Glide.with(profile)
                 .load(usuario.fotoPerfil)
-                .fitCenter()
-                .centerCrop()
                 .into(profile);
         tv_nombre.setText(usuario.name);
         tv_email.setText(usuario.email);
@@ -108,7 +106,15 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        buscar = findViewById(R.id.buscarEventos);
+        buscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentBusqueda = new Intent(getApplicationContext(), BuscarEventos.class);
+                intentBusqueda.putExtra("usuario", usuario);
+                startActivity(intentBusqueda);
+            }
+        });
     }
 
     @Override
@@ -289,50 +295,26 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Call<JsonObject> calle = nixService.eventoBuscar(marker.getTitle());
-        calle.enqueue(new Callback<JsonObject>() {
+        Eventos event =new Eventos(marker.getTitle());
+        Call<EventosResult> calle = nixService.eventoBuscar(event);
+        calle.enqueue(new Callback<EventosResult>() {
             @Override
-            public void onResponse(Call<JsonObject> call, final Response<JsonObject> response) {
+            public void onResponse(Call<EventosResult> call, final Response<EventosResult> response) {
                 if (response.isSuccessful()){
+                   eventos= response.body().eventos;
                     MenuPrincipalUsuarioGeneral.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Bundle data = new Bundle();
-                            String[] ayuda = String.valueOf(response.body()).split("\"fecha\"+:+\"+");//1
-                            String[] ayudaFinal = ayuda[1].split("\"");
-                            data.putString("fecha",ayudaFinal[0]);
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"hora\"+:+\"+");//2
-                            ayudaFinal = ayuda[1].split("\"");
-                            data.putString("hora",ayudaFinal[0]);
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"nombre_evento\"+:+\"+");//3
-                            ayudaFinal = ayuda[1].split("\"");
-                            data.putString("nombre",ayudaFinal[0]);
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"lugar\"+:+\"+");//4
-                            ayudaFinal = ayuda[1].split("\"");
-                            data.putString("lugar",ayudaFinal[0]);
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
 
-                            ayuda = String.valueOf(response.body()).split("\"privacidad\"+:");//5
-                            ayudaFinal = ayuda[1].split(",");
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"categoria_evento\"+:");//6
-                            ayudaFinal = ayuda[1].split(",");
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"descripcion\"+:+\"+");//7
-                            ayudaFinal = ayuda[1].split("\"");
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"cupo\"+:");//8
-                            ayudaFinal = ayuda[1].split(",");
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"cover\"+:");//9
-                            ayudaFinal = ayuda[1].split(",");
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
-                            ayuda = String.valueOf(response.body()).split("\"fotoPrincipal\"+:+\"+");//10
-                            ayudaFinal = ayuda[1].split("\"");
-                            infoCompletaEventoEspecifico.add(ayudaFinal[0]);
+                            data.putString("fecha",eventos.getFecha());
+
+                            data.putString("hora",eventos.getHora());
+
+                            data.putString("nombre",eventos.getNombre_evento());
+
+                            data.putString("lugar",eventos.getLugar());
+                            ;
 
                             InfoEventoFragment infoEventoFragment = InfoEventoFragment.getInstance();
                             infoEventoFragment.setListener(MenuPrincipalUsuarioGeneral.this);
@@ -347,7 +329,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 }
             }
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<EventosResult> call, Throwable t) {
                 Toast.makeText(MenuPrincipalUsuarioGeneral.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -357,16 +339,16 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     @Override
     public void onMoreInfoClickListener() {
         Intent intentInfoExpandida = new Intent(MenuPrincipalUsuarioGeneral.this,InfoEventoExpandida.class);
-        intentInfoExpandida.putExtra("nombre",infoCompletaEventoEspecifico.get(2));
-        intentInfoExpandida.putExtra("privacidad",infoCompletaEventoEspecifico.get(4));
-        intentInfoExpandida.putExtra("categoria",infoCompletaEventoEspecifico.get(5));
-        intentInfoExpandida.putExtra("fecha",infoCompletaEventoEspecifico.get(0));
-        intentInfoExpandida.putExtra("hora",infoCompletaEventoEspecifico.get(1));
-        intentInfoExpandida.putExtra("lugar",infoCompletaEventoEspecifico.get(3));
-        intentInfoExpandida.putExtra("descripcion",infoCompletaEventoEspecifico.get(6));
-        intentInfoExpandida.putExtra("cupo",infoCompletaEventoEspecifico.get(7));
-        intentInfoExpandida.putExtra("cover",infoCompletaEventoEspecifico.get(8));
-        intentInfoExpandida.putExtra("fotoPrincipal",infoCompletaEventoEspecifico.get(9));
+        intentInfoExpandida.putExtra("nombre",eventos.getNombre_evento());
+        intentInfoExpandida.putExtra("privacidad",eventos.getPrivacidad());
+        intentInfoExpandida.putExtra("categoria",eventos.getCategoria_evento());
+        intentInfoExpandida.putExtra("fecha",eventos.getFecha());
+        intentInfoExpandida.putExtra("hora",eventos.getHora());
+        intentInfoExpandida.putExtra("lugar",eventos.getLugar());
+        intentInfoExpandida.putExtra("descripcion",eventos.getDescripcion());
+        intentInfoExpandida.putExtra("cupo",eventos.getCupo());
+        intentInfoExpandida.putExtra("cover",eventos.getCover());
+        intentInfoExpandida.putExtra("fotoPrincipal",eventos.getFotoPrincipal());
         startActivity(intentInfoExpandida);
     }
 }

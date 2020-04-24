@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.proveedor.MenuPrincipalUsuarioProveedor;
 import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -76,11 +77,20 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()) {
-                    Intent intent = new Intent(WelcomeActivity.this,
-                            MenuPrincipalUsuarioGeneral.class);
-                    intent.putExtra("usuario", response.body());
-                    startActivity(intent);
+                    if (response.body().tipoUsuario==0) {
+                        Intent intent = new Intent(WelcomeActivity.this,
+                                MenuPrincipalUsuarioGeneral.class);
+                        intent.putExtra("usuario", response.body());
+                        startActivity(intent);
+                    }
+                    else if (response.body().tipoUsuario==1){
+                        Intent intent = new Intent(WelcomeActivity.this,
+                                MenuPrincipalUsuarioProveedor.class);
+                        intent.putExtra("usuario", response.body());
+                        startActivity(intent);
+                    }
                 } else if (response.code() == 401) {
+
                     pantallaInicioSesion();
                 } else {
                     Toast.makeText(WelcomeActivity.this,

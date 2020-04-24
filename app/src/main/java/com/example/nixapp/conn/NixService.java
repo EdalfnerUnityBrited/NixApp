@@ -2,11 +2,13 @@ package com.example.nixapp.conn;
 
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
+import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
+import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
 import com.google.gson.JsonObject;
 
@@ -28,8 +30,11 @@ public interface NixService {
     @POST("auth/login")
     Call<LoginResult> login(@Body Usuario usuarios);
 
-    @GET("chats")
+    @GET("chats/usuario")
     Call<ChatResult> chat();
+
+    @GET("chats/proveedor")
+    Call<ChatResult> chatProveedor();
 
     @POST("eventos")
     Call<EventosResult> eventos(@Body Eventos eventos);
@@ -56,8 +61,17 @@ public interface NixService {
     Call<ResponseBody> image(@Body List<ImagenEventos> imagenEventos);
 
     @POST ("eventos/buscar")
-    Call<JsonObject> eventoBuscar(@Body String ingresar);
+    Call<EventosResult> eventoBuscar(@Body Eventos ingresar);
 
     @HTTP(method = "DELETE", path = "eventos", hasBody = true)
     Call<ResponseBody> deleteEvent(@Body Eventos eventos);
+
+    @GET("eventos/asistencia")
+    Call<EventosListResult> eventosAsistenciaUsuario();
+
+    @POST("eventos/evento")
+    Call<ImagenResult> buscarImagenes(@Body Eventos evento_imagenes);
+
+    @POST("auth/pagar")
+    Call<ResponseBody> pagar(@Body Pagos pagos);
 }

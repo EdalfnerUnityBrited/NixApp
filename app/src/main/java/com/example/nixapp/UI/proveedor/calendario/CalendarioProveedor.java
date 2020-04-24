@@ -1,16 +1,16 @@
-package com.example.nixapp.UI.usuario;
-
-import android.os.Bundle;
+package com.example.nixapp.UI.proveedor.calendario;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
+
 import com.example.nixapp.R;
 
-public class Calendario extends AppCompatActivity {
+public class CalendarioProveedor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendario);
+        setContentView(R.layout.activity_calendario_proveedor);
     }
 }
