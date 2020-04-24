@@ -38,12 +38,10 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.share.widget.ShareButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -443,7 +441,6 @@ public class InformacionPersonalFragment extends Fragment {
                                                        AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
                     //write your code here what to do when user clicks on facebook logout
-                    Toast.makeText(getActivity(),"Cuenta Desvinculada",Toast.LENGTH_SHORT).show();
                     VFace.setBackgroundResource(R.drawable.custombutom2);
                 }
                 else
@@ -461,6 +458,7 @@ public class InformacionPersonalFragment extends Fragment {
         {
             VFace.setBackgroundResource(R.drawable.custombutom);
         }
+
         /////////////////////////////////////////////////////////Api de google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -502,6 +500,15 @@ public class InformacionPersonalFragment extends Fragment {
 
             }
         });
+        account = GoogleSignIn.getLastSignedInAccount(getActivity().getApplicationContext());
+        if(account != null)
+        {
+            VGoo.setBackgroundResource(R.drawable.custombutom);
+        }
+        else
+        {
+            VGoo.setBackgroundResource(R.drawable.custombutom2);
+        }
         return view;
     }
 
