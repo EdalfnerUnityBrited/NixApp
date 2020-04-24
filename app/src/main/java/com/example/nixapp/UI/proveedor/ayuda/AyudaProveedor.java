@@ -17,10 +17,10 @@ public class AyudaProveedor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ayuda_proveedor);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_ayuda);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_ayudaproveedor);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_ayuda_proveedor,new MenuAyudaProveedorFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_ayudaproveedor,new MenuAyudaProveedorFragment()).commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -29,16 +29,16 @@ public class AyudaProveedor extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
                     switch (item.getItemId()){
-                        case R.id.nav_menudeayuda:{
+                        case R.id.nav_menudeayuda_proveedor:{
                             selectedFragment = new MenuAyudaProveedorFragment();
                             break;
                         }
-                        case R.id.nav_tutoriales:{
+                        case R.id.nav_tutoriales_proveedor:{
                             selectedFragment = new TutorialesProveedorFragment();
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_ayuda_proveedor,selectedFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_ayudaproveedor,selectedFragment).commit();
                     return true;
                 }
             };

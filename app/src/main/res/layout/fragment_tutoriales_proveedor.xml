@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:elevation="4dp"
-            app:title="Ayuda"
+            app:title="Tutoriales"
 
             app:titleTextColor="#ffffffff"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

@@ -7,10 +7,10 @@
     tools:context=".UI.proveedor.ayuda.AyudaProveedor">
 
     <FrameLayout
-        android:id="@+id/fragment_container_ayuda"
+        android:id="@+id/fragment_container_ayudaproveedor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/menu_abajo_ayuda_proveedor">
+        android:layout_above="@id/menu_abajo_ayudaproveedor">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -25,10 +25,11 @@
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/menu_abajo_ayuda_proveedor"
+        android:id="@+id/menu_abajo_ayudaproveedor"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu_abajo_ayuda"></com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:menu="@menu/menu_abajo_ayuda_proveedor"></com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>
