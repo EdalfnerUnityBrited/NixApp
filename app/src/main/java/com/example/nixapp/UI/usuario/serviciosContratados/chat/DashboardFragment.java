@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class DashboardFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+
     View view;
     RecyclerView recyclerView;
     List<Chat> chatsList;

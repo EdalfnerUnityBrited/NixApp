@@ -30,8 +30,11 @@ public interface NixService {
     @POST("auth/login")
     Call<LoginResult> login(@Body Usuario usuarios);
 
-    @GET("chats")
+    @GET("chats/usuario")
     Call<ChatResult> chat();
+
+    @GET("chats/proveedor")
+    Call<ChatResult> chatProveedor();
 
     @POST("eventos")
     Call<EventosResult> eventos(@Body Eventos eventos);

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Usuario implements Serializable {
     public int id;
     private String password_confirmation;
-    private int tipoUsuario;
+    public int tipoUsuario;
     public String name;
     public String apellidoP;
     public String apellidoM;

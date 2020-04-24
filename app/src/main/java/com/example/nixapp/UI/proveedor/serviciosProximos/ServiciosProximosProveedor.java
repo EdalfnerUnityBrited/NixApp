@@ -4,19 +4,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ServiciosProximosProveedor extends AppCompatActivity {
-
+public class ServiciosProximosProveedor extends AppCompatActivity implements ChatsFragmentProveedor.OnListFragmentInteractionListener{
+    Usuario usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_servicios_proximos_proveedor);
-
+        usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_servicios_proximos_proveedor);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
@@ -46,4 +50,14 @@ public class ServiciosProximosProveedor extends AppCompatActivity {
                     return true;
                 }
             };
+    @Override
+    public void onListFragmentInteraction(Chat item) {
+        String idProveedor= String.valueOf(item.getId());
+
+        Intent chatSelected= new Intent(getBaseContext(), ChatActivity.class);
+        chatSelected.putExtra("sender", usuario.id);
+        chatSelected.putExtra("reciver", idProveedor);
+        startActivity(chatSelected);
+
+    }
 }
