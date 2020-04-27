@@ -67,6 +67,7 @@ public class Eventos {
         this.fotoPrincipal =foto;
         this.estado = estado;
         this.tendencia = 0;
+
     }
 
     public String getFotoPrincipal() {
