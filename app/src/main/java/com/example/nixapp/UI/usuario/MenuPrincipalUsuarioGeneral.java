@@ -31,6 +31,7 @@ import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.BusquedaEventos.BuscarEventos;
 import com.example.nixapp.UI.usuario.Calendario.Calendario;
 import com.example.nixapp.UI.usuario.Interfaces.InfoEventoFragmentListener;
+import com.example.nixapp.UI.usuario.Tendencias.Tendencias;
 import com.example.nixapp.UI.usuario.ayuda.Ayuda;
 import com.example.nixapp.UI.usuario.configUsuario.MiPerfil;
 import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;

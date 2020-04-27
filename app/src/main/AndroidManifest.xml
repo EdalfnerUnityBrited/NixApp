@@ -109,7 +109,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".UI.usuario.serviciosContratados.chat.ChatActivity" />
         <activity android:name=".UI.usuario.Calendario.Calendario" />
-        <activity android:name=".UI.usuario.Tendencias" />
+        <activity android:name=".UI.usuario.Tendencias.Tendencias" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"

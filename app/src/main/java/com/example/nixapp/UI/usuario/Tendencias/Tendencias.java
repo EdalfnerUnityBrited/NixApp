@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.usuario;
+package com.example.nixapp.UI.usuario.Tendencias;
 
 import android.os.Bundle;
 
@@ -12,5 +12,7 @@ public class Tendencias extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tendencias);
+
+
     }
 }
