@@ -11,6 +11,7 @@ public class Eventos {
     String descripcion;
     int cupo;
     int cover;
+    int tendencia;
     String fotoPrincipal;
     String estado;
 
@@ -65,6 +66,7 @@ public class Eventos {
         this.cover=cover;
         this.fotoPrincipal =foto;
         this.estado = estado;
+        this.tendencia = 0;
     }
 
     public String getFotoPrincipal() {
