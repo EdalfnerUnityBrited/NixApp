@@ -82,7 +82,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     Switch simpleSwitch1;
     CheckBox cover;
     TextView correosAgregados;
-    String downloadUrl, imagenPrincipal;
+    String downloadUrl, imagenPrincipal="";
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
