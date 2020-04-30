@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -86,7 +87,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
-    String clickedName;
+    String clickedName, municipio;
     Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
     int cupo;
     boolean correoagregado = false, imagen_lista = false;
@@ -95,6 +96,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     ImageView InvitacionSeleccionada;
     ShareButton shareButton;
     RadioButton r1,r2;
+    Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -329,7 +331,55 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
             }
         });
+        String[] Minicipios = new String[]{
+                "Elige un municipio:",
+                "Acatic",
+                "Ameca",
+                "Arandas",
+                "Atotonilco el alto",
+                "Chapala",
+                "Cocula",
+                "El Arenal",
+                "El Salto",
+                "Guachinango",
+                "Guadalajara",
+                "Jocotepec",
+                "La Barca",
+                "Lagos de Moreno",
+                "Mascota",
+                "Mazamitla",
+                "Mezquitic",
+                "Puerto Vallarta",
+                "San Juan de los Lagos",
+                "Tlaquepaque",
+                "Sayula",
+                "Tala",
+                "Tapalpa",
+                "Tequila",
+                "Tlajomulco de Zuñiga",
+                "Tonala",
+                "Tototlan",
+                "Zapopan",
+                "Zapotlanejo"
+        };
 
+        spinner = findViewById(R.id.spinner1);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this,R.layout.texto_municipios,Minicipios
+        );
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.texto_municipios);
+        spinner.setAdapter(spinnerArrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                municipio = spinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                municipio = spinner.getSelectedItem().toString();
+            }
+        });
     }
     private void enviarEmail(){
         //Instanciamos un Intent del tipo ACTION_SEND
@@ -464,10 +514,14 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         if (categoria_evento==0){
             Toast.makeText(CrearEvento.this, "Elija una categoria", Toast.LENGTH_SHORT).show();
         }
+        if(spinner.getSelectedItem().toString().equals("Elige un municipio"))
+        {
+            Toast.makeText(CrearEvento.this, "Elige un municipio", Toast.LENGTH_SHORT).show();
+        }
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
-                final Eventos requestSample = new Eventos(nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal);
+                final Eventos requestSample = new Eventos(privacidad,nombre,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal,municipio);
                 Call<EventosResult> call= nixService.eventos(requestSample);
                 call.enqueue(new Callback<EventosResult>() {
                     @Override

@@ -331,7 +331,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
             }
             @Override
             public void onFailure(Call<EventosResult> call, Throwable t) {
-                Toast.makeText(MenuPrincipalUsuarioGeneral.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MenuPrincipalUsuarioGeneral.this,"Error en el intento: "+ t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         return false;

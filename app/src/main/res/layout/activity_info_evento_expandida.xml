@@ -463,7 +463,44 @@
 
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="20dp">
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow"
+                        android:padding="8dp">
 
+
+                        <Button
+                            android:id="@+id/asistire"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Me interesa"
+                            android:padding="5dp"
+                            android:layout_marginRight="20dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/butom_text"
+                            android:background="@drawable/button_yellow"/>
+
+                        <Button
+                            android:id="@+id/Meinteresa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Confirmar asistencia"
+                            android:padding="5dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/butom_text"
+                            android:background="@drawable/custombutom"/>
+                    </TableRow>
+
+
+                </LinearLayout>
 
 
 

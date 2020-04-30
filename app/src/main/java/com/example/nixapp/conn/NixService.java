@@ -3,6 +3,7 @@ package com.example.nixapp.conn;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Pagos;
+import com.example.nixapp.DB.Prospectos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventosListResult;
@@ -10,7 +11,7 @@ import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
-import com.google.gson.JsonObject;
+import com.example.nixapp.conn.results.ProspectosResult;
 
 import java.util.List;
 
@@ -74,4 +75,10 @@ public interface NixService {
 
     @POST("auth/pagar")
     Call<ResponseBody> pagar(@Body Pagos pagos);
+
+    @POST("eventos/asistir")
+    Call<ResponseBody> prospecto(@Body Prospectos prospectos);
+
+    @POST("eventos/ir")
+    Call<ProspectosResult> Confirmacionprospecto(@Body Prospectos prospectos);
 }
