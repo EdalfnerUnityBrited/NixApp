@@ -65,6 +65,7 @@ public class InfoEventoFragment extends BottomSheetDialogFragment {
         hora.setText("Hora: " + getArguments().getString("hora"));
         lugar.setText(getArguments().getString("lugar"));
 
+
         verMas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

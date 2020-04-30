@@ -315,7 +315,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                             data.putString("nombre",eventos.getNombre_evento());
 
                             data.putString("lugar",eventos.getLugar());
-                            ;
+
 
                             InfoEventoFragment infoEventoFragment = InfoEventoFragment.getInstance();
                             infoEventoFragment.setListener(MenuPrincipalUsuarioGeneral.this);
@@ -350,6 +350,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         intentInfoExpandida.putExtra("cupo",eventos.getCupo());
         intentInfoExpandida.putExtra("cover",eventos.getCover());
         intentInfoExpandida.putExtra("fotoPrincipal",eventos.getFotoPrincipal());
+        intentInfoExpandida.putExtra("id",eventos.getId());
         startActivity(intentInfoExpandida);
     }
 }

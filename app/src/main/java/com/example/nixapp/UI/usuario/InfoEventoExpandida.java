@@ -34,8 +34,8 @@ import retrofit2.Response;
 
 public class InfoEventoExpandida extends AppCompatActivity {
 
-    private String nombre = "", fecha, hora, lugar, descripcion = "", fotoPrincipal;
-    private int privacidad, categoria, cupo, cover, id;
+    private String nombre = "", fecha, hora, lugar, descripcion = "", fotoPrincipal, id;
+    private int privacidad, categoria, cupo, cover;
     EditText nombreEvento,direccion_evento,fecha_evento,hora_evento,cupo_event,descripcion_evento,cover_evento;
     CheckBox cover_even;
     RadioButton publico,privado;
@@ -67,7 +67,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
         categoria = (int) getIntent().getSerializableExtra("categoria");
         cupo = (int) getIntent().getSerializableExtra("cupo");
         cover = (int) getIntent().getSerializableExtra("cover");
-        id = (int) getIntent().getSerializableExtra("id");
+        id =(String) getIntent().getSerializableExtra("id");
         setToolbarTitle(nombre);
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         String[] fechaSeparada = fecha.split("-");

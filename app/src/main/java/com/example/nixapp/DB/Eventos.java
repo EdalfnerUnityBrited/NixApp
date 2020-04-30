@@ -97,6 +97,20 @@ public class Eventos {
 
     }
 
+    public Eventos(String id, String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String fotoPrincipal) {
+        this.id = id;
+        this.nombre_evento = nombre_evento;
+        this.privacidad = privacidad;
+        this.categoria_evento = categoria_evento;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.lugar = lugar;
+        this.descripcion = descripcion;
+        this.cupo = cupo;
+        this.cover = cover;
+        this.fotoPrincipal = fotoPrincipal;
+    }
+
     public String getFotoPrincipal() {
         return fotoPrincipal;
     }
