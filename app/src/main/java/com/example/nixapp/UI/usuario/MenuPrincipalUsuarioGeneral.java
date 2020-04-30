@@ -351,6 +351,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         intentInfoExpandida.putExtra("cover",eventos.getCover());
         intentInfoExpandida.putExtra("fotoPrincipal",eventos.getFotoPrincipal());
         intentInfoExpandida.putExtra("id",eventos.getId());
+        intentInfoExpandida.putExtra("municipio",eventos.getMunicipio());
         startActivity(intentInfoExpandida);
     }
 }
