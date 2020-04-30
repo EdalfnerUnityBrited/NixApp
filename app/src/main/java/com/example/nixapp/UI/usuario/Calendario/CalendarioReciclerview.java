@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.R;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -82,7 +82,7 @@ public class CalendarioReciclerview extends RecyclerView.Adapter<CalendarioRecic
             holder.asistencia.setText("Tu lo creaste");
             holder.asistencia.setTextColor(Color.parseColor("#1C8FD6"));
         }
-        else if(EventosC.get(position).estado_asistencia.equals("Me interesa"))
+        else if(EventosC.get(position).estado_asistencia.equals("me interesa"))
         {
             holder.asistencia.setText("Te interesa");
             holder.asistencia.setTextColor(Color.parseColor("#F59710"));

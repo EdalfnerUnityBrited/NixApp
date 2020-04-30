@@ -1,14 +1,14 @@
 package com.example.nixapp.DB;
 
 public class Prospectos {
-    int id_evento;
+    String id_evento;
     int id;
 
-    public int getId_evento() {
+    public String getId_evento() {
         return id_evento;
     }
 
-    public void setId_evento(int id_evento) {
+    public void setId_evento(String id_evento) {
         this.id_evento = id_evento;
     }
 
@@ -48,18 +48,18 @@ public class Prospectos {
     int id_prospecto;
     String estado;
 
-    public Prospectos(int id_evento, String estado)
+    public Prospectos(String id_evento, String estado)
     {
         this.id_evento = id_evento;
         this.estado = estado;
     }
 
-    public Prospectos(int id_evento)
+    public Prospectos(String id_evento)
     {
         this.id_evento = id_evento;
     }
 
-    public Prospectos(int id_evento, String estado,int id, int id_prospecto,int confirmacionasistencia)
+    public Prospectos(String id_evento, String estado,int id, int id_prospecto,int confirmacionasistencia)
     {
         this.id_evento = id_evento;
         this.estado = estado;

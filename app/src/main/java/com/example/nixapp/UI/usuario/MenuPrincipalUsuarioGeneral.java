@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +74,8 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Usuario usuario;
     private NixService nixService;
     private NixClient nixClient;
+    private long mLastClickTime = 0;
+
     Button buscar;
     Eventos eventos;
 
@@ -111,9 +114,15 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentBusqueda = new Intent(getApplicationContext(), BuscarEventos.class);
-                intentBusqueda.putExtra("usuario", usuario);
-                startActivity(intentBusqueda);
+                if (SystemClock.elapsedRealtime() - mLastClickTime > 1000){
+                    buscar.setEnabled(false);
+                    Intent intentBusqueda = new Intent(getApplicationContext(), BuscarEventos.class);
+                    intentBusqueda.putExtra("usuario", usuario);
+                    startActivity(intentBusqueda);
+                    buscar.setEnabled(true);
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
             }
         });
     }
@@ -121,52 +130,55 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         menuItem.setChecked(false);
-        switch (menuItem.getItemId()) {
-            case R.id.nav_miseventos: {
-                Intent intentMisEventos = new Intent(this, MisEventos.class);
-                startActivity(intentMisEventos);
-                break;
-            }
-            case R.id.nav_serviciosproximos: {
-                Intent intentServiciosProximos = new Intent(this, ServiciosProximos.class);
-                intentServiciosProximos.putExtra("usuario", usuario);
-                startActivity(intentServiciosProximos);
-                break;
-            }
-            case R.id.nav_eventosproximos: {
-                Intent intentEventosProximos = new Intent(this, EventosProximos.class);
-                startActivity(intentEventosProximos);
-                break;
-            }
-            case R.id.nav_salir:{
-                TokenController.getToken().delete();
-                Intent intentVuelta = new Intent(this, MainActivity.class);
-                startActivity(intentVuelta);
-                finish();
-                break;
-            }
-            case R.id.nav_perfil:{
-                Intent intentMiPerfil = new Intent(this, MiPerfil.class);
-                intentMiPerfil.putExtra("usuario", usuario);
-                startActivity(intentMiPerfil);
-                break;
-            }
-            case R.id.nav_ayuda:{
-                Intent intentAyuda = new Intent(this, Ayuda.class);
-                startActivity(intentAyuda);
-                break;
-            }
-            case R.id.nav_calendario:{
-                Intent intentCalendario = new Intent(this, Calendario.class);
-                startActivity(intentCalendario);
-                break;
-            }
-            case R.id.nav_tendencia:{
-                Intent intentTendencia = new Intent(this, Tendencias.class);
-                startActivity(intentTendencia);
-                break;
+        if (SystemClock.elapsedRealtime() - mLastClickTime > 1000){
+            switch (menuItem.getItemId()) {
+                case R.id.nav_miseventos: {
+                    Intent intentMisEventos = new Intent(this, MisEventos.class);
+                    startActivity(intentMisEventos);
+                    break;
+                }
+                case R.id.nav_serviciosproximos: {
+                    Intent intentServiciosProximos = new Intent(this, ServiciosProximos.class);
+                    intentServiciosProximos.putExtra("usuario", usuario);
+                    startActivity(intentServiciosProximos);
+                    break;
+                }
+                case R.id.nav_eventosproximos: {
+                    Intent intentEventosProximos = new Intent(this, EventosProximos.class);
+                    startActivity(intentEventosProximos);
+                    break;
+                }
+                case R.id.nav_salir:{
+                    TokenController.getToken().delete();
+                    Intent intentVuelta = new Intent(this, MainActivity.class);
+                    startActivity(intentVuelta);
+                    finish();
+                    break;
+                }
+                case R.id.nav_perfil:{
+                    Intent intentMiPerfil = new Intent(this, MiPerfil.class);
+                    intentMiPerfil.putExtra("usuario", usuario);
+                    startActivity(intentMiPerfil);
+                    break;
+                }
+                case R.id.nav_ayuda:{
+                    Intent intentAyuda = new Intent(this, Ayuda.class);
+                    startActivity(intentAyuda);
+                    break;
+                }
+                case R.id.nav_calendario:{
+                    Intent intentCalendario = new Intent(this, Calendario.class);
+                    startActivity(intentCalendario);
+                    break;
+                }
+                case R.id.nav_tendencia:{
+                    Intent intentTendencia = new Intent(this, Tendencias.class);
+                    startActivity(intentTendencia);
+                    break;
+                }
             }
         }
+        mLastClickTime = SystemClock.elapsedRealtime();
 
         menuItem.setChecked(false);
         return true;
@@ -296,44 +308,47 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Eventos event =new Eventos(marker.getTitle());
-        Call<EventosResult> calle = nixService.eventoBuscar(event);
-        calle.enqueue(new Callback<EventosResult>() {
-            @Override
-            public void onResponse(Call<EventosResult> call, final Response<EventosResult> response) {
-                if (response.isSuccessful()){
-                   eventos= response.body().eventos;
-                    MenuPrincipalUsuarioGeneral.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Bundle data = new Bundle();
+        if (SystemClock.elapsedRealtime() - mLastClickTime > 1000){
+            Eventos event =new Eventos(marker.getTitle());
+            Call<EventosResult> calle = nixService.eventoBuscar(event);
+            calle.enqueue(new Callback<EventosResult>() {
+                @Override
+                public void onResponse(Call<EventosResult> call, final Response<EventosResult> response) {
+                    if (response.isSuccessful()){
+                        eventos= response.body().eventos;
+                        MenuPrincipalUsuarioGeneral.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bundle data = new Bundle();
 
-                            data.putString("fecha",eventos.getFecha());
+                                data.putString("fecha",eventos.getFecha());
 
-                            data.putString("hora",eventos.getHora());
+                                data.putString("hora",eventos.getHora());
 
-                            data.putString("nombre",eventos.getNombre_evento());
+                                data.putString("nombre",eventos.getNombre_evento());
 
-                            data.putString("lugar",eventos.getLugar());
+                                data.putString("lugar",eventos.getLugar());
 
 
-                            InfoEventoFragment infoEventoFragment = InfoEventoFragment.getInstance();
-                            infoEventoFragment.setListener(MenuPrincipalUsuarioGeneral.this);
-                            infoEventoFragment.setArguments(data);
-                            infoEventoFragment.show(getSupportFragmentManager(),infoEventoFragment.getTag());
-                        }
-                    });
+                                InfoEventoFragment infoEventoFragment = InfoEventoFragment.getInstance();
+                                infoEventoFragment.setListener(MenuPrincipalUsuarioGeneral.this);
+                                infoEventoFragment.setArguments(data);
+                                infoEventoFragment.show(getSupportFragmentManager(),infoEventoFragment.getTag());
+                            }
+                        });
 
+                    }
+                    else{
+                        Toast.makeText(MenuPrincipalUsuarioGeneral.this, "Fallo en Response", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(MenuPrincipalUsuarioGeneral.this, "Fallo en Response", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(Call<EventosResult> call, Throwable t) {
+                    Toast.makeText(MenuPrincipalUsuarioGeneral.this,"Error en el intento: "+ t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }
-            @Override
-            public void onFailure(Call<EventosResult> call, Throwable t) {
-                Toast.makeText(MenuPrincipalUsuarioGeneral.this,"Error en el intento: "+ t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+            });
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
         return false;
     }
 
