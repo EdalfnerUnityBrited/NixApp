@@ -46,6 +46,9 @@ public interface NixService {
     @GET("eventos/usuario")
     Call<EventosListResult> eventosUsuario();
 
+    @GET("eventos/tendencia")
+    Call<EventosListResult> eventosTendencia();
+
     @GET("auth/user")
     Call<Usuario> getUser();
 
