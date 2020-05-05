@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.proveedor.MenuPrincipalUsuarioProveedor;
@@ -36,15 +33,11 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.login.widget.ProfilePictureView;
-import com.facebook.share.widget.ShareButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.SignInButtonImpl;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -76,7 +69,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     boolean imagen_agregada = false;
     Uri imagen_enviar = null;
     //////////////////
-    Button btnLogin;
+    Button btnLogin,crearcuenta;
     EditText etEmail, etPassword;
     NixService nixService;
     NixClient nixClient;
@@ -96,6 +89,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         btnLogin=findViewById(R.id.login);
         etEmail=findViewById(R.id.username);
         etPassword=findViewById(R.id.password);
+        crearcuenta = findViewById(R.id.crear_cuenta);
         btnLogin.setOnClickListener(this);
         retrofitInit();
 
@@ -115,6 +109,15 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        ////////////////////////////////////////////////////////////
+        crearcuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intentBusqueda = new Intent(getApplicationContext(), CrearCuenta.class);
+                startActivity(intentBusqueda);
+            }
+        });
 
         //////////////////////////////////////////////////////////Facebook API
         callbackManager = CallbackManager.Factory.create();
@@ -163,12 +166,16 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         requestEmail(AccessToken.getCurrentAccessToken());
                         requestEdad(AccessToken.getCurrentAccessToken());
                         Toast.makeText(getApplicationContext(),"Iniciaste Sesion con facebook",Toast.LENGTH_SHORT).show();
+                        etEmail.setText(AccessToken.getCurrentAccessToken().getToken());
+
 
                     } else {
                         Profile.fetchProfileForCurrentAccessToken();
                         requestEmail(AccessToken.getCurrentAccessToken());
                         requestEdad(AccessToken.getCurrentAccessToken());
                         Toast.makeText(getApplicationContext(),"Wow, si iniciaste con facebook",Toast.LENGTH_SHORT).show();
+                        etEmail.setText(AccessToken.getCurrentAccessToken().getToken());
+
                     }
                 }
 

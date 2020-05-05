@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.serviciosContratados.chat.DashboardFragment;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;

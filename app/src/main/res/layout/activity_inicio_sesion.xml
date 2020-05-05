@@ -112,26 +112,29 @@
         android:id="@+id/buttonFacebook"
         android:layout_width="55dp"
         android:layout_height="55dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="31dp"
         android:background="@drawable/facebookbl"
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.373"
+        app:layout_constraintHorizontal_bias="0.345"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977" />
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintVertical_bias="0.512" />
 
     <com.google.android.gms.common.internal.SignInButtonImpl
         android:id="@+id/googleInicio"
         android:layout_width="54dp"
         android:layout_height="54dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="31dp"
         android:background="@drawable/googlebl"
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.667"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.925" />
+        app:layout_constraintHorizontal_bias="0.329"
+        app:layout_constraintStart_toEndOf="@+id/buttonFacebook"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        app:layout_constraintVertical_bias="0.523" />
 
     <EditText
         android:id="@+id/password"
@@ -140,18 +143,32 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:hint="Contraseña"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
-        android:textColor="#ffffffff"
-        android:hint="Contraseña"
-        android:textColorHint="#ffffffff"
         android:selectAllOnFocus="true"
+        android:textColor="#ffffffff"
+        android:textColorHint="#ffffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.887"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.588"  />
+        app:layout_constraintVertical_bias="0.588" />
+
+    <Button
+        android:id="@+id/crear_cuenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="¿No tienes una cuenta aun?..."
+        android:textColor="@drawable/butom_text"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="@+id/login"
+        app:layout_constraintStart_toStartOf="@+id/login" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

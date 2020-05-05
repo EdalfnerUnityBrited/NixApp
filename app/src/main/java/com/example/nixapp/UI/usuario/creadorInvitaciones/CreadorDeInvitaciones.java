@@ -87,8 +87,14 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
 
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_backarrow2);
         getSupportActionBar().setTitle("Creador de Invitaciones");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //View
         photoEditorView = (PhotoEditorView) findViewById(R.id.image_preview);

@@ -29,6 +29,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Eventos;
@@ -103,8 +104,16 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_crear_evento);
         retrofitinit();
         iniciarcomponentes();
-
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarTitle("Nuevo Evento");
+        mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         terminar.setOnClickListener(this);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         //////////////////////
         mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
         mProgressDialog= new ProgressDialog(this);
@@ -381,6 +390,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
     }
+    public void setToolbarTitle(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
+    }
     private void enviarEmail(){
         //Instanciamos un Intent del tipo ACTION_SEND
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -554,6 +567,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     }
                                 });
                             }
+                            finish();
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
