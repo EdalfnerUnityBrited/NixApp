@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,6 +37,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.CreadorDeInvitaciones;
+import com.example.nixapp.UI.welcome.CrearCuenta;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -112,6 +114,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View view) {
                 finish();
+                Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                startActivity(intent);
+                CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
             }
         });
         //////////////////////
@@ -390,6 +395,18 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            //do your stuff
+            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void setToolbarTitle(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
@@ -568,6 +585,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                 });
                             }
                             finish();
+                            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                            startActivity(intent);
+                            CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();

@@ -50,7 +50,7 @@ public class BusquedaFiltros extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                BusquedaFiltros.this.overridePendingTransition(R.anim.slide_down,R.anim.slide_down);
+                BusquedaFiltros.this.overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
             }
         });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -176,7 +176,7 @@ public class BusquedaFiltros extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             //do your stuff
             finish();
-            BusquedaFiltros.this.overridePendingTransition(R.anim.slide_down,R.anim.slide_down);
+            BusquedaFiltros.this.overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
         }
         return super.onKeyDown(keyCode, event);
     }

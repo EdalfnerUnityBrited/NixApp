@@ -89,6 +89,7 @@ public class EventosCerradosFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.nuevo_evento:{
+                getActivity().finish();
                 Intent intent = new Intent(getActivity(), CrearEvento.class);
                 startActivity(intent);
                 break;

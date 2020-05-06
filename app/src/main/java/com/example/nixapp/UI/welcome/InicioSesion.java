@@ -166,7 +166,6 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         requestEmail(AccessToken.getCurrentAccessToken());
                         requestEdad(AccessToken.getCurrentAccessToken());
                         Toast.makeText(getApplicationContext(),"Iniciaste Sesion con facebook",Toast.LENGTH_SHORT).show();
-                        etEmail.setText(AccessToken.getCurrentAccessToken().getToken());
 
 
                     } else {
@@ -174,7 +173,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         requestEmail(AccessToken.getCurrentAccessToken());
                         requestEdad(AccessToken.getCurrentAccessToken());
                         Toast.makeText(getApplicationContext(),"Wow, si iniciaste con facebook",Toast.LENGTH_SHORT).show();
-                        etEmail.setText(AccessToken.getCurrentAccessToken().getToken());
+                        
 
                     }
                 }
