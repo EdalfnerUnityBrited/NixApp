@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,12 +30,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.CreadorDeInvitaciones;
+import com.example.nixapp.UI.welcome.CrearCuenta;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -103,8 +106,19 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_crear_evento);
         retrofitinit();
         iniciarcomponentes();
-
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarTitle("Nuevo Evento");
+        mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         terminar.setOnClickListener(this);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                startActivity(intent);
+                CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            }
+        });
         //////////////////////
         mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
         mProgressDialog= new ProgressDialog(this);
@@ -381,6 +395,22 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            //do your stuff
+            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void setToolbarTitle(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
+    }
     private void enviarEmail(){
         //Instanciamos un Intent del tipo ACTION_SEND
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -554,6 +584,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     }
                                 });
                             }
+                            finish();
+                            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                            startActivity(intent);
+                            CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();

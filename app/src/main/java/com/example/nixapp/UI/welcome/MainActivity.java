@@ -2,6 +2,7 @@ package com.example.nixapp.UI.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     Button btnLogin, btnSignup;
-
+    long mLastClickTime = 0;
     /**Declaración de variables
      * Primeramente se relacionan los botones con su respectivo elemento en la vista utilizando la
      * función findViewbyId, lo que hace esta función es asignar a la variable la referencia del
@@ -53,18 +54,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int i = view.getId();
         Intent q;
-        switch (i) {
-            case R.id.buttonLogin: {
-                q = new Intent(view.getContext(), InicioSesion.class);
-                startActivity(q);
-                break;
-            }
-            case R.id.buttonSignup: {
-                q = new Intent(view.getContext(), CrearCuenta.class);
-                startActivity(q);
-                break;
+        if (SystemClock.elapsedRealtime() - mLastClickTime > 1000){
+            switch (i) {
+                case R.id.buttonLogin: {
+                    q = new Intent(view.getContext(), InicioSesion.class);
+                    startActivity(q);
+                    break;
+                }
+                case R.id.buttonSignup: {
+                    q = new Intent(view.getContext(), CrearCuenta.class);
+                    startActivity(q);
+                    break;
+                }
             }
         }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
     }
 
 
