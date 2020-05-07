@@ -1,5 +1,6 @@
 package com.example.nixapp.conn;
 
+import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Pagos;
@@ -84,4 +85,7 @@ public interface NixService {
 
     @POST("eventos/ir")
     Call<ProspectosResult> Confirmacionprospecto(@Body Prospectos prospectos);
+
+    @POST("eventos/buscarEvento")
+    Call<EventosListResult> buscarEvento(@Body Busqueda busqueda);
 }
