@@ -216,7 +216,39 @@
                             android:textSize="20dp" />
                     </TableRow>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
 
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/mun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Municipio: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/muni"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="Atotonilco"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -458,12 +490,53 @@
                         android:id="@+id/viewPager"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="350dp"
                         android:layout_marginBottom="8dp"/>
 
 
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/lineabotones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="30dp">
+                    <TableRow
+                        android:id="@+id/borderbotones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow"
+                        android:padding="8dp">
 
+
+                        <Button
+                            android:id="@+id/asistire"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Me interesa"
+                            android:padding="5dp"
+                            android:layout_marginRight="20dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/buttom_text2"
+                            android:textSize="18sp"
+                            android:background="@drawable/button_yellow"/>
+
+                        <Button
+                            android:id="@+id/Meinteresa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Confirmar asistencia"
+                            android:padding="5dp"
+                            android:textAllCaps="false"
+                            android:textSize="18sp"
+                            android:textColor="@drawable/buttom_text2"
+                            android:background="@drawable/custombutom"/>
+                    </TableRow>
+
+
+                </LinearLayout>
 
 
 

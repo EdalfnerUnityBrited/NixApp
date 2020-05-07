@@ -187,6 +187,46 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/borderrow"
+                            android:padding="6dp">
+
+                            <TextView
+                                android:id="@+id/municipios"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="Municipio: "
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginRight="25dp"
+                                android:layout_marginBottom="15dp"
+                                android:gravity="center_vertical"/>
+
+                            <Spinner
+                                android:id="@+id/spinner1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/listaMunicipios"
+                                android:prompt="@string/listaBase"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:padding="5dp"
+                                android:background="@drawable/borderrow"
+                                />
+                        </TableRow>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
                         android:orientation="vertical">
 
 
@@ -712,8 +752,32 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/info_imagen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Nota: Recuerda ponerle imagenes!"
+                            android:textColor="#EFE8E8"
+
+                            android:textSize="14sp"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dip"
+                            android:background="#EFE8E8" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="4dp"
                         android:orientation="vertical"
                         android:gravity="center_vertical"
                         android:background="@drawable/border_table">

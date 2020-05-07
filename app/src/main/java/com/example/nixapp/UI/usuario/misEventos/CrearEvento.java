@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -28,12 +30,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.CreadorDeInvitaciones;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
+import com.example.nixapp.UI.welcome.CrearCuenta;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -82,11 +87,11 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     Switch simpleSwitch1;
     CheckBox cover;
     TextView correosAgregados;
-    String downloadUrl, imagenPrincipal;
+    String downloadUrl, imagenPrincipal="";
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
-    String clickedName;
+    String clickedName, municipio;
     Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
     int cupo;
     boolean correoagregado = false, imagen_lista = false;
@@ -95,14 +100,26 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     ImageView InvitacionSeleccionada;
     ShareButton shareButton;
     RadioButton r1,r2;
+    Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_evento);
         retrofitinit();
         iniciarcomponentes();
-
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarTitle("Nuevo Evento");
+        mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         terminar.setOnClickListener(this);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                startActivity(intent);
+                CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            }
+        });
         //////////////////////
         mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
         mProgressDialog= new ProgressDialog(this);
@@ -242,7 +259,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         crear_invitacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent irInvitacionIntent = new Intent(CrearEvento.this, CreadorDeInvitaciones.class);
+                Intent irInvitacionIntent = new Intent(CrearEvento.this, Plantillas.class);
                 startActivity(irInvitacionIntent);
             }
         });
@@ -329,7 +346,71 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
             }
         });
+        String[] Minicipios = new String[]{
+                "Elige un municipio:",
+                "Acatic",
+                "Ameca",
+                "Arandas",
+                "Atotonilco el alto",
+                "Chapala",
+                "Cocula",
+                "El Arenal",
+                "El Salto",
+                "Guachinango",
+                "Guadalajara",
+                "Jocotepec",
+                "La Barca",
+                "Lagos de Moreno",
+                "Mascota",
+                "Mazamitla",
+                "Mezquitic",
+                "Puerto Vallarta",
+                "San Juan de los Lagos",
+                "Tlaquepaque",
+                "Sayula",
+                "Tala",
+                "Tapalpa",
+                "Tequila",
+                "Tlajomulco de Zuñiga",
+                "Tonala",
+                "Tototlan",
+                "Zapopan",
+                "Zapotlanejo"
+        };
 
+        spinner = findViewById(R.id.spinner1);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this,R.layout.texto_municipios,Minicipios
+        );
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.texto_municipios);
+        spinner.setAdapter(spinnerArrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                municipio = spinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                municipio = spinner.getSelectedItem().toString();
+            }
+        });
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            //do your stuff
+            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void setToolbarTitle(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
     }
     private void enviarEmail(){
         //Instanciamos un Intent del tipo ACTION_SEND
@@ -464,10 +545,14 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         if (categoria_evento==0){
             Toast.makeText(CrearEvento.this, "Elija una categoria", Toast.LENGTH_SHORT).show();
         }
+        if(spinner.getSelectedItem().toString().equals("Elige un municipio"))
+        {
+            Toast.makeText(CrearEvento.this, "Elige un municipio", Toast.LENGTH_SHORT).show();
+        }
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
-                final Eventos requestSample = new Eventos(nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal);
+                final Eventos requestSample = new Eventos(privacidad,nombre,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal,municipio);
                 Call<EventosResult> call= nixService.eventos(requestSample);
                 call.enqueue(new Callback<EventosResult>() {
                     @Override
@@ -500,6 +585,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     }
                                 });
                             }
+                            finish();
+                            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                            startActivity(intent);
+                            CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();

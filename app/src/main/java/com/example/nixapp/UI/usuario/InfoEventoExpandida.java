@@ -2,9 +2,11 @@ package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -15,34 +17,40 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
+import com.example.nixapp.DB.Prospectos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ImagenResult;
+import com.example.nixapp.conn.results.ProspectosResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InfoEventoExpandida extends AppCompatActivity {
 
-    private String nombre = "", fecha, hora, lugar, descripcion = "", fotoPrincipal;
+    private String nombre = "", fecha, hora, lugar, descripcion = "", fotoPrincipal, id, municipio;
     private int privacidad, categoria, cupo, cover;
-    EditText nombreEvento,direccion_evento,fecha_evento,hora_evento,cupo_event,descripcion_evento,cover_evento;
+    EditText nombreEvento,direccion_evento,fecha_evento,hora_evento,cupo_event,descripcion_evento,cover_evento, municipios;
     CheckBox cover_even;
     RadioButton publico,privado;
     ImageView principal;
     Spinner spinners;
+    Button asistire,interes;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     NixClient nixClient;
     NixService nixService;
+    boolean Meinteresa = false, Voyir = false;
     List<ImagenEventos> eventosUsuario;
+    LinearLayout botones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
 
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
         nombre = (String) getIntent().getSerializableExtra("nombre");
         fecha = (String) getIntent().getSerializableExtra("fecha");
         hora = (String) getIntent().getSerializableExtra("hora");
@@ -61,6 +70,8 @@ public class InfoEventoExpandida extends AppCompatActivity {
         categoria = (int) getIntent().getSerializableExtra("categoria");
         cupo = (int) getIntent().getSerializableExtra("cupo");
         cover = (int) getIntent().getSerializableExtra("cover");
+        id =(String) getIntent().getSerializableExtra("id");
+        municipio=(String) getIntent().getSerializableExtra("municipio");
         setToolbarTitle(nombre);
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         String[] fechaSeparada = fecha.split("-");
@@ -79,6 +90,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
                     {
                         //Toast.makeText(getApplicationContext(),"Esta vacio...",Toast.LENGTH_LONG).show();
                         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+                        eventosUsuario.add(new ImagenEventos("https://pbs.twimg.com/media/DqiOx30WkAEcWEg.jpg","1"));
                         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
                         viewPager.setAdapter(viewPagerAdapter);
                     }
@@ -112,6 +124,10 @@ public class InfoEventoExpandida extends AppCompatActivity {
         descripcion_evento = findViewById(R.id.descripcion);
         cover_even = findViewById(R.id.cover);
         cover_evento = findViewById(R.id.cover_valor);
+        interes = findViewById(R.id.Meinteresa);
+        asistire = findViewById(R.id.asistire);
+        municipios = findViewById(R.id.muni);
+        botones = findViewById(R.id.lineabotones);
         //////////////////////////////////////////////////
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +175,9 @@ public class InfoEventoExpandida extends AppCompatActivity {
         descripcion_evento.setText(descripcion);
         descripcion_evento.setBackground(null);
         descripcion_evento.setEnabled(false);
+        municipios.setText(municipio);
+        municipios.setBackground(null);
+        municipios.setEnabled(false);
         ///////////////////////////////////////////////////
         if(cover == 0)
         {
@@ -174,8 +193,187 @@ public class InfoEventoExpandida extends AppCompatActivity {
             cover_evento.setBackground(null);
             cover_evento.setEnabled(false);
         }
+        Call<ProspectosResult> Cprospecto = nixService.Confirmacionprospecto(new Prospectos(id));
+        Cprospecto.enqueue(new Callback<ProspectosResult>() {
+            @Override
+            public void onResponse(Call<ProspectosResult> call, Response<ProspectosResult> response) {
+                if (response.isSuccessful()) {
+                    Prospectos prospecto1 = response.body().prospectos;
+                    if(prospecto1 == null)
+                    {
+                        Toast.makeText(InfoEventoExpandida.this,"No eres participe aun....", Toast.LENGTH_LONG).show();
+                        asistire.setBackgroundResource(R.drawable.custombutom2);
+                        asistire.setTextColor(R.drawable.butom_text);
+                        asistire.setText("Confirmar asistencia");
+                        interes.setBackgroundResource(R.drawable.custombutom2);
+                        interes.setTextColor(R.drawable.butom_text);
+                        interes.setText("Me interesa");
 
+                    }
+                    else
+                    {
+                        if(prospecto1.getEstado().equals("confirmado"))
+                        {
+                            asistire.setBackgroundResource(R.drawable.custombutom);
+                            asistire.setTextColor(R.drawable.buttom_text2);
+                            asistire.setText("Cancelar asistencia");
+                            interes.setBackgroundResource(R.drawable.custombutom2);
+                            interes.setTextColor(R.drawable.butom_text);
+                            interes.setText("Me interesa");
+                            Voyir = true;
+                        }
+                        else if(prospecto1.getEstado().equals("me interesa"))
+                        {
+                            interes.setBackgroundResource(R.drawable.button_yellow);
+                            interes.setTextColor(R.drawable.buttom_text2);
+                            interes.setText("Ya no me interesa");
+                            Meinteresa = true;
+                            asistire.setBackgroundResource(R.drawable.custombutom2);
+                            asistire.setTextColor(R.drawable.butom_text);
+                            asistire.setText("Confirmar asistencia");
+                        }
+                        else
+                        {
+                            interes.setVisibility(View.GONE);
+                            asistire.setVisibility(View.GONE);
+                            botones.setVisibility(View.GONE);
+                        }
 
+                    }
+
+                }
+                else
+                {
+                    Toast.makeText(InfoEventoExpandida.this, "Fallo en Response", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProspectosResult> call, Throwable t) {
+                Toast.makeText(InfoEventoExpandida.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        asistire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Voyir == false)
+                {
+                    Call<ResponseBody> prospecto = nixService.prospecto(new Prospectos(id,"confirmado"));
+                    prospecto.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(InfoEventoExpandida.this, response.message(), Toast.LENGTH_SHORT).show();
+                                asistire.setBackgroundResource(R.drawable.custombutom);
+                                asistire.setTextColor(R.drawable.buttom_text2);
+                                asistire.setText("Cancelar asistencia");
+                                Voyir = true;
+                                interes.setBackgroundResource(R.drawable.custombutom2);
+                                interes.setTextColor(R.drawable.butom_text);
+                                interes.setText("Me interesa");
+                                Meinteresa = false;
+                            }
+                            else
+                            {
+                                Toast.makeText(InfoEventoExpandida.this, "Fallo al confirmar su asistencia", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(InfoEventoExpandida.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else
+                {
+                    Call<ResponseBody> prospecto = nixService.prospecto(new Prospectos(id,"cancelar"));
+                    prospecto.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(InfoEventoExpandida.this, response.message(), Toast.LENGTH_SHORT).show();
+                                asistire.setBackgroundResource(R.drawable.custombutom2);
+                                asistire.setTextColor(R.drawable.butom_text);
+                                asistire.setText("Confirmar asistencia");
+                                Voyir = false;
+                            }
+                            else
+                            {
+                                Toast.makeText(InfoEventoExpandida.this, "Fallo al cancelar su asitencia", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(InfoEventoExpandida.this, "Error2: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }
+        });
+
+        interes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Meinteresa == false)
+                {
+                    Call<ResponseBody> prospecto = nixService.prospecto(new Prospectos(id,"me interesa"));
+                    prospecto.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(InfoEventoExpandida.this, response.message(), Toast.LENGTH_SHORT).show();
+                                interes.setBackgroundResource(R.drawable.button_yellow);
+                                interes.setTextColor(R.drawable.buttom_text2);
+                                interes.setText("Ya no me interesa");
+                                Meinteresa = true;
+                                asistire.setBackgroundResource(R.drawable.custombutom2);
+                                asistire.setTextColor(R.drawable.butom_text);
+                                asistire.setText("Confirmar asistencia");
+                                Voyir = false;
+                            }
+                            else
+                            {
+                                Toast.makeText(InfoEventoExpandida.this, "Fallo al poner interes", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(InfoEventoExpandida.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else
+                {
+                    Call<ResponseBody> prospecto = nixService.prospecto(new Prospectos(id,"cancelar"));
+                    prospecto.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(InfoEventoExpandida.this, response.message(), Toast.LENGTH_SHORT).show();
+                                interes.setBackgroundResource(R.drawable.custombutom2);
+                                interes.setTextColor(R.drawable.butom_text);
+                                interes.setText("Me interesa");
+                                Meinteresa = false;
+                            }
+                            else
+                            {
+                                Toast.makeText(InfoEventoExpandida.this, "Fallo al quitar interes", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(InfoEventoExpandida.this, "Error2: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 

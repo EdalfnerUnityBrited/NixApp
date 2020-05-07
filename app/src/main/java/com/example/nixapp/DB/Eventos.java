@@ -11,8 +11,36 @@ public class Eventos {
     String descripcion;
     int cupo;
     int cover;
+
+    public Eventos( int privacidad,String nombre_evento, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String fotoPrincipal, String municipio)
+    {
+        this.nombre_evento = nombre_evento;
+        this.privacidad = privacidad;
+        this.categoria_evento = categoria_evento;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.lugar = lugar;
+        this.descripcion = descripcion;
+        this.cupo = cupo;
+        this.cover = cover;
+        this.fotoPrincipal = fotoPrincipal;
+        this.municipio = municipio;
+    }
+
+    int tendencia;
     String fotoPrincipal;
     String estado;
+    String municipio;
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+
+
 
     public Eventos(String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String foto) {
         this.nombre_evento = nombre_evento;
@@ -65,6 +93,22 @@ public class Eventos {
         this.cover=cover;
         this.fotoPrincipal =foto;
         this.estado = estado;
+        this.tendencia = 0;
+
+    }
+
+    public Eventos(String id, String nombre_evento, int privacidad, int categoria_evento, String fecha, String hora, String lugar, String descripcion, int cupo, int cover, String fotoPrincipal) {
+        this.id = id;
+        this.nombre_evento = nombre_evento;
+        this.privacidad = privacidad;
+        this.categoria_evento = categoria_evento;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.lugar = lugar;
+        this.descripcion = descripcion;
+        this.cupo = cupo;
+        this.cover = cover;
+        this.fotoPrincipal = fotoPrincipal;
     }
 
     public String getFotoPrincipal() {

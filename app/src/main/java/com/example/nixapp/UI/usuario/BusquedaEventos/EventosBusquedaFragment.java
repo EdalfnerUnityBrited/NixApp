@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.usuario.misEventos;
+package com.example.nixapp.UI.usuario.BusquedaEventos;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.Tendencias.EventosTendenciaRecyclerViewAdapter;
+import com.example.nixapp.UI.usuario.misEventos.CrearEvento;
+import com.example.nixapp.UI.usuario.misEventos.PruebaEventosRecyclerViewAdapter;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
@@ -29,11 +32,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventosCerradosFragment extends Fragment implements View.OnClickListener {
+public class EventosBusquedaFragment extends Fragment implements View.OnClickListener {
     View view;
     RecyclerView recyclerView;
     List<Eventos> eventosList;
-    PruebaEventosRecyclerViewAdapter adapterEventos;
+    EventosRecyclerViewAdapter adapterEventos;
     NixService nixService;
     NixClient nixClient;
     Eventos eventos;
@@ -41,39 +44,15 @@ public class EventosCerradosFragment extends Fragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_eventos_cerrados, container, false);
+        View view = inflater.inflate(R.layout.fragment_eventos_buscar, container, false);
         recyclerView= view.findViewById(R.id.recyclerUserEvents);
         eventosList= new ArrayList<>();
         retrofitInit();
-        Call<EventosListResult> call = nixService.eventosUsuario();
-        call.enqueue(new Callback<EventosListResult>() {
-            @Override
-            public void onResponse(Call<EventosListResult> call, Response<EventosListResult> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(getActivity(), "Eventos Obtenidos correctamente",
-                            Toast.LENGTH_SHORT).show();
+        BuscarEventos activity = (BuscarEventos) getActivity();
+        eventosList= activity.getDataFragment();
+        recyclerView.setAdapter(adapterEventos);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                    eventosList=  response.body().eventos;
-                   adapterEventos=  new PruebaEventosRecyclerViewAdapter(eventosList, mListener);
-                    recyclerView.setAdapter(adapterEventos);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                }
-                else{
-                    Toast.makeText(getActivity(), response.errorBody().toString(),
-                            Toast.LENGTH_SHORT).show();
-                    Log.i("Error:" ,response.errorBody().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<EventosListResult> call, Throwable t) {
-                Toast.makeText(getActivity(), "Eventos Obtenidos incorrectamente",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.nuevo_evento);
-        actionButton.setOnClickListener(this);
         return view;
 
 
@@ -105,8 +84,8 @@ public class EventosCerradosFragment extends Fragment implements View.OnClickLis
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof EventosCerradosFragment.OnListFragmentInteractionListener) {
-            mListener = (EventosCerradosFragment.OnListFragmentInteractionListener) context;
+        if (context instanceof EventosBusquedaFragment.OnListFragmentInteractionListener) {
+            mListener = (EventosBusquedaFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
