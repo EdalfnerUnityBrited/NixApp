@@ -33,7 +33,7 @@ public class EventosRecyclerViewAdapter extends RecyclerView.Adapter<EventosRecy
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_eventos_list, parent, false);
+                .inflate(R.layout.fragment_eventosbuscar_list, parent, false);
         return new ViewHolder(view);
 
         
