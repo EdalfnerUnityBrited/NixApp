@@ -18,11 +18,13 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Prospectos;
+import com.example.nixapp.DB.RespuestaEventoLleno;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 
@@ -193,6 +195,29 @@ public class InfoEventoExpandida extends AppCompatActivity {
             cover_evento.setBackground(null);
             cover_evento.setEnabled(false);
         }
+        Call<EventoLlenoResult> eventoLleno = nixService.eventoLleno(new Eventos(id));
+        eventoLleno.enqueue(new Callback<EventoLlenoResult>() {
+            @Override
+            public void onResponse(Call<EventoLlenoResult> call, Response<EventoLlenoResult> response) {
+                if (response.isSuccessful()){
+                    RespuestaEventoLleno eventolleno1 = response.body().eventoLleno;
+                    if (eventolleno1.id_evento.equals("0")){
+                        interes.setEnabled(false);
+                        asistire.setEnabled(false);
+                        interes.setText("Evento lleno");
+                        asistire.setText("Evento lleno");
+                    }
+                    else if (eventolleno1.id_evento.equals("1")){
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EventoLlenoResult> call, Throwable t) {
+                Toast.makeText(InfoEventoExpandida.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
         Call<ProspectosResult> Cprospecto = nixService.Confirmacionprospecto(new Prospectos(id));
         Cprospecto.enqueue(new Callback<ProspectosResult>() {
             @Override
