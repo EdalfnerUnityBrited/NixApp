@@ -105,7 +105,7 @@ public class BusquedaFiltros extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                fecha1.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                fecha1.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                                 fechaInicio= fecha1.getText().toString();
                                 Toast.makeText(BusquedaFiltros.this, fechaInicio, Toast.LENGTH_SHORT).show();
                             }
@@ -132,7 +132,7 @@ public class BusquedaFiltros extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                fecha2.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                fecha2.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                                 fechaFinal= fecha2.getText().toString();
                                 Toast.makeText(BusquedaFiltros.this, fechaFinal, Toast.LENGTH_SHORT).show();
                             }
