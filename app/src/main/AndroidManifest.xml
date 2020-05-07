@@ -20,21 +20,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.proveedor.serviciosProximos.ServiciosProximosProveedor"
-            android:screenOrientation="portrait" ></activity>
-        <activity android:name=".UI.proveedor.misServicios.MisServiciosProveedor"
+        <activity android:name=".UI.usuario.creadorInvitaciones.Plantillas"></activity>
+        <activity
+            android:name=".UI.proveedor.serviciosProximos.ServiciosProximosProveedor"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.proveedor.calendario.CalendarioProveedor"
+        <activity
+            android:name=".UI.proveedor.misServicios.MisServiciosProveedor"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.proveedor.ayuda.AyudaProveedor"
+        <activity
+            android:name=".UI.proveedor.calendario.CalendarioProveedor"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.proveedor.MenuPrincipalUsuarioProveedor"
+        <activity
+            android:name=".UI.proveedor.ayuda.AyudaProveedor"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.usuario.BusquedaEventos.BusquedaFiltros"
+        <activity
+            android:name=".UI.proveedor.MenuPrincipalUsuarioProveedor"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.usuario.BusquedaEventos.BuscarEventos"
+        <activity
+            android:name=".UI.usuario.BusquedaEventos.BusquedaFiltros"
             android:screenOrientation="portrait" />
-        <activity android:name=".UI.usuario.InfoEventoExpandida"
+        <activity
+            android:name=".UI.usuario.BusquedaEventos.BuscarEventos"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UI.usuario.InfoEventoExpandida"
             android:screenOrientation="portrait" />
 
         <meta-data

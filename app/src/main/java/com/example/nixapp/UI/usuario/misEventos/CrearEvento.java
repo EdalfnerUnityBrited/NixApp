@@ -37,6 +37,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.CreadorDeInvitaciones;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
 import com.example.nixapp.UI.welcome.CrearCuenta;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
@@ -258,7 +259,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         crear_invitacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent irInvitacionIntent = new Intent(CrearEvento.this, CreadorDeInvitaciones.class);
+                Intent irInvitacionIntent = new Intent(CrearEvento.this, Plantillas.class);
                 startActivity(irInvitacionIntent);
             }
         });

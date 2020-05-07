@@ -53,7 +53,9 @@ import ja.burhanrashid52.photoeditor.PhotoEditorView;
 
 public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersListFragmentListener, EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener, AddFrameListener {
 
-    public static final String pictureName ="dientedeleon.jpeg";
+
+
+    public static String pictureName ="dientedeleon.jpeg";
     public static final int PERMISSION_PICK_IMAGE = 1000;
     public static final int PERMISSION_INSERT_IMAGE = 1001;
 
@@ -84,6 +86,8 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.creador_de_invitaciones_activity);
+
+        pictureName = (String) getIntent().getSerializableExtra("nombre_plantilla");
 
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
