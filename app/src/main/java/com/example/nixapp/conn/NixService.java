@@ -5,8 +5,10 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.DB.Prospectos;
+import com.example.nixapp.DB.RespuestaEventoLleno;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
@@ -88,4 +90,7 @@ public interface NixService {
 
     @POST("eventos/buscarEvento")
     Call<EventosListResult> buscarEvento(@Body Busqueda busqueda);
+
+    @POST("eventos/cupo")
+    Call<EventoLlenoResult> eventoLleno(@Body Eventos evento);
 }
