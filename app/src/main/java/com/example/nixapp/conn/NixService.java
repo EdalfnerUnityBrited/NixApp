@@ -5,7 +5,6 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.DB.Prospectos;
-import com.example.nixapp.DB.RespuestaEventoLleno;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventoLlenoResult;
@@ -15,6 +14,7 @@ import com.example.nixapp.conn.results.EventosTodosResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
 import com.example.nixapp.conn.results.ProspectosResult;
+import com.example.nixapp.conn.results.UsuarioResult;
 
 import java.util.List;
 
@@ -93,4 +93,10 @@ public interface NixService {
 
     @POST("eventos/cupo")
     Call<EventoLlenoResult> eventoLleno(@Body Eventos evento);
+
+    @POST("auth/verificar")
+    Call<UsuarioResult> verificacionEmail(@Body Usuario usuario);
+
+    @POST("auth/signupfg")
+    Call<ResponseBody> CrearUsuarioFG(@Body Usuario usuario);
 }

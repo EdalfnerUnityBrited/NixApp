@@ -1,6 +1,7 @@
 package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -88,21 +89,33 @@ public class InfoEventoExpandida extends AppCompatActivity {
                 {
 
                     eventosUsuario = response.body().imagenEventos;
+                    final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
                     if(eventosUsuario.isEmpty())
                     {
                         //Toast.makeText(getApplicationContext(),"Esta vacio...",Toast.LENGTH_LONG).show();
-                        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+
                         eventosUsuario.add(new ImagenEventos("https://pbs.twimg.com/media/DqiOx30WkAEcWEg.jpg","1"));
-                        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
-                        viewPager.setAdapter(viewPagerAdapter);
                     }
                     else
                     {
                         //Toast.makeText(getApplicationContext(),String.valueOf(eventosUsuario.size()),Toast.LENGTH_LONG).show();
-                        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-                        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
-                        viewPager.setAdapter(viewPagerAdapter);
+
                     }
+                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                    viewPager.setAdapter(viewPagerAdapter);
+                    viewPager.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if(viewPager.isFocused() == false)
+                            {
+                                Toast.makeText(getApplicationContext(),"Tocado",Toast.LENGTH_LONG).show();//Funciona pero le faltan detalles
+
+                            }
+
+                            return false;
+
+                        }
+                    });
                 }
                 else
                 {

@@ -3,16 +3,18 @@ package com.example.nixapp.UI.usuario.eventosProximos;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class EventosProximos extends AppCompatActivity {
+public class EventosProximos extends AppCompatActivity implements EventosProximosFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,4 +69,9 @@ public class EventosProximos extends AppCompatActivity {
                     return true;
                 }
             };
+
+    @Override
+    public void onListFragmentInteraction(Eventos item) {
+        Toast.makeText(this, "Me seleccionaste", Toast.LENGTH_SHORT).show();
+    }
 }
