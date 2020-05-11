@@ -1,7 +1,9 @@
 package com.example.nixapp.UI.usuario.misEventos;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +21,8 @@ import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.io.Serializable;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -121,9 +125,27 @@ public class MisEventos extends AppCompatActivity implements EventosCerradosFrag
     }
 
     @Override
-    public void onClickEdit(Eventos item) {
+    public void onClickEdit(final Eventos item) {
+        final AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("¿Quiere editar el evento "+item.getNombre_evento()+"?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                Intent i = new Intent(MisEventos.this, EditarEvento.class);
+                i.putExtra("id", item.getId());
+                startActivity(i);
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                //cancelar();
+            }
+        });
+        dialogo1.show();
 
     }
+
     private void retrofitInit() {
         nixClient= NixClient.getInstance();
         nixService= nixClient.getNixService();

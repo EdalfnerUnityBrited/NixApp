@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.usuario.creadorInvitaciones.Plantillas"></activity>
+        <activity android:name=".UI.usuario.creadorInvitaciones.Plantillas" />
         <activity
             android:name=".UI.proveedor.serviciosProximos.ServiciosProximosProveedor"
             android:screenOrientation="portrait" />
@@ -96,6 +96,9 @@
             android:label="@string/title_activity_menu_principal_usuario_general" />
         <activity
             android:name=".UI.welcome.CrearCuenta"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UI.usuario.misEventos.EditarEvento"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UI.welcome.WelcomeActivity"

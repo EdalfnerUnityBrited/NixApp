@@ -99,4 +99,10 @@ public interface NixService {
 
     @POST("auth/signupfg")
     Call<ResponseBody> CrearUsuarioFG(@Body Usuario usuario);
+
+    @POST("eventos/idEvento")
+    Call<EventosResult> buscarEventoId(@Body Busqueda busqueda);
+
+    @POST("eventos/actualizar")
+    Call<ResponseBody> actualizarEvento(@Body Eventos eventos);
 }
