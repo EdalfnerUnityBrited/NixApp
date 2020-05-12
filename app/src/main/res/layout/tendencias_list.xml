@@ -31,8 +31,8 @@
         android:layout_marginTop="4dp"
         android:text="TextView"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/textViewDireccion"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDireccion" />
+        app:layout_constraintStart_toStartOf="@+id/textViewContenido"
+        app:layout_constraintTop_toBottomOf="@+id/textViewContenido" />
 
     <ImageView
         android:id="@+id/imageViewEvento"
@@ -48,7 +48,7 @@
         android:layout_marginRight="8dp" />
 
     <TextView
-        android:id="@+id/textViewDireccion"
+        android:id="@+id/textViewContenido"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

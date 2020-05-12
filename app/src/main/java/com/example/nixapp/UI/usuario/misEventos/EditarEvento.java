@@ -231,9 +231,29 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                 else {
                     if(validarEmail(correos.getText().toString()))
                     {
-                        mostrarCorreos.setText(mostrarCorreos.getText()+"\n" + correos.getText());
-                        correoagregado = true;
-                        correos.setText("");
+                        String email=correos.getText().toString();
+                        Busqueda busqueda= new Busqueda(email, id);
+                        Call<ResponseBody> call = nixService.invitar(busqueda);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(EditarEvento.this, "Usuario añadido al evento", Toast.LENGTH_SHORT).show();
+                                    mostrarCorreos.setText(mostrarCorreos.getText()+"\n" + correos.getText());
+                                    correoagregado = true;
+                                    correos.setText("");
+                                }
+                                else{
+                                    Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(EditarEvento.this, "No se estableció la conexión", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
                     else
                     {
@@ -248,7 +268,30 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         dialogo1.setCancelable(false);
         dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
-                Toast.makeText(EditarEvento.this, "Neri, Aqui va a borrar el item: " + viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen(), Toast.LENGTH_LONG).show();
+                String imagenBorrar=viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen();
+                ImagenEventos imagenEventos= new ImagenEventos(imagenBorrar);
+                Call<ResponseBody> call = nixService.borrarImagen(imagenEventos);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(EditarEvento.this, "Imagen borrada", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            try {
+                                Log.i("Error",response.errorBody().string().toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(EditarEvento.this, "Error en la conexion", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -833,10 +876,25 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     downloadUrl = task.getResult().toString();
-                                    if (fotos.isEmpty()) {
-                                        imagenPrincipal = downloadUrl;
-                                    }
-                                    fotos.add(downloadUrl);
+                                    ImagenEventos image= new ImagenEventos(downloadUrl, id);
+                                    Call<ResponseBody> call = nixService.imagenUna(image);
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()){
+                                                Toast.makeText(EditarEvento.this, "Imagen añadida correctamente", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                Toast.makeText(EditarEvento.this, "Error", Toast.LENGTH_SHORT).show();
+                                                Log.i("error",response.errorBody().toString());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(EditarEvento.this, "Error en la ruta", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                     mProgressDialog.dismiss();
 
                                 }
@@ -863,6 +921,77 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                     imagen_lista = true;
                     Glide.with(this).load(imagen_enviar).into(InvitacionSeleccionada);
                     InvitacionSeleccionada.setVisibility(View.VISIBLE);
+                    mProgressDialog.setTitle("Subiendo...");
+
+                    mProgressDialog.setMessage("Subiendo foto a firebase");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+                    Uri uri = data.getData();
+                    viewPager.setVisibility(View.VISIBLE);
+                    final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
+                    final UploadTask uploadTask = filePath.putFile(uri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            String message = e.toString();
+                            Toast.makeText(EditarEvento.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(EditarEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+                                    downloadUrl = filePath.getDownloadUrl().toString();
+                                    return filePath.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    downloadUrl = task.getResult().toString();
+                                    if (fotos.isEmpty()) {
+                                        imagenPrincipal = downloadUrl;
+                                    }
+                                    ImagenEventos image= new ImagenEventos(downloadUrl, id);
+                                    Call<ResponseBody> call = nixService.imagenUna(image);
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()){
+                                                Toast.makeText(EditarEvento.this, "Imagen añadida correctamente", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                try {
+                                                    Log.i("Error",response.errorBody().string().toString());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(EditarEvento.this, "Error en la ruta", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    fotos.add(downloadUrl);
+                                    mProgressDialog.dismiss();
+                                    viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                                    viewPager.setAdapter(viewPagerAdapter);
+                                    contador++;
+
+                                }
+                            });
+
+
+                        }
+                    });
+
                     Toast.makeText(this, "Imagen Agregada", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();

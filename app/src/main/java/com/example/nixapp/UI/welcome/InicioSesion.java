@@ -1,5 +1,6 @@
 package com.example.nixapp.UI.welcome;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -57,6 +58,7 @@ import retrofit2.Response;
 
 public class InicioSesion extends AppCompatActivity implements View.OnClickListener {
 
+    private ProgressDialog mProgressDialog;
     //////////////////
     private ProfileTracker profileTracker;
     CallbackManager callbackManager;
@@ -94,7 +96,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
-
+        mProgressDialog= new ProgressDialog(this);
         btnLogin=findViewById(R.id.login);
         etEmail=findViewById(R.id.username);
         etPassword=findViewById(R.id.password);
@@ -244,6 +246,10 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int id) {
                     intentoContra = editTextField.getText().toString();
                 final Usuario requestSample = new Usuario(emailG, intentoContra);
+                mProgressDialog.setTitle("Iniciando Sesion...");
+                mProgressDialog.setMessage("Por favor espere");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
                 Call<LoginResult> call = nixService.login(requestSample);
 
                 call.enqueue(new Callback<LoginResult>() {
@@ -258,6 +264,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                                 i.putExtra("usuario", response.body().usuario);
 
                                 Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
                                 startActivity(i);
                                 finish();
                             }
@@ -266,6 +273,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                                 i.putExtra("usuario", response.body().usuario);
 
                                 Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
                                 startActivity(i);
                                 finish();
                             }
@@ -286,6 +294,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(InicioSesion.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
                     }
                 });
+                mProgressDialog.dismiss();
 
             }
         });
@@ -307,6 +316,10 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialogFace, int id) {
                 intentoContra = editTextField2.getText().toString();
                 final Usuario requestSample = new Usuario(emailF, intentoContra);
+                mProgressDialog.setTitle("Iniciando sesion...");
+                mProgressDialog.setMessage("Por favor espere");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
                 Call<LoginResult> call = nixService.login(requestSample);
 
                 call.enqueue(new Callback<LoginResult>() {
@@ -321,6 +334,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                                 i.putExtra("usuario", response.body().usuario);
 
                                 Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
                                 startActivity(i);
                                 finish();
                             }
@@ -329,6 +343,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                                 i.putExtra("usuario", response.body().usuario);
 
                                 Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
                                 startActivity(i);
                                 finish();
                             }
@@ -419,6 +434,10 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         String email= etEmail.getText().toString();
         String password= etPassword.getText().toString();
         final Usuario requestSample = new Usuario(email, password);
+        mProgressDialog.setTitle("Iniciando sesion...");
+        mProgressDialog.setMessage("Por favor espere");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
         Call<LoginResult> call = nixService.login(requestSample);
 
         call.enqueue(new Callback<LoginResult>() {
@@ -433,6 +452,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     i.putExtra("usuario", response.body().usuario);
 
                     Log.i("Sesion Iniciada",response.body().toString());
+                    mProgressDialog.dismiss();
                     startActivity(i);
                     finish();
                     }
@@ -441,6 +461,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         i.putExtra("usuario", response.body().usuario);
 
                         Log.i("Sesion Iniciada",response.body().toString());
+                        mProgressDialog.dismiss();
                         startActivity(i);
                         finish();
                     }

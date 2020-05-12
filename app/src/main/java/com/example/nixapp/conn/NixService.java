@@ -3,6 +3,7 @@ package com.example.nixapp.conn;
 import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
+import com.example.nixapp.DB.Notificaciones;
 import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.DB.Prospectos;
 import com.example.nixapp.DB.Usuario;
@@ -13,6 +14,7 @@ import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
+import com.example.nixapp.conn.results.NotificationsResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 import com.example.nixapp.conn.results.UsuarioResult;
 
@@ -105,4 +107,19 @@ public interface NixService {
 
     @POST("eventos/actualizar")
     Call<ResponseBody> actualizarEvento(@Body Eventos eventos);
+
+    @POST("eventos/invitar")
+    Call<ResponseBody> invitar(@Body Busqueda busqueda);
+
+    @POST("imagen/unaImagen")
+    Call<ResponseBody> imagenUna(@Body ImagenEventos imagenEventos);
+
+    @POST("imagen/erase")
+    Call<ResponseBody> borrarImagen(@Body ImagenEventos imagenEventos);
+
+    @GET("notificaciones")
+    Call<NotificationsResult> notificaciones();
+
+    @POST("eventos/id")
+    Call<EventosResult> getEventId(@Body Busqueda busqueda);
 }

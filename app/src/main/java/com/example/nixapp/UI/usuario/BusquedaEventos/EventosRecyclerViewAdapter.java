@@ -10,10 +10,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.misEventos.EventosCerradosFragment;
 
 import java.util.List;
 
@@ -87,9 +85,9 @@ public class EventosRecyclerViewAdapter extends RecyclerView.Adapter<EventosRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
-           nombre = view.findViewById(R.id.textViewNo_temporada);
+           nombre = view.findViewById(R.id.textViewTitulo);
            statusUsuario= view.findViewById(R.id.textViewFecha);
-           direccion=view.findViewById(R.id.textViewDireccion);
+           direccion=view.findViewById(R.id.textViewContenido);
            privacidad= view.findViewById(R.id.textViewPrivacidad);
            cupo= view.findViewById(R.id.textViewCupo);
            btnBorrar=view.findViewById(R.id.buttonDelete);

@@ -2,6 +2,7 @@ package com.example.nixapp.UI.welcome;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -53,7 +54,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     NixService nixService;
     boolean RECaptcha = false;
     String nuevaFecha = "";
-
+    private ProgressDialog mProgressDialog;
     String SITE_KEY = "6LcKU-gUAAAAAJnQRFaoXEBKD2DicwGKYu19EOI6";
     String SECRET_KEY = "6LcKU-gUAAAAABBdaP82YT7e4Sr8ZZtFWB2O93mc";
     String nombre2,apellidoP,fechaN = "",email,fotoPerfil;
@@ -68,7 +69,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         setContentView(R.layout.activity_crear_cuenta);
 
         switchProveedor = (Switch) findViewById(R.id.switchProveedor);
-
+        mProgressDialog= new ProgressDialog(this);
         switchProveedor.setTextOn("Si");
         switchProveedor.setTextOff("No");
         etNombre=findViewById(R.id.nombre);
@@ -249,6 +250,10 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
 
                                 if(fotoPerfil.equals(""))
                                 {
+                                    mProgressDialog.setTitle("Creando...");
+                                    mProgressDialog.setMessage("Creando cuenta");
+                                    mProgressDialog.setCancelable(false);
+                                    mProgressDialog.show();
                                     Call<ResponseBody> call = nixService.usuario(requestSample);
 
                                     call.enqueue(new Callback<ResponseBody>() {
@@ -262,6 +267,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
+                                                mProgressDialog.dismiss();
                                                 startActivity(i);
                                                 finish();
 
@@ -286,9 +292,14 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                                             t.printStackTrace();
                                         }
                                     });
+                                    mProgressDialog.dismiss();
                                 }
                                 else
                                 {
+                                    mProgressDialog.setTitle("Creando...");
+                                    mProgressDialog.setMessage("Creando cuenta");
+                                    mProgressDialog.setCancelable(false);
+                                    mProgressDialog.show();
                                     Call<ResponseBody> call = nixService.CrearUsuarioFG(requestSample);
 
                                     call.enqueue(new Callback<ResponseBody>() {
@@ -302,6 +313,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
+                                                mProgressDialog.dismiss();
                                                 startActivity(i);
                                                 finish();
 
@@ -325,6 +337,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                                             t.printStackTrace();
                                         }
                                     });
+                                    mProgressDialog.dismiss();
                                 }
 
                     }

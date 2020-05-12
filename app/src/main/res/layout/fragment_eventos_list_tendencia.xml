@@ -12,7 +12,7 @@
 
 
     <TextView
-        android:id="@+id/textViewNo_temporada"
+        android:id="@+id/textViewTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -30,8 +30,8 @@
         android:layout_marginTop="4dp"
         android:text="TextView"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/textViewDireccion"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDireccion" />
+        app:layout_constraintStart_toStartOf="@+id/textViewContenido"
+        app:layout_constraintTop_toBottomOf="@+id/textViewContenido" />
 
     <ImageView
         android:id="@+id/imageViewEvento"
@@ -46,7 +46,7 @@
         app:srcCompat="@drawable/ejemplo1" />
 
     <TextView
-        android:id="@+id/textViewDireccion"
+        android:id="@+id/textViewContenido"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -54,7 +54,7 @@
         android:text="Direccion"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNo_temporada" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
     <TextView
         android:id="@+id/textViewCupo"
@@ -73,7 +73,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="@+id/imageViewEvento"
-        app:layout_constraintTop_toTopOf="@+id/textViewNo_temporada"
+        app:layout_constraintTop_toTopOf="@+id/textViewTitulo"
         app:srcCompat="@drawable/ic_whatshot_black_24dp" />
 
 

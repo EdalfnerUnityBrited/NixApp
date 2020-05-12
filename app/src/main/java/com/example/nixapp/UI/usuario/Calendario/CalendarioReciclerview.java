@@ -39,7 +39,7 @@ public class CalendarioReciclerview extends RecyclerView.Adapter<CalendarioRecic
         public MyViewHolder(View v) {
             super(v);
             titulo = v.findViewById(R.id.titulo);
-            direccion = v.findViewById(R.id.textViewDireccion);
+            direccion = v.findViewById(R.id.textViewContenido);
             fecha = v.findViewById(R.id.textViewFecha);
             cupo = v.findViewById(R.id.textViewCupo);
             tipo_evento = v.findViewById(R.id.imageViewEvento);

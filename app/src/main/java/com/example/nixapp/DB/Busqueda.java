@@ -26,4 +26,9 @@ public class Busqueda {
     public Busqueda(String cupo) {
         this.cupo = cupo;
     }
+
+    public Busqueda(String cupo, String cover) {
+        this.cupo = cupo;
+        this.cover = cover;
+    }
 }

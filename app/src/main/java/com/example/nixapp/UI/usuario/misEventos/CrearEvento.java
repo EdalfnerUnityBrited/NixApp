@@ -34,6 +34,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
@@ -233,30 +234,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        final TextView mostrarCorreos = findViewById(R.id.mostrarCorreos);
-        final EditText correos = findViewById(R.id.correos);
 
 
-        insertar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (correos.getText().toString().isEmpty()) {
-                    Toast.makeText(CrearEvento.this, "Agrega algun correo porfavor", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if(validarEmail(correos.getText().toString()))
-                    {
-                        mostrarCorreos.setText(mostrarCorreos.getText()+"\n" + correos.getText());
-                        correoagregado = true;
-                        correos.setText("");
-                    }
-                    else
-                    {
-                        Toast.makeText(CrearEvento.this, "Eso no es un correo -.-'", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+
+
         /////////////////////CREAR INVITACIÓN
         crear_invitacion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -555,6 +536,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
+                mProgressDialog.setTitle("Creando...");
+                mProgressDialog.setMessage("Creando evento");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
                 final Eventos requestSample = new Eventos(privacidad,nombre,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal,municipio);
                 Call<EventosResult> call= nixService.eventos(requestSample);
                 call.enqueue(new Callback<EventosResult>() {
@@ -567,8 +552,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                             if (!fotos.isEmpty()){
 
                                 for (String imagenes: fotos){
-                                   ImagenEventos image= new ImagenEventos(imagenes.toString(), id);
-                                   imagenEventos.add(image);
+
                                 }
                                 Call<ResponseBody> callImagen=nixService.image(imagenEventos);
                                 callImagen.enqueue(new Callback<ResponseBody>() {
@@ -588,6 +572,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     }
                                 });
                             }
+                            mProgressDialog.dismiss();
                             finish();
                             Intent intent = new Intent(getApplicationContext(), MisEventos.class);
                             startActivity(intent);
@@ -666,7 +651,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             if (length < 7) {
                 if (requestCode == GALLERY_INTENT && resultCode == -1) {
                     mProgressDialog.setTitle("Subiendo...");
-
                     mProgressDialog.setMessage("Subiendo foto a firebase");
                     mProgressDialog.setCancelable(false);
                     mProgressDialog.show();

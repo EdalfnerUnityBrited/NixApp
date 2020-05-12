@@ -13,6 +13,7 @@ public class ImagenEventos {
         this.id_evento = id_evento;
     }
 
+
     public String getImagen() {
         return imagen;
     }

@@ -621,67 +621,7 @@
                         app:srcCompat="@drawable/compromisos"
                         tools:visibility="gone" />
                 </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="vertical"
-                        android:background="@drawable/borderrow">
-                        <TableRow
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            >
 
-
-                            <TextView
-                                android:id="@+id/invitados"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:layout_gravity="center_vertical"
-                                android:text="Invitados:"
-                                android:textColor="@color/white"
-                                android:textSize="20dp" />
-
-
-                            <EditText
-                                android:id="@+id/correos"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:ems="10"
-                                android:inputType="textEmailAddress"
-                                android:textColor="#FFFFFF"
-                                android:textColorHint="#FFFFFF"
-                                android:backgroundTint="@color/white"
-                                />
-
-                            <Button
-                                android:id="@+id/correoAgregado"
-                                android:layout_width="60dp"
-                                android:layout_height="40dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@drawable/custombutom2"
-                                android:text="Añadir"
-                                android:textAlignment="gravity"
-                                android:textColor="@drawable/butom_text"
-                                />
-
-                        </TableRow>
-
-                        <TextView
-                            android:id="@+id/mostrarCorreos"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="5dp"
-                            android:textAlignment="center"
-                            android:textColor="#FFFFFF"
-                            android:textColorHint="#FFFFFF"
-                            android:textSize="20sp" />
-                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
