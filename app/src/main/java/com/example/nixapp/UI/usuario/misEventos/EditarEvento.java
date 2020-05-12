@@ -578,11 +578,11 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         if (categoria_evento==0){
             categoria_evento=eventos.getCategoria_evento();
         }
-        if(spinner.getSelectedItem().toString().equals("Elige un municipio"))
+        if(spinner.getSelectedItem().toString().equals("Elige un municipio:"))
         {
             municipio=eventos.getMunicipio();
         }
-        else{
+        
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
 
@@ -641,7 +641,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                 });
 
             }
-        }
+
 
     }
 
