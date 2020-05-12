@@ -2,7 +2,6 @@ package com.example.nixapp.UI.usuario.Calendario;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +19,6 @@ import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,7 +62,7 @@ public class Calendario extends AppCompatActivity {
     NixClient nixClient;
     NixService nixService;
     List<Eventos> eventosUsuario;
-
+    Calendar currentTime = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +90,15 @@ public class Calendario extends AppCompatActivity {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(),"Error al poner fechas",Toast.LENGTH_LONG).show();
                         }
-                        EventosCorregidos exem = new EventosCorregidos(even.getNombre_evento(),even.getLugar(),calendar,even.getCategoria_evento(),even.getCupo(),even.getEstado(),even.getFotoPrincipal());
-                        EventosC.add(exem);
+                        if(calendar.get(Calendar.YEAR) >= currentTime.get(Calendar.YEAR))
+                        {
+                            if(currentTime.get(Calendar.MONTH) < calendar.get(Calendar.MONTH)|| (currentTime.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && currentTime.get(Calendar.DAY_OF_MONTH) <= calendar.get(Calendar.DAY_OF_MONTH)))
+                            {
+                                EventosCorregidos exem = new EventosCorregidos(even.getNombre_evento(),even.getLugar(),calendar,even.getCategoria_evento(),even.getCupo(),even.getEstado(),even.getFotoPrincipal());
+                                EventosC.add(exem);
+                            }
+                        }
+
 
                     }
                     for (EventosCorregidos eventos: EventosC) { //LLeno el calendario con los eventos
@@ -101,7 +106,7 @@ public class Calendario extends AppCompatActivity {
                         {
                             case 1:
                             {
-                                events.add(new EventDay(eventos.fecha, R.drawable.festejos));
+                                events.add(new EventDay(eventos.fecha, R.drawable.compromisos));
                             }
                             break;
                             case 2:
@@ -121,12 +126,12 @@ public class Calendario extends AppCompatActivity {
                             break;
                             case 5:
                             {
-                                events.add(new EventDay(eventos.fecha, R.drawable.religiosos));
+                                events.add(new EventDay(eventos.fecha, R.drawable.festejos));
                             }
                             break;
                             case 6:
                             {
-                                events.add(new EventDay(eventos.fecha, R.drawable.compromisos));
+                                events.add(new EventDay(eventos.fecha, R.drawable.religiosos));
                             }
                             break;
 

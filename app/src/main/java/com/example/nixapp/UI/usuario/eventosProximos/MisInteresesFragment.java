@@ -20,6 +20,7 @@ import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,6 +34,7 @@ public class MisInteresesFragment extends Fragment {
     RecyclerView eventosP;
     EventosProximosReciclerView adapterEventos;
     private EventosProximosFragment.OnListFragmentInteractionListener mListener;
+    Calendar currentTime = Calendar.getInstance();
 
     @Nullable
     @Override
@@ -45,17 +47,27 @@ public class MisInteresesFragment extends Fragment {
             @Override
             public void onResponse(Call<EventosListResult> call, Response<EventosListResult> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Objetos Obtenidos Correctamente", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Objetos Obtenidos Correctamente", Toast.LENGTH_LONG).show();
                     eventosUsuario = response.body().eventos;
                     if (eventosUsuario == null) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Aun no tienes eventos que te interesen :o", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Aun no tienes eventos que te interesen :o", Toast.LENGTH_LONG).show();
                     } else {
                         List<Eventos> eventosProximos = new ArrayList<>();
                         for (Eventos event : eventosUsuario) {
-                            if (event.getEstado().equals("me interesa")) {
-                                eventosProximos.add(event);
-
+                            if(event.getEstado().equals("me interesa")) {
+                                String[] fechanueva= event.getFecha().split("-");
+                                int dia=Integer.parseInt(fechanueva[2]);
+                                int mes= Integer.parseInt(fechanueva[1]);
+                                int ano=Integer.parseInt(fechanueva[0]);
+                                if(ano >= currentTime.get(Calendar.YEAR))
+                                {
+                                    if((currentTime.get(Calendar.MONTH)+1)< mes|| ((currentTime.get(Calendar.MONTH)+1) == mes && currentTime.get(Calendar.DAY_OF_MONTH) < dia))
+                                    {
+                                        eventosProximos.add(event);
+                                    }
+                                }
                             }
+
                         }
                         adapterEventos = new EventosProximosReciclerView(eventosProximos, mListener);
                         eventosP.setAdapter(adapterEventos);
@@ -63,13 +75,13 @@ public class MisInteresesFragment extends Fragment {
                     }
 
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), response.errorBody().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), response.errorBody().toString(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<EventosListResult> call, Throwable t) {
-                Toast.makeText(getActivity().getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
