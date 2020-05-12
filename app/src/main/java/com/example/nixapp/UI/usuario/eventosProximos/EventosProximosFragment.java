@@ -20,6 +20,7 @@ import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,6 +34,7 @@ public class EventosProximosFragment extends Fragment {
     List<Eventos> eventosUsuario= new ArrayList<>();
     RecyclerView eventosP;
     EventosProximosReciclerView adapterEventos;
+    Calendar currentTime = Calendar.getInstance();
     private EventosProximosFragment.OnListFragmentInteractionListener mListener;
     @Nullable
     @Override
@@ -47,20 +49,32 @@ public class EventosProximosFragment extends Fragment {
             public void onResponse(Call<EventosListResult> call, Response<EventosListResult> response) {
                 if(response.isSuccessful())
                 {
-                    Toast.makeText(getActivity().getApplicationContext(),"Objetos Obtenidos Correctamente",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"Objetos Obtenidos Correctamente",Toast.LENGTH_LONG).show();
                     eventosUsuario = response.body().eventos;
                     if(eventosUsuario == null)
                     {
-                        Toast.makeText(getActivity().getApplicationContext(),"Aun no tienes eventos de los que seras parte :o",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),"Aun no tienes eventos de los que seras parte :o",Toast.LENGTH_LONG).show();
                     }
                     else
                     {
                         List<Eventos> eventosProximos= new ArrayList<>();
                         for (Eventos event : eventosUsuario)
                         {
+
                             if(event.getEstado().equals("confirmado"))
                             {
-                                eventosProximos.add(event);
+                                String[] fechanueva= event.getFecha().split("-");
+                                int dia=Integer.parseInt(fechanueva[2]);
+                                int mes= Integer.parseInt(fechanueva[1]);
+                                int ano=Integer.parseInt(fechanueva[0]);
+                                if(ano >= currentTime.get(Calendar.YEAR))
+                                {
+                                    if((currentTime.get(Calendar.MONTH)+1)< mes|| ((currentTime.get(Calendar.MONTH)+1) == mes && currentTime.get(Calendar.DAY_OF_MONTH) < dia))
+                                    {
+                                        eventosProximos.add(event);
+                                    }
+                                }
+
 
                             }
                         }
@@ -72,13 +86,13 @@ public class EventosProximosFragment extends Fragment {
                 }
                 else
                 {
-                    Toast.makeText(getActivity().getApplicationContext(),response.errorBody().toString(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),response.errorBody().toString(),Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<EventosListResult> call, Throwable t) {
-                Toast.makeText(getActivity().getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
 

@@ -755,59 +755,74 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/info_imagen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="Nota: Recuerda ponerle imagenes!"
-                        android:textColor="#EFE8E8"
-
-                        android:textSize="14sp"
-                        android:textStyle="bold">
-
-                    </TextView>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dip"
-                        android:background="#EFE8E8" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/border_table">
-
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="20dp">
                     <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-
-                        <Button
-                            android:id="@+id/buttonImagen"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:background="@drawable/agregar_imagen" />
-
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
 
                         <TextView
+                            android:id="@+id/imagen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Puedes Agregar hasta 7 fotos"
-                            android:textColor="@color/white"/>
+                            android:layout_margin="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:text="Imagenes del evento: "
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
 
+                    </TableRow>
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"/>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/lineabotones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="30dp">
+                    <TableRow
+                        android:id="@+id/borderbotones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow"
+                        android:padding="8dp">
+
+
+                        <Button
+                            android:id="@+id/quitar_ima"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quitar Imagen"
+                            android:padding="5dp"
+                            android:layout_marginRight="20dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/buttom_text2"
+                            android:textSize="18sp"
+                            android:background="@drawable/button_yellow"/>
+
+                        <Button
+                            android:id="@+id/agregar_ima"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Agregar Imagen"
+                            android:padding="5dp"
+                            android:textAllCaps="false"
+                            android:textSize="18sp"
+                            android:textColor="@drawable/buttom_text2"
+                            android:background="@drawable/custombutom"/>
                     </TableRow>
 
 

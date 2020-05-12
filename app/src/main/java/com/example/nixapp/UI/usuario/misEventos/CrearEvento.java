@@ -31,14 +31,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.creadorInvitaciones.CreadorDeInvitaciones;
+import com.example.nixapp.UI.usuario.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
-import com.example.nixapp.UI.welcome.CrearCuenta;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -61,7 +61,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -81,9 +80,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     private ArrayList<EventosItems> mEventsList;
     private EventosAdapter mAdapter;
     TimePickerDialog picker2;
-    Date currentTime = Calendar.getInstance().getTime();
+    Calendar currentTime = Calendar.getInstance();
     List<String> fotos;
-
+    int contador = 0;
     Switch simpleSwitch1;
     CheckBox cover;
     TextView correosAgregados;
@@ -101,6 +100,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     ShareButton shareButton;
     RadioButton r1,r2;
     Spinner spinner;
+    ViewPager viewPager;
+    ViewPagerAdapter viewPagerAdapter;
+    List<ImagenEventos> eventosUsuario = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -466,6 +468,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         coverEvento=findViewById(R.id.cover_valor);
         crear_invitacion = (Button) findViewById(R.id.buttonIrInvitacion);
         descripcionEvento= findViewById(R.id.descripcion);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
         imagen= findViewById(R.id.buttonImagen);
         catalogo=findViewById(R.id.buttonIrCatalogo);
         catalogo.setOnClickListener(new View.OnClickListener() {
@@ -614,28 +617,31 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
     private boolean verificarFecha(int day, int month, int year) {
         int diff=0;
-        if (currentTime.getYear()>year){
+        if (currentTime.get(Calendar.YEAR)>year){
             eTextFecha.setError("Esa fecha se encuentra en el pasado");
-        }
-        else{
-            if (currentTime.getMonth() > month ||
-                    (currentTime.getMonth() == month && currentTime.getDay() > day)) {
-                eTextFecha.setError("Esa fecha se encuentra en el pasado");
-            }
-            else{
-                diff=day-currentTime.getDay();
-            }
-        }
-
-
-        if (diff<3){
-            eTextFecha.setError("Tienes que tener 3 dias de anticipación");
             return true;
         }
         else{
+            if ((currentTime.get(Calendar.MONTH) +1)> month ||
+                    ((currentTime.get(Calendar.MONTH) +1) == month && currentTime.get(Calendar.DAY_OF_MONTH) > day)) {
+                eTextFecha.setError("Esa fecha se encuentra en el pasado");
+                return true;
+            }
+            else{
+                if((currentTime.get(Calendar.MONTH) +1) == month)
+                {
+                    diff=day-currentTime.get(Calendar.DAY_OF_MONTH);
+                    if (diff<3){
+                        eTextFecha.setError("Tienes que tener 3 dias de anticipación");
+                        return true;
+                    }
+                }
 
+            }
             return false;
         }
+
+
     }
 
     private int privacidad() {
@@ -660,10 +666,12 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             if (length < 7) {
                 if (requestCode == GALLERY_INTENT && resultCode == -1) {
                     mProgressDialog.setTitle("Subiendo...");
+
                     mProgressDialog.setMessage("Subiendo foto a firebase");
                     mProgressDialog.setCancelable(false);
                     mProgressDialog.show();
                     Uri uri = data.getData();
+                    viewPager.setVisibility(View.VISIBLE);
                     final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
                     final UploadTask uploadTask = filePath.putFile(uri);
                     uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -694,6 +702,11 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     }
                                     fotos.add(downloadUrl);
                                     mProgressDialog.dismiss();
+                                    ImagenEventos nueva = new ImagenEventos(downloadUrl);
+                                    eventosUsuario.add(contador,nueva);
+                                    viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                                    viewPager.setAdapter(viewPagerAdapter);
+                                    contador++;
 
                                 }
                             });

@@ -1,7 +1,6 @@
 package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,7 +45,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
     RadioButton publico,privado;
     ImageView principal;
     Spinner spinners;
-    Button asistire,interes;
+    Button asistire,interes,imagenes;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     NixClient nixClient;
@@ -75,6 +74,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
         cover = (int) getIntent().getSerializableExtra("cover");
         id =(String) getIntent().getSerializableExtra("id");
         municipio=(String) getIntent().getSerializableExtra("municipio");
+
         setToolbarTitle(nombre);
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         String[] fechaSeparada = fecha.split("-");
@@ -101,21 +101,9 @@ public class InfoEventoExpandida extends AppCompatActivity {
                         //Toast.makeText(getApplicationContext(),String.valueOf(eventosUsuario.size()),Toast.LENGTH_LONG).show();
 
                     }
-                    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                    final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
                     viewPager.setAdapter(viewPagerAdapter);
-                    viewPager.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            if(viewPager.isFocused() == false)
-                            {
-                                Toast.makeText(getApplicationContext(),"Tocado",Toast.LENGTH_LONG).show();//Funciona pero le faltan detalles
 
-                            }
-
-                            return false;
-
-                        }
-                    });
                 }
                 else
                 {
@@ -164,6 +152,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
             privado.setClickable(false);
             publico.setClickable(false);
         }
+
         /////////////////////////////////////////////////
         initList();
         mAdapter = new EventosAdapter(this, mEventsList);

@@ -3,6 +3,7 @@ package com.example.nixapp.UI.usuario.misEventos;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,20 +30,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
-import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
+import com.example.nixapp.conn.results.ImagenResult;
 import com.facebook.AccessToken;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
@@ -77,7 +81,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog mProgressDialog;
     private static final int GALLERY_INTENT=1;
     DatePickerDialog picker;
-    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail;
+    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail, cover_val;
     private ArrayList<EventosItems> mEventsList;
     private EventosAdapter mAdapter;
     TimePickerDialog picker2;
@@ -93,7 +97,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName, municipio, id;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen;
     int cupo;
     boolean correoagregado = false, imagen_lista = false;
     int ApiActivada = 0;
@@ -101,7 +105,13 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     ImageView InvitacionSeleccionada;
     ShareButton shareButton;
     RadioButton r1,r2;
-    Spinner spinner;
+    Spinner spinner,spinners;
+    List<ImagenEventos> eventosUsuario;
+    ViewPagerAdapter viewPagerAdapter;
+    AlertDialog.Builder dialogo1;
+    ViewPager viewPager;
+    String[] Minicipios;
+    int contador;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,14 +156,6 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        imagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent,GALLERY_INTENT);
-            }
-        });
 
         eTextHora.setInputType(InputType.TYPE_NULL);
         eTextHora.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +180,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
 
         initList();
 
-        Spinner spinners = findViewById(R.id.spinnerSimple);
+        spinners = findViewById(R.id.spinnerSimple);
 
         mAdapter = new EventosAdapter(this, mEventsList);
         spinners.setAdapter(mAdapter);
@@ -214,23 +216,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        cover = (CheckBox) findViewById(R.id.cover);
-        final EditText cover_val = findViewById(R.id.cover_valor);
 
-        cover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String statusSwitch1, statusSwitch2;
-                if (cover.isChecked()) {
-                    cover_val.setVisibility(View.VISIBLE);
-                    Toast.makeText(EditarEvento.this, "Agrega el cover", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    cover_val.setText("");
-                    cover_val.setVisibility(View.GONE);
-                }
-            }
-        });
 
         final TextView mostrarCorreos = findViewById(R.id.mostrarCorreos);
         final EditText correos = findViewById(R.id.correos);
@@ -254,6 +240,40 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(EditarEvento.this, "Eso no es un correo -.-'", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+        ///////////////////////////////////////////
+        dialogo1 = new AlertDialog.Builder(EditarEvento.this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                Toast.makeText(EditarEvento.this, "Neri, Aqui va a borrar el item: " + viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen(), Toast.LENGTH_LONG).show();
+            }
+        });
+        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                //cancelar();
+            }
+        });
+        //////////////////////////////////////////
+        agregar_imagen = findViewById(R.id.agregar_ima);
+        agregar_imagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregarImagen();//Aqui se pone pa agregar una imagen a la BD... (se carga a la vista despues pero para añadirla)
+                //ImagenEventos nueva = new ImagenEventos("la nueva string","1");//Creas la ImagenEventos con el id del evento
+                //viewPagerAdapter.getImagenes().add(viewPagerAdapter.getImagenes().size()+1,nueva);//Se la agregas a la lista del adapter solo para que se vea....
+            }
+        });
+        quitar_imagen = findViewById(R.id.quitar_ima);
+        quitar_imagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogo1.setMessage("¿Desea eliminar el elemento: " + (viewPager.getCurrentItem()+1) + "?");
+                dialogo1.show();
+                //viewPagerAdapter.getImagenes().remove(viewPager.getCurrentItem()); Asi se elimina de la vista (se hace antes que de la BD)
+                //Neri no se que pase si se borran todas las fotos :o... lo mas seguro es que de error, intentalo <3 (La de sully solo se quita de la lista)
             }
         });
         /////////////////////CREAR INVITACIÓN
@@ -347,37 +367,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        String[] Minicipios = new String[]{
-                "Elige un municipio:",
-                "Acatic",
-                "Ameca",
-                "Arandas",
-                "Atotonilco el alto",
-                "Chapala",
-                "Cocula",
-                "El Arenal",
-                "El Salto",
-                "Guachinango",
-                "Guadalajara",
-                "Jocotepec",
-                "La Barca",
-                "Lagos de Moreno",
-                "Mascota",
-                "Mazamitla",
-                "Mezquitic",
-                "Puerto Vallarta",
-                "San Juan de los Lagos",
-                "Tlaquepaque",
-                "Sayula",
-                "Tala",
-                "Tapalpa",
-                "Tequila",
-                "Tlajomulco de Zuñiga",
-                "Tonala",
-                "Tototlan",
-                "Zapopan",
-                "Zapotlanejo"
-        };
+
 
         spinner = findViewById(R.id.spinner1);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
@@ -439,6 +429,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     }
 
     ///////////////////////////////////////////
+
     public void agregarImagen()
     {
         ApiActivada = 4;
@@ -469,6 +460,54 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         crear_invitacion = (Button) findViewById(R.id.buttonIrInvitacion);
         descripcionEvento= findViewById(R.id.descripcion);
         imagen= findViewById(R.id.buttonImagen);
+        cover = (CheckBox) findViewById(R.id.cover);
+        cover_val = findViewById(R.id.cover_valor);
+        Minicipios = new String[]{
+                "Elige un municipio:",
+                "Acatic",
+                "Ameca",
+                "Arandas",
+                "Atotonilco el alto",
+                "Chapala",
+                "Cocula",
+                "El Arenal",
+                "El Salto",
+                "Guachinango",
+                "Guadalajara",
+                "Jocotepec",
+                "La Barca",
+                "Lagos de Moreno",
+                "Mascota",
+                "Mazamitla",
+                "Mezquitic",
+                "Puerto Vallarta",
+                "San Juan de los Lagos",
+                "Tlaquepaque",
+                "Sayula",
+                "Tala",
+                "Tapalpa",
+                "Tequila",
+                "Tlajomulco de Zuñiga",
+                "Tonala",
+                "Tototlan",
+                "Zapopan",
+                "Zapotlanejo"
+        };
+
+        cover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String statusSwitch1, statusSwitch2;
+                if (cover.isChecked()) {
+                    cover_val.setVisibility(View.VISIBLE);
+                    Toast.makeText(EditarEvento.this, "Agrega el cover", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    cover_val.setText("");
+                    cover_val.setVisibility(View.GONE);
+                }
+            }
+        });
         catalogo=findViewById(R.id.buttonIrCatalogo);
         catalogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -493,6 +532,78 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                     descripcionEvento.setText(eventos.getDescripcion());
                     lugarEvento.setText(eventos.getLugar());
                     imagenPrincipal=eventos.getFotoPrincipal();
+                    spinners.setSelection(eventos.getCategoria_evento());
+                    cupoEvento.setText(String.valueOf(eventos.getCupo()));
+                    if(eventos.getCover() != 0)
+                    {
+                        cover.setChecked(true);
+                        cover_val.setVisibility(View.VISIBLE);
+                        cover_val.setText(String.valueOf(eventos.getCover()));
+
+                    }
+                    else
+                    {
+                        cover.setChecked(false);
+                        cover_val.setText("");
+                        cover_val.setVisibility(View.GONE);
+                    }
+                    if(eventos.getPrivacidad() == 0)
+                    {
+                        r1.setChecked(true);
+                        r2.setChecked(false);
+                    }
+                    else
+                    {
+                        r2.setChecked(true);
+                        r1.setChecked(false);
+                    }
+                    for (int i = 0; i < Minicipios.length ; i++)
+                    {
+
+                        if(Minicipios[i].equals(eventos.getMunicipio()))
+                        {
+                            contador = i;
+                        }
+                    }
+                    spinner.setSelection(contador);
+                    final Eventos event =new Eventos(eventos.getNombre_evento());
+                    Call<ImagenResult> calls = nixService.buscarImagenes(event);
+                    calls.enqueue(new Callback<ImagenResult>() {
+                        @Override
+                        public void onResponse(Call<ImagenResult> call, Response<ImagenResult> response) {
+                            if(response.isSuccessful())
+                            {
+
+                                eventosUsuario = response.body().imagenEventos;
+                                viewPager = (ViewPager) findViewById(R.id.viewPager);
+                                if(eventosUsuario.isEmpty())
+                                {
+                                    //Toast.makeText(getApplicationContext(),"Esta vacio...",Toast.LENGTH_LONG).show();
+
+                                    eventosUsuario.add(new ImagenEventos("https://pbs.twimg.com/media/DqiOx30WkAEcWEg.jpg","1"));
+                                }
+                                else
+                                {
+                                    //Toast.makeText(getApplicationContext(),String.valueOf(eventosUsuario.size()),Toast.LENGTH_LONG).show();
+
+                                }
+                                viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                                viewPager.setAdapter(viewPagerAdapter);
+
+
+
+
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),response.errorBody().toString(),Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<ImagenResult> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(),"Error en el intento",Toast.LENGTH_LONG).show();
+                        }
+                    });
 
 
                 }

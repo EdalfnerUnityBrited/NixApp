@@ -3,7 +3,6 @@ package com.example.nixapp.UI.usuario.misEventos;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -15,14 +14,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.DB.Eventos;
-import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
-import com.example.nixapp.conn.results.EventosListResult;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.Serializable;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -135,6 +130,7 @@ public class MisEventos extends AppCompatActivity implements EventosCerradosFrag
                 Intent i = new Intent(MisEventos.this, EditarEvento.class);
                 i.putExtra("id", item.getId());
                 startActivity(i);
+                finish();
             }
         });
         dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
