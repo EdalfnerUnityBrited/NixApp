@@ -43,6 +43,12 @@ import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.EventosTodosResult;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,6 +57,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
@@ -75,7 +83,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     private NixService nixService;
     private NixClient nixClient;
     private long mLastClickTime = 0;
-
+    GoogleSignInClient mGoogleSignInClient;
     Button buscar;
     Eventos eventos;
 
@@ -101,7 +109,10 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 .into(profile);
         tv_nombre.setText(usuario.name);
         tv_email.setText(usuario.email);
-
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_draw_open, R.string.navigation_draw_close);
         drawer.addDrawerListener(toggle);
@@ -150,6 +161,15 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                 }
                 case R.id.nav_salir:{
                     TokenController.getToken().delete();
+                    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                    if(AccessToken.getCurrentAccessToken()!=null)
+                    {
+                        LoginManager.getInstance().logOut();
+                    }
+                    if(account != null)
+                    {
+                        signOut();
+                    }
                     Intent intentVuelta = new Intent(this, MainActivity.class);
                     startActivity(intentVuelta);
                     finish();
@@ -182,6 +202,18 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
 
         menuItem.setChecked(false);
         return true;
+    }
+
+    private void signOut() {
+         mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // [START_EXCLUDE]
+                        //Toast.makeText(getApplicationContext(),"Saliste de la sesion" ,Toast.LENGTH_LONG).show();
+                        // [END_EXCLUDE]
+                    }
+                });
     }
 
     @Override

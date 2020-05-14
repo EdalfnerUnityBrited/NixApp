@@ -16,6 +16,7 @@ public class Usuario implements Serializable {
     private int calificacion;
     public String fotoPerfil;
 
+
     public Usuario(int tipoUsuario, String nname, String apellidoP, String apellidoM, String email, String fechaNac, String contras, String telefono, int calificacion, String fotoPerfil, String password_confirmation) {
         this.tipoUsuario = tipoUsuario;
         this.name = nname;

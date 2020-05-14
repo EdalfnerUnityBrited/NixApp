@@ -1,6 +1,10 @@
 package com.example.nixapp.DB;
 
 public class ImagenEventos {
+    public ImagenEventos(String imagen) {
+        this.imagen = imagen;
+    }
+
     String imagen;
     String id_evento;
 
@@ -8,6 +12,7 @@ public class ImagenEventos {
         this.imagen = imagen;
         this.id_evento = id_evento;
     }
+
 
     public String getImagen() {
         return imagen;

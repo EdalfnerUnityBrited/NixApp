@@ -18,11 +18,13 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Prospectos;
+import com.example.nixapp.DB.RespuestaEventoLleno;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 
@@ -43,7 +45,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
     RadioButton publico,privado;
     ImageView principal;
     Spinner spinners;
-    Button asistire,interes;
+    Button asistire,interes,imagenes;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     NixClient nixClient;
@@ -72,6 +74,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
         cover = (int) getIntent().getSerializableExtra("cover");
         id =(String) getIntent().getSerializableExtra("id");
         municipio=(String) getIntent().getSerializableExtra("municipio");
+
         setToolbarTitle(nombre);
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         String[] fechaSeparada = fecha.split("-");
@@ -86,21 +89,21 @@ public class InfoEventoExpandida extends AppCompatActivity {
                 {
 
                     eventosUsuario = response.body().imagenEventos;
+                    final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
                     if(eventosUsuario.isEmpty())
                     {
                         //Toast.makeText(getApplicationContext(),"Esta vacio...",Toast.LENGTH_LONG).show();
-                        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+
                         eventosUsuario.add(new ImagenEventos("https://pbs.twimg.com/media/DqiOx30WkAEcWEg.jpg","1"));
-                        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
-                        viewPager.setAdapter(viewPagerAdapter);
                     }
                     else
                     {
                         //Toast.makeText(getApplicationContext(),String.valueOf(eventosUsuario.size()),Toast.LENGTH_LONG).show();
-                        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-                        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
-                        viewPager.setAdapter(viewPagerAdapter);
+
                     }
+                    final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                    viewPager.setAdapter(viewPagerAdapter);
+
                 }
                 else
                 {
@@ -149,6 +152,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
             privado.setClickable(false);
             publico.setClickable(false);
         }
+
         /////////////////////////////////////////////////
         initList();
         mAdapter = new EventosAdapter(this, mEventsList);
@@ -193,6 +197,29 @@ public class InfoEventoExpandida extends AppCompatActivity {
             cover_evento.setBackground(null);
             cover_evento.setEnabled(false);
         }
+        Call<EventoLlenoResult> eventoLleno = nixService.eventoLleno(new Eventos(id));
+        eventoLleno.enqueue(new Callback<EventoLlenoResult>() {
+            @Override
+            public void onResponse(Call<EventoLlenoResult> call, Response<EventoLlenoResult> response) {
+                if (response.isSuccessful()){
+                    RespuestaEventoLleno eventolleno1 = response.body().eventoLleno;
+                    if (eventolleno1.id_evento.equals("0")){
+                        interes.setEnabled(false);
+                        asistire.setEnabled(false);
+                        interes.setText("Evento lleno");
+                        asistire.setText("Evento lleno");
+                    }
+                    else if (eventolleno1.id_evento.equals("1")){
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EventoLlenoResult> call, Throwable t) {
+                Toast.makeText(InfoEventoExpandida.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
         Call<ProspectosResult> Cprospecto = nixService.Confirmacionprospecto(new Prospectos(id));
         Cprospecto.enqueue(new Callback<ProspectosResult>() {
             @Override

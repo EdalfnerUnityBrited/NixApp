@@ -1,4 +1,6 @@
 package com.example.nixapp.UI.welcome;
+
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +25,7 @@ import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.LoginResult;
+import com.example.nixapp.conn.results.UsuarioResult;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -32,6 +35,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -54,6 +58,7 @@ import retrofit2.Response;
 
 public class InicioSesion extends AppCompatActivity implements View.OnClickListener {
 
+    private ProgressDialog mProgressDialog;
     //////////////////
     private ProfileTracker profileTracker;
     CallbackManager callbackManager;
@@ -73,7 +78,13 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     EditText etEmail, etPassword;
     NixService nixService;
     NixClient nixClient;
-
+    String emailF ="",edadF = "", idF = "",nameF = "",nameCF ="", middleF = "", lastnF= "", nombreG = "",apellidosG = "", emailG = "" , givennameG = "";
+    String FotoPerfilF,FotoPerfilG;
+    Usuario nuevo;
+    String editTextInput;
+    String intentoContra;
+    EditText editTextField,editTextField2;
+    AlertDialog.Builder dialogo1,dialog,dialogFace;
     /**Inicializar Variables
      * Se coloca el respectivo layout al activity mediante la función setContentView
      * Se referencian las variables con sus respectivos elementos en la vista
@@ -85,7 +96,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
-
+        mProgressDialog= new ProgressDialog(this);
         btnLogin=findViewById(R.id.login);
         etEmail=findViewById(R.id.username);
         etPassword=findViewById(R.id.password);
@@ -94,16 +105,16 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         retrofitInit();
 
         /////////////////////////////Inicializacion de un dialog
-        final AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+        dialogo1 = new AlertDialog.Builder(this);
         dialogo1.setTitle("Importante");
         dialogo1.setMessage("¿ Quiere salir de la sesion de google iniciada ?");
         dialogo1.setCancelable(false);
-        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 signOut();
             }
         });
-        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
                 //cancelar();
             }
@@ -227,39 +238,140 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        ///////////////////////////////////////// Verificacion de Token al inicio y al cambiar
-        if(AccessToken.getCurrentAccessToken()==null) //Token de facebook desactivado
-        {
+        ///////////////////////////////////////////////////////////////
+        dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Importante");
+        dialog.setCancelable(false);
+        dialog.setPositiveButton("Iniciar Sesion", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                    intentoContra = editTextField.getText().toString();
+                final Usuario requestSample = new Usuario(emailG, intentoContra);
+                mProgressDialog.setTitle("Iniciando Sesion...");
+                mProgressDialog.setMessage("Por favor espere");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+                Call<LoginResult> call = nixService.login(requestSample);
 
-        }
-        else
-        {
+                call.enqueue(new Callback<LoginResult>() {
+                    @Override
+                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(InicioSesion.this, "Sesion Iniciada", Toast.LENGTH_SHORT).show();
+                            response.body().procesarRespuesta();
+                            Usuario usuario= response.body().usuario;
+                            if (usuario.tipoUsuario==0){
+                                Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioGeneral.class);
+                                i.putExtra("usuario", response.body().usuario);
 
-        }
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                       AccessToken currentAccessToken) { //Cambio del valor de token de facebook
-                if (currentAccessToken == null) {//Sign Out
-                    //write your code here what to do when user clicks on facebook logout
+                                Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
+                                startActivity(i);
+                                finish();
+                            }
+                            else if(usuario.tipoUsuario==1) {
+                                Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioProveedor.class);
+                                i.putExtra("usuario", response.body().usuario);
 
-                }
-                else //Sign In
-                {
+                                Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
+                                startActivity(i);
+                                finish();
+                            }
+                        } else {
+                            try {
+                                Log.i("Error",response.errorBody().string().toString());
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            Toast.makeText(InicioSesion.this, "Error en la contraseña", Toast.LENGTH_SHORT).show();
+                            signOut();
+                        }
+                    }
 
-                }
+                    @Override
+                    public void onFailure(Call<LoginResult> call, Throwable t) {
+                        t.printStackTrace();
+                        Toast.makeText(InicioSesion.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                mProgressDialog.dismiss();
+
             }
-        };
-        //Si quieres hacer algo cuando se inicie sesion de manera exitosa ponerlo en la funcion de "handleSignInResult"
-        account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if(account != null)//Si no hay una cuenta activa
-        {
+        });
+        dialog.setNegativeButton("No,gracias", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
 
-        }
-        else
-        {
+                    signOut();
+            }
+        });
 
-        }
+
+        //////////////////////////////////////////////////////////////
+        editTextField2 = new EditText(this);
+        dialogFace = new AlertDialog.Builder(this);
+        dialogFace.setTitle("Importante");
+        dialogFace.setView(editTextField2);
+        dialogFace.setCancelable(false);
+        dialogFace.setPositiveButton("Iniciar Sesion", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogFace, int id) {
+                intentoContra = editTextField2.getText().toString();
+                final Usuario requestSample = new Usuario(emailF, intentoContra);
+                mProgressDialog.setTitle("Iniciando sesion...");
+                mProgressDialog.setMessage("Por favor espere");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+                Call<LoginResult> call = nixService.login(requestSample);
+
+                call.enqueue(new Callback<LoginResult>() {
+                    @Override
+                    public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(InicioSesion.this, "Sesion Iniciada", Toast.LENGTH_SHORT).show();
+                            response.body().procesarRespuesta();
+                            Usuario usuario= response.body().usuario;
+                            if (usuario.tipoUsuario==0){
+                                Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioGeneral.class);
+                                i.putExtra("usuario", response.body().usuario);
+
+                                Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
+                                startActivity(i);
+                                finish();
+                            }
+                            else if(usuario.tipoUsuario==1) {
+                                Intent i= new Intent(InicioSesion.this, MenuPrincipalUsuarioProveedor.class);
+                                i.putExtra("usuario", response.body().usuario);
+
+                                Log.i("Sesion Iniciada",response.body().toString());
+                                mProgressDialog.dismiss();
+                                startActivity(i);
+                                finish();
+                            }
+                        } else {
+                            try {
+                                Log.i("Error",response.errorBody().string().toString());
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            Toast.makeText(InicioSesion.this, "Error en la contraseña", Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResult> call, Throwable t) {
+                        t.printStackTrace();
+                        Toast.makeText(InicioSesion.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        dialogFace.setNegativeButton("No,gracias", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogFace, int id) {
+
+                LoginManager.getInstance().logOut();
+            }
+        });
 
     }
 
@@ -322,6 +434,10 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         String email= etEmail.getText().toString();
         String password= etPassword.getText().toString();
         final Usuario requestSample = new Usuario(email, password);
+        mProgressDialog.setTitle("Iniciando sesion...");
+        mProgressDialog.setMessage("Por favor espere");
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
         Call<LoginResult> call = nixService.login(requestSample);
 
         call.enqueue(new Callback<LoginResult>() {
@@ -336,6 +452,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     i.putExtra("usuario", response.body().usuario);
 
                     Log.i("Sesion Iniciada",response.body().toString());
+                    mProgressDialog.dismiss();
                     startActivity(i);
                     finish();
                     }
@@ -344,6 +461,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         i.putExtra("usuario", response.body().usuario);
 
                         Log.i("Sesion Iniciada",response.body().toString());
+                        mProgressDialog.dismiss();
                         startActivity(i);
                         finish();
                     }
@@ -371,14 +489,69 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
+            nombreG = acct.getDisplayName();
+            givennameG = acct.getGivenName();
+            apellidosG = acct.getFamilyName();
+            emailG = acct.getEmail();
             String personId = acct.getId();
-            String datett = "";
-            Uri personPhoto = acct.getPhotoUrl();
+            try {
+                FotoPerfilG = acct.getPhotoUrl().toString();
+            }
+            catch (Exception e)
+            {
+                FotoPerfilG = "";
+            }
 
+
+            nuevo = new Usuario(emailG);
+            Call<UsuarioResult> call = nixService.verificacionEmail(nuevo);
+            call.enqueue(new Callback<UsuarioResult>() {
+                @Override
+                public void onResponse(Call<UsuarioResult> call, Response<UsuarioResult> response) {
+                    if(response.isSuccessful())
+                    {
+                        Usuario chequeo = response.body().usuario;
+                        if(chequeo == null)
+                        {
+                            Intent i= new Intent(InicioSesion.this,CrearCuenta.class);
+                            i.putExtra("nombreU", givennameG);
+                            i.putExtra("segundoNombreU", "");
+                            i.putExtra("apellidoU", apellidosG);
+                            i.putExtra("emailU", emailG);
+                            i.putExtra("edadU", "");
+                            i.putExtra("fotoPerfil", FotoPerfilG);
+                            startActivity(i);
+                            finish();
+                            Log.i("Crear Google fallido",response.body().toString());
+                            signOut();
+
+                        }
+                        else
+                        {
+
+                            Toast.makeText(getApplicationContext(),"Ya tienes cuenta de Google",Toast.LENGTH_SHORT).show();
+                            editTextField = new EditText(InicioSesion.this);
+                            dialog.setView(editTextField);
+                            dialog.setMessage("Deseas iniciar sesion con la cuenta registrada con el correo: " + emailG+"?");
+                            dialog.show();
+
+
+
+                        }
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Error: " + response.errorBody().toString(),Toast.LENGTH_SHORT).show();
+                        Log.i("Error sistema", response.errorBody().toString());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UsuarioResult> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Error: No se encontro la ruta", Toast.LENGTH_SHORT).show();
+                }
+            });
             //Glide.with(this).load(personPhoto) .diskCacheStrategy(DiskCacheStrategy.RESOURCE) .into(fotoperfil); Ponerle la imagen a una view
         }
     }
@@ -389,7 +562,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account); //mensaje de Inicio Exitoso
+            //updateUI(account); //mensaje de Inicio Exitoso
             getinformation(); // Tomar la informacion de perfil de google
 
         } catch (ApiException e) {
@@ -406,7 +579,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // [START_EXCLUDE]
-                        Toast.makeText(getApplicationContext(),"Saliste de la sesion " ,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(),"Saliste de la sesion" ,Toast.LENGTH_LONG).show();
                         // [END_EXCLUDE]
                     }
                 });
@@ -438,8 +611,8 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 try {
-                    String email = object.getString("email"); //Peticion de la informacion en el campo de email
-                    setEmail(email);
+                    emailF = object.getString("email"); //Peticion de la informacion en el campo de email
+                    setEmail(emailF);
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     emails.setText("No se pudo");
@@ -463,8 +636,8 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 try {
-                    String edad = object.getString("birthday");//Peticion de la informacion en el campo birthday
-                    setEdad(edad);
+                    edadF = object.getString("birthday");//Peticion de la informacion en el campo birthday
+                    setEdad(edadF);
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -480,6 +653,51 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     //Escritura del TextView Email
     private void setEmail(String email) {
         //Aqui esta el Email del usuario de facebook "email"
+        emailF = email;
+        nuevo = new Usuario(emailF);
+        Call<UsuarioResult> call = nixService.verificacionEmail(nuevo);
+        call.enqueue(new Callback<UsuarioResult>() {
+            @Override
+            public void onResponse(Call<UsuarioResult> call, Response<UsuarioResult> response) {
+                if(response.isSuccessful())
+                {
+                    Usuario chequeo = response.body().usuario;
+                    if(chequeo == null)
+                    {
+                        Intent i= new Intent(InicioSesion.this,CrearCuenta.class);
+                        i.putExtra("nombreU", nameF);
+                        i.putExtra("segundoNombreU", middleF);
+                        i.putExtra("apellidoU", lastnF);
+                        i.putExtra("emailU", emailF);
+                        i.putExtra("edadU", edadF);
+                        i.putExtra("fotoPerfil", FotoPerfilF);
+                        Log.i("Crear Facebook fallido",response.body().toString());
+                        startActivity(i);
+                        finish();
+                        LoginManager.getInstance().logOut();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Ya tienes cuenta de Facebook",Toast.LENGTH_SHORT).show();
+                        editTextField2 = new EditText(InicioSesion.this);
+                        dialogFace.setView(editTextField2);
+                        dialogFace.setMessage("Deseas iniciar sesion con la cuenta registrada con el correo: " + emailF+"?");
+                        dialogFace.show();
+                    }
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Error: " + response.errorBody().toString(),Toast.LENGTH_SHORT).show();
+                    Log.i("Error sistema", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UsuarioResult> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Error: No se encontro la ruta", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //Escritura del TextView edad
@@ -490,14 +708,14 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
     //Toma de la informacion basica del perfil de facebook y mostrada
     public void displayProfileInfo(Profile profile)
     {
-        String id = profile.getId();
-        String name = profile.getFirstName();
-        String nameC = profile.getName();
-        String middle = profile.getMiddleName();
-        String app = profile.getLastName();
+        idF = profile.getId();
+        nameF = profile.getFirstName();
+        nameCF = profile.getName();
+        middleF = profile.getMiddleName();
+        lastnF = profile.getLastName();
 
         int dimensionPixelSize = getResources().getDimensionPixelSize(com.facebook.R.dimen.com_facebook_profilepictureview_preset_size_large);
-        Uri profilePictureUri= Profile.getCurrentProfile().getProfilePictureUri(dimensionPixelSize , dimensionPixelSize);
+        FotoPerfilF = profile.getProfilePictureUri(180,180).toString();
         //Glide.with(this).load(profilePictureUri) .diskCacheStrategy(DiskCacheStrategy.RESOURCE) .into(Vista_Donde_Ira_Foto);
     }
 

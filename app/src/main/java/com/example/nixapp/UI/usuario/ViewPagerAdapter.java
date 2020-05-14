@@ -21,6 +21,15 @@ public class ViewPagerAdapter extends PagerAdapter {
     private LayoutInflater layoutInflater;
     private Integer [] images = {R.drawable.compromisos,R.drawable.galas,R.drawable.festejos};
     List<ImagenEventos> imagenes;
+
+    public List<ImagenEventos> getImagenes() {
+        return imagenes;
+    }
+
+    public void setImagenes(List<ImagenEventos> imagenes) {
+        this.imagenes = imagenes;
+    }
+
     public ViewPagerAdapter(Context context, List<ImagenEventos> imagenes) {
         this.context = context;
         this.imagenes = imagenes;

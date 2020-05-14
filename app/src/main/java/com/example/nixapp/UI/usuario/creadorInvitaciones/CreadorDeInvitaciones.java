@@ -25,6 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Adapter.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.AddFrameListener;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.AddShapeListener;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.AddTextFragmentListener;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.BrushFragmentListener;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.EditImageFragmentListener;
@@ -51,7 +52,7 @@ import ja.burhanrashid52.photoeditor.OnSaveBitmap;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
 
-public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersListFragmentListener, EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener, AddFrameListener {
+public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersListFragmentListener, EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener, AddFrameListener, AddShapeListener {
 
 
 
@@ -69,7 +70,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
 
-    CardView btn_filters_list, btn_edit_card,btn_brush,btn_emoji,btn_add_text,btn_add_image,btn_add_frame,btn_crop;
+    CardView btn_filters_list, btn_edit_card,btn_brush,btn_emoji,btn_add_text,btn_add_image,btn_add_frame,btn_crop,btn_shape;
 
     int brightnessFinal = 0;
     float contrastFinal = 1.0f, saturationFinal = 1.0f;
@@ -116,6 +117,16 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         btn_add_image = (CardView) findViewById(R.id.btn_add_image_editor);
         btn_add_frame = (CardView) findViewById(R.id.btn_add_frame_editor);
         btn_crop = (CardView) findViewById(R.id.btn_crop_editor);
+        btn_shape = (CardView) findViewById(R.id.btn_shape_editor);
+
+        btn_shape.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShapeFragment shapeFragment = ShapeFragment.getInstance();
+                shapeFragment.setListener(CreadorDeInvitaciones.this);
+                shapeFragment.show(getSupportFragmentManager(),shapeFragment.getTag());
+            }
+        });
 
         btn_crop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -509,6 +520,12 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
 
     @Override
     public void onAddFrame(int frame) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),frame);
+        photoEditor.addImage(bitmap);
+    }
+
+    @Override
+    public void onAddShape(int frame) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),frame);
         photoEditor.addImage(bitmap);
     }

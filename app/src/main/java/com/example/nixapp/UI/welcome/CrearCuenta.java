@@ -2,6 +2,7 @@ package com.example.nixapp.UI.welcome;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -52,10 +53,11 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
     NixClient nixClient;
     NixService nixService;
     boolean RECaptcha = false;
-
+    String nuevaFecha = "";
+    private ProgressDialog mProgressDialog;
     String SITE_KEY = "6LcKU-gUAAAAAJnQRFaoXEBKD2DicwGKYu19EOI6";
     String SECRET_KEY = "6LcKU-gUAAAAABBdaP82YT7e4Sr8ZZtFWB2O93mc";
-
+    String nombre2,apellidoP,fechaN = "",email,fotoPerfil;
     private static final String TAG = "MainActivity";
 
     private TextView mDisplayDate=null;
@@ -67,7 +69,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         setContentView(R.layout.activity_crear_cuenta);
 
         switchProveedor = (Switch) findViewById(R.id.switchProveedor);
-
+        mProgressDialog= new ProgressDialog(this);
         switchProveedor.setTextOn("Si");
         switchProveedor.setTextOff("No");
         etNombre=findViewById(R.id.nombre);
@@ -81,6 +83,35 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
 
         switchProveedor.setOnCheckedChangeListener(this);
         btnCrear.setOnClickListener(this);
+        try {
+            nombre2=(String) getIntent().getSerializableExtra("nombreU")+" "+(String) getIntent().getSerializableExtra("segundoNombreU");
+            apellidoP = (String) getIntent().getSerializableExtra("apellidoU");
+            email = (String) getIntent().getSerializableExtra("emailU");
+            fechaN =(String) getIntent().getSerializableExtra("edadU");
+            fotoPerfil = (String) getIntent().getSerializableExtra("fotoPerfil");
+            String[] desgloce = fechaN.split("/");
+            if(!fechaN.equals(""))
+            {
+                nuevaFecha = desgloce[2] + "-"+desgloce[0]+"-"+desgloce[1];
+            }
+            etNombre.setText(nombre2);
+            etApellidoP.setText(apellidoP);
+            etEmail.setText(email);
+            date = nuevaFecha;
+
+        }
+        catch (Exception e){
+            nombre2="";
+            apellidoP="";
+            email="";
+            fechaN="";
+            fotoPerfil="";
+            date = nuevaFecha;
+        }
+        if(fotoPerfil == null)
+        {
+            fotoPerfil = "";
+        }
         //////////////
         mDisplayDate = (TextView)findViewById(R.id.fecha_nacimiento);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +131,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                 dialog.show();
             }
         });
-
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -113,6 +143,7 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
                 mDisplayDate.setText(date);
             }
         };
+        mDisplayDate.setText(nuevaFecha);
         /////////////
         retrofitInit();
         ///////////////////////////////Recaptcha
@@ -191,12 +222,6 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         if (nombre.isEmpty()){
             etNombre.setError("Ingrese Nombre");
         }
-        if (apellidoPaterno.isEmpty()){
-            etApellidoP.setError("Ingrese Apellido Paterno");
-        }
-        if (apellidoMaterno.isEmpty()){
-            etApellidoM.setError("Ingrese Apellido Materno");
-        }
         if (telefono.isEmpty()){
             etTelefono.setError("Ingrese Telefono");
         }
@@ -215,51 +240,106 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
             if (!verificarCorreo){
             boolean verificarNumero= veificarNumero(telefono);
             if (!verificarNumero) {
-            boolean verificarNombre= verificarNombre(nombre, apellidoMaterno, apellidoPaterno);
+            boolean verificarNombre= verificarNombre(nombre, apellidoPaterno);
             if (!verificarNombre){
                 boolean verificarContraseña=verificarContraseña(password,passwordConfirmacion);
                 if (!verificarContraseña){
                     boolean verificarMayor= verificarCumpleaños(ano, mes, dia);
                     if (!verificarMayor){
-                                final Usuario requestSample = new Usuario(proovedor,nombre,apellidoPaterno,apellidoMaterno, email, date,password, telefono,5,"",passwordConfirmacion);
+                        final Usuario requestSample = new Usuario(proovedor,nombre,apellidoPaterno,apellidoMaterno, email, date,password, telefono,5,fotoPerfil,passwordConfirmacion);
 
+                                if(fotoPerfil.equals(""))
+                                {
+                                    mProgressDialog.setTitle("Creando...");
+                                    mProgressDialog.setMessage("Creando cuenta");
+                                    mProgressDialog.setCancelable(false);
+                                    mProgressDialog.show();
+                                    Call<ResponseBody> call = nixService.usuario(requestSample);
 
-                                Call<ResponseBody> call = nixService.usuario(requestSample);
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()) {
+                                                Toast.makeText(CrearCuenta.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
+                                                Intent i= new Intent(CrearCuenta.this, InicioSesion.class);
+                                                try {
+                                                    Log.i("Cuenta Creada",response.body().string().toString());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                mProgressDialog.dismiss();
+                                                startActivity(i);
+                                                finish();
 
-                                call.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if (response.isSuccessful()) {
-                                            Toast.makeText(CrearCuenta.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
-                                            Intent i= new Intent(CrearCuenta.this, InicioSesion.class);
-                                            try {
-                                                Log.i("Cuenta Creada",response.body().string().toString());
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                            startActivity(i);
-                                            finish();
+                                            } else {
+                                                try {
+                                                    Log.i("Error",response.errorBody().string().toString());
+                                                } catch (IOException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                                Toast.makeText(CrearCuenta.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                Log.i("Error en los datos: ",response.errorBody().toString());
+                                                try {
 
-                                        } else {
-                                            try {
-                                                Log.i("Error",response.errorBody().string().toString());
-                                            } catch (IOException ex) {
-                                                ex.printStackTrace();
-                                            }
-                                            Toast.makeText(CrearCuenta.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                                            try {
-
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        t.printStackTrace();
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            t.printStackTrace();
+                                        }
+                                    });
+                                    mProgressDialog.dismiss();
+                                }
+                                else
+                                {
+                                    mProgressDialog.setTitle("Creando...");
+                                    mProgressDialog.setMessage("Creando cuenta");
+                                    mProgressDialog.setCancelable(false);
+                                    mProgressDialog.show();
+                                    Call<ResponseBody> call = nixService.CrearUsuarioFG(requestSample);
+
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()) {
+                                                Toast.makeText(CrearCuenta.this, "Cuenta creada", Toast.LENGTH_SHORT).show();
+                                                Intent i= new Intent(CrearCuenta.this, InicioSesion.class);
+                                                try {
+                                                    Log.i("Cuenta Creada",response.body().string().toString());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                mProgressDialog.dismiss();
+                                                startActivity(i);
+                                                finish();
+
+                                            } else {
+                                                try {
+                                                    Log.i("Error",response.errorBody().string().toString());
+                                                } catch (IOException ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                                Toast.makeText(CrearCuenta.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                try {
+
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            t.printStackTrace();
+                                        }
+                                    });
+                                    mProgressDialog.dismiss();
+                                }
+
                     }
                     }
                 }
@@ -312,19 +392,14 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
         return  verificarPassword;
     }
 
-    private boolean verificarNombre(String nombre, String apellidoMaterno, String apellidoPaterno) {
+    private boolean verificarNombre(String nombre, String apellidoPaterno) {
 
         boolean verificacionNombre=false;
 
         if (nombre.matches("[A-Za-z\\s]+") && nombre.length() > 2){
             if (apellidoPaterno.matches("[A-Za-z\\s]+") && nombre.length() > 2){
-                if (apellidoMaterno.matches("[A-Za-z\\s]+") && nombre.length() > 2){
 
-                }
-                else{
-                    etApellidoM.setError("Solo puede insertar letras");
-                    verificacionNombre=true;
-                }
+
             }
             else{
                 etApellidoP.setError("Solo puede insertar letras");

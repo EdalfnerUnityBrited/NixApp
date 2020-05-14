@@ -1,4 +1,5 @@
-package com.example.nixapp.UI.usuario.Tendencias;
+package com.example.nixapp.UI.usuario.eventosProximos;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,15 @@ import com.example.nixapp.R;
 
 import java.util.List;
 
-public class EventosTendenciaRecyclerViewAdapter extends RecyclerView.Adapter<EventosTendenciaRecyclerViewAdapter.ViewHolder> {
+import static com.example.nixapp.R.drawable.ic_privado;
+import static com.example.nixapp.R.drawable.ic_public;
+
+public class EventosProximosReciclerView extends RecyclerView.Adapter<EventosProximosReciclerView.ViewHolder> {
 
     private final List<Eventos> mValues;
-    private final EventosTendenciasFragment.OnListFragmentInteractionListener mListener;
+    private final EventosProximosFragment.OnListFragmentInteractionListener mListener;
 
-    public EventosTendenciaRecyclerViewAdapter(List<Eventos> items, EventosTendenciasFragment.OnListFragmentInteractionListener listener) {
+    public EventosProximosReciclerView(List<Eventos> items, EventosProximosFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -31,12 +35,20 @@ public class EventosTendenciaRecyclerViewAdapter extends RecyclerView.Adapter<Ev
                 .inflate(R.layout.fragment_eventos_list_tendencia, parent, false);
         return new ViewHolder(view);
 
-        
+
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+        if(holder.mItem.getPrivacidad() == 0)
+        {
+            holder.privacidad.setImageResource(ic_public);
+        }
+        else
+        {
+            holder.privacidad.setImageResource(ic_privado);
+        }
         holder.nombre.setText(String.valueOf(holder.mItem.getNombre_evento()));
         holder.statusUsuario.setText(String.valueOf(holder.mItem.getFecha()));
         holder.direccion.setText(String.valueOf(holder.mItem.getLugar()));
@@ -78,14 +90,14 @@ public class EventosTendenciaRecyclerViewAdapter extends RecyclerView.Adapter<Ev
         public ViewHolder(View view) {
             super(view);
             mView = view;
-           nombre = view.findViewById(R.id.textViewTitulo);
-           statusUsuario= view.findViewById(R.id.textViewFecha);
-           direccion=view.findViewById(R.id.textViewContenido);
-           privacidad= view.findViewById(R.id.textViewPrivacidad);
-           cupo= view.findViewById(R.id.textViewCupo);
-           btnBorrar=view.findViewById(R.id.buttonDelete);
-           btnEditar=view.findViewById(R.id.buttonEdit);
-        eventImage=view.findViewById(R.id.imageViewEvento);
+            nombre = view.findViewById(R.id.textViewTitulo);
+            statusUsuario= view.findViewById(R.id.textViewFecha);
+            direccion=view.findViewById(R.id.textViewContenido);
+            privacidad= view.findViewById(R.id.textViewPrivacidad);
+            cupo= view.findViewById(R.id.textViewCupo);
+            btnBorrar=view.findViewById(R.id.buttonDelete);
+            btnEditar=view.findViewById(R.id.buttonEdit);
+            eventImage=view.findViewById(R.id.imageViewEvento);
 
 
         }

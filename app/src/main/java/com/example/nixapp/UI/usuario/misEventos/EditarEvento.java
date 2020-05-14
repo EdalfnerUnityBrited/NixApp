@@ -3,6 +3,7 @@ package com.example.nixapp.UI.usuario.misEventos;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -44,6 +46,7 @@ import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
+import com.example.nixapp.conn.results.ImagenResult;
 import com.facebook.AccessToken;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
@@ -62,6 +65,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -71,19 +75,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrearEvento extends AppCompatActivity implements View.OnClickListener {
+public class EditarEvento extends AppCompatActivity implements View.OnClickListener {
 
     private StorageReference mStorage;
     private ProgressDialog mProgressDialog;
     private static final int GALLERY_INTENT=1;
     DatePickerDialog picker;
-    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail;
+    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail, cover_val;
     private ArrayList<EventosItems> mEventsList;
     private EventosAdapter mAdapter;
     TimePickerDialog picker2;
-    Calendar currentTime = Calendar.getInstance();
+    Date currentTime = Calendar.getInstance().getTime();
     List<String> fotos;
-    int contador = 0;
+    Eventos eventos;
+
     Switch simpleSwitch1;
     CheckBox cover;
     TextView correosAgregados;
@@ -91,8 +96,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
-    String clickedName, municipio;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
+    String clickedName, municipio, id;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen;
     int cupo;
     boolean correoagregado = false, imagen_lista = false;
     int ApiActivada = 0;
@@ -100,18 +105,21 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     ImageView InvitacionSeleccionada;
     ShareButton shareButton;
     RadioButton r1,r2;
-    Spinner spinner;
-    ViewPager viewPager;
+    Spinner spinner,spinners;
+    List<ImagenEventos> eventosUsuario;
     ViewPagerAdapter viewPagerAdapter;
-    List<ImagenEventos> eventosUsuario = new ArrayList<>();
+    AlertDialog.Builder dialogo1;
+    ViewPager viewPager;
+    String[] Minicipios;
+    int contador;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_evento);
+        setContentView(R.layout.activity_editar_evento);
         retrofitinit();
         iniciarcomponentes();
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setToolbarTitle("Nuevo Evento");
+        setToolbarTitle("Editar Evento");
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
         terminar.setOnClickListener(this);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -120,7 +128,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 finish();
                 Intent intent = new Intent(getApplicationContext(), MisEventos.class);
                 startActivity(intent);
-                CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+                EditarEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
             }
         });
         //////////////////////
@@ -137,7 +145,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 mes = cldr.get(Calendar.MONTH);
                 ano = cldr.get(Calendar.YEAR);
                 // date picker dialog
-                picker = new DatePickerDialog(CrearEvento.this,
+                picker = new DatePickerDialog(EditarEvento.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -148,14 +156,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        imagen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent,GALLERY_INTENT);
-            }
-        });
 
         eTextHora.setInputType(InputType.TYPE_NULL);
         eTextHora.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +167,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 int hour = cldr2.get(Calendar.HOUR_OF_DAY);
                 int minutes = cldr2.get(Calendar.MINUTE);
                 // time picker dialog
-                picker2 = new TimePickerDialog(CrearEvento.this,
+                picker2 = new TimePickerDialog(EditarEvento.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
@@ -180,7 +180,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
         initList();
 
-        Spinner spinners = findViewById(R.id.spinnerSimple);
+        spinners = findViewById(R.id.spinnerSimple);
 
         mAdapter = new EventosAdapter(this, mEventsList);
         spinners.setAdapter(mAdapter);
@@ -191,7 +191,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 EventosItems clickedItem = (EventosItems) parent.getItemAtPosition(position);
                 categoria_evento= position;
                 clickedName = clickedItem.getEventoName();
-                Toast.makeText(CrearEvento.this, clickedName + " seleccionada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditarEvento.this, clickedName + " seleccionada", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -207,7 +207,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 if (simpleSwitch1.isChecked()) {
                     info.setVisibility(View.VISIBLE);
                     enables.setVisibility(View.VISIBLE);
-                    Toast.makeText(CrearEvento.this, "Ve al catalogo para ver los servicios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarEvento.this, "Ve al catalogo para ver los servicios", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     info.setVisibility(View.GONE);
@@ -216,33 +216,114 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        cover = (CheckBox) findViewById(R.id.cover);
-        final EditText cover_val = findViewById(R.id.cover_valor);
 
-        cover.setOnClickListener(new View.OnClickListener() {
+
+        final TextView mostrarCorreos = findViewById(R.id.mostrarCorreos);
+        final EditText correos = findViewById(R.id.correos);
+
+
+        insertar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String statusSwitch1, statusSwitch2;
-                if (cover.isChecked()) {
-                    cover_val.setVisibility(View.VISIBLE);
-                    Toast.makeText(CrearEvento.this, "Agrega el cover", Toast.LENGTH_SHORT).show();
+                if (correos.getText().toString().isEmpty()) {
+                    Toast.makeText(EditarEvento.this, "Agrega algun correo porfavor", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    cover_val.setText("");
-                    cover_val.setVisibility(View.GONE);
+                    if(validarEmail(correos.getText().toString()))
+                    {
+                        String email=correos.getText().toString();
+                        Busqueda busqueda= new Busqueda(email, id);
+                        Call<ResponseBody> call = nixService.invitar(busqueda);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(EditarEvento.this, "Usuario añadido al evento", Toast.LENGTH_SHORT).show();
+                                    mostrarCorreos.setText(mostrarCorreos.getText()+"\n" + correos.getText());
+                                    correoagregado = true;
+                                    correos.setText("");
+                                }
+                                else{
+                                    Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(EditarEvento.this, "No se estableció la conexión", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                    else
+                    {
+                        Toast.makeText(EditarEvento.this, "Eso no es un correo -.-'", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
+        ///////////////////////////////////////////
+        dialogo1 = new AlertDialog.Builder(EditarEvento.this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                String imagenBorrar=viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen();
+                ImagenEventos imagenEventos= new ImagenEventos(imagenBorrar);
+                Call<ResponseBody> call = nixService.borrarImagen(imagenEventos);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(EditarEvento.this, "Imagen borrada", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            try {
+                                Log.i("Error",response.errorBody().string().toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 
-
-
-
-
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(EditarEvento.this, "Error en la conexion", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                //cancelar();
+            }
+        });
+        //////////////////////////////////////////
+        agregar_imagen = findViewById(R.id.agregar_ima);
+        agregar_imagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregarImagen();//Aqui se pone pa agregar una imagen a la BD... (se carga a la vista despues pero para añadirla)
+                //ImagenEventos nueva = new ImagenEventos("la nueva string","1");//Creas la ImagenEventos con el id del evento
+                //viewPagerAdapter.getImagenes().add(viewPagerAdapter.getImagenes().size()+1,nueva);//Se la agregas a la lista del adapter solo para que se vea....
+            }
+        });
+        quitar_imagen = findViewById(R.id.quitar_ima);
+        quitar_imagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogo1.setMessage("¿Desea eliminar el elemento: " + (viewPager.getCurrentItem()+1) + "?");
+                dialogo1.show();
+                //viewPagerAdapter.getImagenes().remove(viewPager.getCurrentItem()); Asi se elimina de la vista (se hace antes que de la BD)
+                //Neri no se que pase si se borran todas las fotos :o... lo mas seguro es que de error, intentalo <3 (La de sully solo se quita de la lista)
+            }
+        });
         /////////////////////CREAR INVITACIÓN
         crear_invitacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent irInvitacionIntent = new Intent(CrearEvento.this, Plantillas.class);
+                Intent irInvitacionIntent = new Intent(EditarEvento.this, Plantillas.class);
                 startActivity(irInvitacionIntent);
             }
         });
@@ -272,11 +353,11 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 //Llamamos al metodo enviarEmail
                 if(imagen_lista  == false)
                 {
-                    Toast.makeText(CrearEvento.this, "Ingresa la invitacion para continuar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditarEvento.this, "Ingresa la invitacion para continuar", Toast.LENGTH_SHORT).show();
                 }
                 else if(correoagregado== false)
                 {
-                    Toast.makeText(CrearEvento.this, "Ingresa minimo una direccion de correo para poder poder enviar la invtacion", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditarEvento.this, "Ingresa minimo una direccion de correo para poder poder enviar la invtacion", Toast.LENGTH_LONG).show();
                 }
                 else
                 {
@@ -329,37 +410,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
             }
         });
-        String[] Minicipios = new String[]{
-                "Elige un municipio:",
-                "Acatic",
-                "Ameca",
-                "Arandas",
-                "Atotonilco el alto",
-                "Chapala",
-                "Cocula",
-                "El Arenal",
-                "El Salto",
-                "Guachinango",
-                "Guadalajara",
-                "Jocotepec",
-                "La Barca",
-                "Lagos de Moreno",
-                "Mascota",
-                "Mazamitla",
-                "Mezquitic",
-                "Puerto Vallarta",
-                "San Juan de los Lagos",
-                "Tlaquepaque",
-                "Sayula",
-                "Tala",
-                "Tapalpa",
-                "Tequila",
-                "Tlajomulco de Zuñiga",
-                "Tonala",
-                "Tototlan",
-                "Zapopan",
-                "Zapotlanejo"
-        };
+
 
         spinner = findViewById(R.id.spinner1);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
@@ -397,7 +448,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     }
     private void enviarEmail(){
         //Instanciamos un Intent del tipo ACTION_SEND
-        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
         //Aqui definimos la tipologia de datos del contenido dle Email en este caso text/html
         emailIntent.setType("text/html");
         // Indicamos con un Array de tipo String las direcciones de correo a las cuales enviar
@@ -405,11 +456,11 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         String[] correos = direcciones.split("\n");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, correos);
         // Aqui definimos un titulo para el Email
-        emailIntent.putExtra(android.content.Intent.EXTRA_TITLE, "Invitacion del evento: " + nombreEvento.getText());
+        emailIntent.putExtra(Intent.EXTRA_TITLE, "Invitacion del evento: " + nombreEvento.getText());
         // Aqui definimos un Asunto para el Email
-        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Invitacion al evento: '"+nombreEvento.getText()+"' Te esperamos...");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Invitacion al evento: '"+nombreEvento.getText()+"' Te esperamos...");
         // Aqui obtenemos la referencia al texto y lo pasamos al Email Intent
-        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, descripcionEventoEmail.getText());
+        emailIntent.putExtra(Intent.EXTRA_TEXT, descripcionEventoEmail.getText());
         //Agregar una imagen
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imagen_enviar.toString()));
         try {
@@ -421,6 +472,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     }
 
     ///////////////////////////////////////////
+
     public void agregarImagen()
     {
         ApiActivada = 4;
@@ -434,6 +486,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     }
     /////////////////////////////
     private void iniciarcomponentes() {
+        id = (String) getIntent().getSerializableExtra("id");
         r1=findViewById(R.id.publico);
         r2=findViewById(R.id.privado);
         terminar = findViewById(R.id.eventoTerminado);
@@ -449,20 +502,165 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         coverEvento=findViewById(R.id.cover_valor);
         crear_invitacion = (Button) findViewById(R.id.buttonIrInvitacion);
         descripcionEvento= findViewById(R.id.descripcion);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
         imagen= findViewById(R.id.buttonImagen);
+        cover = (CheckBox) findViewById(R.id.cover);
+        cover_val = findViewById(R.id.cover_valor);
+        Minicipios = new String[]{
+                "Elige un municipio:",
+                "Acatic",
+                "Ameca",
+                "Arandas",
+                "Atotonilco el alto",
+                "Chapala",
+                "Cocula",
+                "El Arenal",
+                "El Salto",
+                "Guachinango",
+                "Guadalajara",
+                "Jocotepec",
+                "La Barca",
+                "Lagos de Moreno",
+                "Mascota",
+                "Mazamitla",
+                "Mezquitic",
+                "Puerto Vallarta",
+                "San Juan de los Lagos",
+                "Tlaquepaque",
+                "Sayula",
+                "Tala",
+                "Tapalpa",
+                "Tequila",
+                "Tlajomulco de Zuñiga",
+                "Tonala",
+                "Tototlan",
+                "Zapopan",
+                "Zapotlanejo"
+        };
+
+        cover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String statusSwitch1, statusSwitch2;
+                if (cover.isChecked()) {
+                    cover_val.setVisibility(View.VISIBLE);
+                    Toast.makeText(EditarEvento.this, "Agrega el cover", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    cover_val.setText("");
+                    cover_val.setVisibility(View.GONE);
+                }
+            }
+        });
         catalogo=findViewById(R.id.buttonIrCatalogo);
         catalogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i= new Intent(CrearEvento.this, MainActivity.class);
+                Intent i= new Intent(EditarEvento.this, MainActivity.class);
                 startActivity(i);
             }
         });
         downloadUrl="";
         imagenPrincipal="";
         fotos= new ArrayList<>();
+        Busqueda busqueda= new Busqueda(id);
+        Call<EventosResult> call= nixService.buscarEventoId(busqueda);
+        call.enqueue(new Callback<EventosResult>() {
+            @Override
+            public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
+                if(response.isSuccessful()){
+                    eventos=response.body().eventos;
+                    eTextFecha.setText(eventos.getFecha());
+                    eTextHora.setText(eventos.getHora());
+                    nombreEvento.setText(eventos.getNombre_evento());
+                    descripcionEvento.setText(eventos.getDescripcion());
+                    lugarEvento.setText(eventos.getLugar());
+                    imagenPrincipal=eventos.getFotoPrincipal();
+                    spinners.setSelection(eventos.getCategoria_evento());
+                    cupoEvento.setText(String.valueOf(eventos.getCupo()));
+                    if(eventos.getCover() != 0)
+                    {
+                        cover.setChecked(true);
+                        cover_val.setVisibility(View.VISIBLE);
+                        cover_val.setText(String.valueOf(eventos.getCover()));
 
+                    }
+                    else
+                    {
+                        cover.setChecked(false);
+                        cover_val.setText("");
+                        cover_val.setVisibility(View.GONE);
+                    }
+                    if(eventos.getPrivacidad() == 0)
+                    {
+                        r1.setChecked(true);
+                        r2.setChecked(false);
+                    }
+                    else
+                    {
+                        r2.setChecked(true);
+                        r1.setChecked(false);
+                    }
+                    for (int i = 0; i < Minicipios.length ; i++)
+                    {
+
+                        if(Minicipios[i].equals(eventos.getMunicipio()))
+                        {
+                            contador = i;
+                        }
+                    }
+                    spinner.setSelection(contador);
+                    final Eventos event =new Eventos(eventos.getNombre_evento());
+                    Call<ImagenResult> calls = nixService.buscarImagenes(event);
+                    calls.enqueue(new Callback<ImagenResult>() {
+                        @Override
+                        public void onResponse(Call<ImagenResult> call, Response<ImagenResult> response) {
+                            if(response.isSuccessful())
+                            {
+
+                                eventosUsuario = response.body().imagenEventos;
+                                viewPager = (ViewPager) findViewById(R.id.viewPager);
+                                if(eventosUsuario.isEmpty())
+                                {
+                                    //Toast.makeText(getApplicationContext(),"Esta vacio...",Toast.LENGTH_LONG).show();
+
+                                    eventosUsuario.add(new ImagenEventos("https://pbs.twimg.com/media/DqiOx30WkAEcWEg.jpg","1"));
+                                }
+                                else
+                                {
+                                    //Toast.makeText(getApplicationContext(),String.valueOf(eventosUsuario.size()),Toast.LENGTH_LONG).show();
+
+                                }
+                                viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                                viewPager.setAdapter(viewPagerAdapter);
+
+
+
+
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),response.errorBody().toString(),Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<ImagenResult> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(),"Error en el intento",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                }
+                else{
+                    Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                    Log.i("error",response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EventosResult> call, Throwable t) {
+                Toast.makeText(EditarEvento.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean validarEmail(String email) {
@@ -492,77 +690,79 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         String nombre = nombreEvento.getText().toString();
         String lugar=lugarEvento.getText().toString();
         String fecha= eTextFecha.getText().toString();
-        String hora=(eTextHora.getText().toString())+":00";
+        String hora=(eTextHora.getText().toString());
         String cupo= cupoEvento.getText().toString();
         String precio= coverEvento.getText().toString();
         final List<ImagenEventos> imagenEventos= new ArrayList<>();
 
+        try {
+            String[] fechanueva= fecha.split("/");
+            dia=Integer.parseInt(fechanueva[0]);
+            mes= Integer.parseInt(fechanueva[1]);
+            ano=Integer.parseInt(fechanueva[2]);
+            fecha= (ano+"-"+mes+"-"+dia);
+        }
+        catch (Exception e){
+            fecha=eventos.getFecha();
+        }
 
-        String[] fechanueva= fecha.split("/");
-                dia=Integer.parseInt(fechanueva[0]);
-                mes= Integer.parseInt(fechanueva[1]);
-                ano=Integer.parseInt(fechanueva[2]);
-                fecha= (ano+"-"+mes+"-"+dia);
         int cover;
         int numCupo=0;
         String descripcion=descripcionEvento.getText().toString();
         if (nombre.isEmpty()){
-            nombreEvento.setError("Ingrese Nombre para el evento");
+            nombre=eventos.getNombre_evento();
         }
         if (lugar.isEmpty()){
-            lugarEvento.setError("Ingrese lugar");
+            lugar= eventos.getLugar();
         }
         if (cupo.isEmpty()){
-            cupoEvento.setError("Ingrese cupo");
+            numCupo=eventos.getCupo();
         }
         else{
             numCupo= Integer.parseInt(cupo);
         }
         if (precio.isEmpty()){
-            cover=0;
+            cover=eventos.getCover();
         }else{
             cover=Integer.parseInt(precio);
         }
         if (descripcion.isEmpty()){
-            descripcionEvento.setError("Ingrese descripción");
+            descripcion=eventos.getDescripcion();
         }
         if (categoria_evento==0){
-            Toast.makeText(CrearEvento.this, "Elija una categoria", Toast.LENGTH_SHORT).show();
+            categoria_evento=eventos.getCategoria_evento();
         }
-        if(spinner.getSelectedItem().toString().equals("Elige un municipio"))
+        if(spinner.getSelectedItem().toString().equals("Elige un municipio:"))
         {
-            Toast.makeText(CrearEvento.this, "Elige un municipio", Toast.LENGTH_SHORT).show();
+            municipio=eventos.getMunicipio();
         }
-        else{
+        
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
-                mProgressDialog.setTitle("Creando...");
-                mProgressDialog.setMessage("Creando evento");
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.show();
-                final Eventos requestSample = new Eventos(privacidad,nombre,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal,municipio);
-                Call<EventosResult> call= nixService.eventos(requestSample);
-                call.enqueue(new Callback<EventosResult>() {
+
+                final Eventos requestSample = new Eventos(id, nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal,municipio);
+                Call<ResponseBody> call= nixService.actualizarEvento(requestSample);
+                call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()){
-                            Toast.makeText(CrearEvento.this, "Crear evento correcto", Toast.LENGTH_SHORT).show();
-                            Eventos eventos= response.body().eventos;
-                            String id= eventos.getId();
+                            Toast.makeText(EditarEvento.this, "Crear evento correcto", Toast.LENGTH_SHORT).show();
+
                             if (!fotos.isEmpty()){
 
                                 for (String imagenes: fotos){
-
+                                   ImagenEventos image= new ImagenEventos(imagenes.toString(), id);
+                                   imagenEventos.add(image);
                                 }
                                 Call<ResponseBody> callImagen=nixService.image(imagenEventos);
                                 callImagen.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if (response.isSuccessful()){
-                                            Toast.makeText(CrearEvento.this, "Imagenes añadidas correctamente", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(EditarEvento.this, "Imagenes añadidas correctamente", Toast.LENGTH_SHORT).show();
                                         }
                                         else{
-                                            Toast.makeText(CrearEvento.this, "Error al añadir las imagenes", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(EditarEvento.this, "Error al añadir las imagenes", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -572,14 +772,13 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     }
                                 });
                             }
-                            mProgressDialog.dismiss();
                             finish();
                             Intent intent = new Intent(getApplicationContext(), MisEventos.class);
                             startActivity(intent);
-                            CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+                            EditarEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
                         }
                         else{
-                            Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
                             try {
                                 Log.i("Error",response.errorBody().string().toString());
                             } catch (IOException e) {
@@ -590,43 +789,40 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                     }
 
                     @Override
-                    public void onFailure(Call<EventosResult> call, Throwable t) {
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     }
                 });
 
             }
-        }
+
 
     }
 
     private boolean verificarFecha(int day, int month, int year) {
         int diff=0;
-        if (currentTime.get(Calendar.YEAR)>year){
+        if (currentTime.getYear()>year){
             eTextFecha.setError("Esa fecha se encuentra en el pasado");
+        }
+        else{
+            if (currentTime.getMonth() > month ||
+                    (currentTime.getMonth() == month && currentTime.getDay() > day)) {
+                eTextFecha.setError("Esa fecha se encuentra en el pasado");
+            }
+            else{
+                diff=day-currentTime.getDay();
+            }
+        }
+
+
+        if (diff<3){
+            eTextFecha.setError("Tienes que tener 3 dias de anticipación");
             return true;
         }
         else{
-            if ((currentTime.get(Calendar.MONTH) +1)> month ||
-                    ((currentTime.get(Calendar.MONTH) +1) == month && currentTime.get(Calendar.DAY_OF_MONTH) > day)) {
-                eTextFecha.setError("Esa fecha se encuentra en el pasado");
-                return true;
-            }
-            else{
-                if((currentTime.get(Calendar.MONTH) +1) == month)
-                {
-                    diff=day-currentTime.get(Calendar.DAY_OF_MONTH);
-                    if (diff<3){
-                        eTextFecha.setError("Tienes que tener 3 dias de anticipación");
-                        return true;
-                    }
-                }
 
-            }
             return false;
         }
-
-
     }
 
     private int privacidad() {
@@ -655,19 +851,18 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                     mProgressDialog.setCancelable(false);
                     mProgressDialog.show();
                     Uri uri = data.getData();
-                    viewPager.setVisibility(View.VISIBLE);
                     final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
                     final UploadTask uploadTask = filePath.putFile(uri);
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             String message = e.toString();
-                            Toast.makeText(CrearEvento.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarEvento.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(CrearEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
                             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                 @Override
                                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -681,16 +876,26 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     downloadUrl = task.getResult().toString();
-                                    if (fotos.isEmpty()) {
-                                        imagenPrincipal = downloadUrl;
-                                    }
-                                    fotos.add(downloadUrl);
+                                    ImagenEventos image= new ImagenEventos(downloadUrl, id);
+                                    Call<ResponseBody> call = nixService.imagenUna(image);
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()){
+                                                Toast.makeText(EditarEvento.this, "Imagen añadida correctamente", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                Toast.makeText(EditarEvento.this, "Error", Toast.LENGTH_SHORT).show();
+                                                Log.i("error",response.errorBody().toString());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(EditarEvento.this, "Error en la ruta", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                                     mProgressDialog.dismiss();
-                                    ImagenEventos nueva = new ImagenEventos(downloadUrl);
-                                    eventosUsuario.add(contador,nueva);
-                                    viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
-                                    viewPager.setAdapter(viewPagerAdapter);
-                                    contador++;
 
                                 }
                             });
@@ -716,6 +921,77 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                     imagen_lista = true;
                     Glide.with(this).load(imagen_enviar).into(InvitacionSeleccionada);
                     InvitacionSeleccionada.setVisibility(View.VISIBLE);
+                    mProgressDialog.setTitle("Subiendo...");
+
+                    mProgressDialog.setMessage("Subiendo foto a firebase");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+                    Uri uri = data.getData();
+                    viewPager.setVisibility(View.VISIBLE);
+                    final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
+                    final UploadTask uploadTask = filePath.putFile(uri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            String message = e.toString();
+                            Toast.makeText(EditarEvento.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(EditarEvento.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw task.getException();
+                                    }
+                                    downloadUrl = filePath.getDownloadUrl().toString();
+                                    return filePath.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    downloadUrl = task.getResult().toString();
+                                    if (fotos.isEmpty()) {
+                                        imagenPrincipal = downloadUrl;
+                                    }
+                                    ImagenEventos image= new ImagenEventos(downloadUrl, id);
+                                    Call<ResponseBody> call = nixService.imagenUna(image);
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()){
+                                                Toast.makeText(EditarEvento.this, "Imagen añadida correctamente", Toast.LENGTH_SHORT).show();
+                                            }
+                                            else{
+                                                Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                try {
+                                                    Log.i("Error",response.errorBody().string().toString());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(EditarEvento.this, "Error en la ruta", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    fotos.add(downloadUrl);
+                                    mProgressDialog.dismiss();
+                                    viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                                    viewPager.setAdapter(viewPagerAdapter);
+                                    contador++;
+
+                                }
+                            });
+
+
+                        }
+                    });
+
                     Toast.makeText(this, "Imagen Agregada", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();

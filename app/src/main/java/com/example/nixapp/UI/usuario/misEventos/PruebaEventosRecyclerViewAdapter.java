@@ -104,9 +104,9 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
         public ViewHolder(View view) {
             super(view);
             mView = view;
-           nombre = view.findViewById(R.id.textViewNo_temporada);
+           nombre = view.findViewById(R.id.textViewTitulo);
            statusUsuario= view.findViewById(R.id.textViewFecha);
-           direccion=view.findViewById(R.id.textViewDireccion);
+           direccion=view.findViewById(R.id.textViewContenido);
            privacidad= view.findViewById(R.id.textViewPrivacidad);
            cupo= view.findViewById(R.id.textViewCupo);
            btnBorrar=view.findViewById(R.id.buttonDelete);
