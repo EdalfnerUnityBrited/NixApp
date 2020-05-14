@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.Prospectos;
 import com.example.nixapp.DB.RespuestaEventoLleno;
+import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
@@ -27,6 +29,8 @@ import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.ProspectosResult;
+import com.example.nixapp.conn.results.UsuarioListResult;
+import com.example.nixapp.conn.results.UsuarioResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +44,9 @@ public class InfoEventoExpandida extends AppCompatActivity {
 
     private String nombre = "", fecha, hora, lugar, descripcion = "", fotoPrincipal, id, municipio;
     private int privacidad, categoria, cupo, cover;
-    EditText nombreEvento,direccion_evento,fecha_evento,hora_evento,cupo_event,descripcion_evento,cover_evento, municipios;
+    EditText nombreEvento,direccion_evento,fecha_evento,hora_evento,cupo_event,descripcion_evento,cover_evento, municipios, nombre_Anfitrion, email_Anfitrion, telefono_Anfitrion;
     CheckBox cover_even;
+    TextView invitadosConfirmados;
     RadioButton publico,privado;
     ImageView principal;
     Spinner spinners;
@@ -53,7 +58,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
     boolean Meinteresa = false, Voyir = false;
     List<ImagenEventos> eventosUsuario;
     LinearLayout botones;
-
+    String confir = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +136,74 @@ public class InfoEventoExpandida extends AppCompatActivity {
         asistire = findViewById(R.id.asistire);
         municipios = findViewById(R.id.muni);
         botones = findViewById(R.id.lineabotones);
+        email_Anfitrion = findViewById(R.id.email_Anf);
+        nombre_Anfitrion = findViewById(R.id.nomb_Anf);
+        telefono_Anfitrion = findViewById(R.id.tels_Anf);
+        invitadosConfirmados = findViewById(R.id.invitados_confirmados);
+        ///////////////////////////////////////////////////
+        Eventos nuevo = new Eventos(id);
+        Call<UsuarioListResult> confirmados = nixService.confirmados(nuevo);
+        confirmados.enqueue(new Callback<UsuarioListResult>() {
+            @Override
+            public void onResponse(Call<UsuarioListResult> call, Response<UsuarioListResult> response) {
+                if(response.isSuccessful())
+                {
+                    List<Usuario> confirmados = response.body().usuarios;
+                    for (Usuario asistente: confirmados)
+                    {
+                        confir += asistente.name + " " + asistente.apellidoP + " " + asistente.apellidoM + "\n";
+                    }
+                    if(confirmados.isEmpty())
+                    {
+                        invitadosConfirmados.setText("Puedes ser el primero en confirmar tu asistencia!");
+                    }
+                    else
+                    {
+                        invitadosConfirmados.setText(confir);
+                    }
+
+                }
+                else
+                {
+                    Toast.makeText(InfoEventoExpandida.this, "Error al encontrar asistentes:" + response.message() , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UsuarioListResult> call, Throwable t) {
+                Toast.makeText(InfoEventoExpandida.this, "Error Anfitrion: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        ///////////////////////////////////////////////////
+
+        Call<UsuarioResult> InfoAnfitrion = nixService.infoAnfitrion(nuevo);
+        InfoAnfitrion.enqueue(new Callback<UsuarioResult>() {
+            @Override
+            public void onResponse(Call<UsuarioResult> call, Response<UsuarioResult> response) {
+                if(response.isSuccessful())
+                {
+                    Usuario anfitrion = response.body().usuario;
+                    nombre_Anfitrion.setText(anfitrion.name + " " + anfitrion.apellidoP + " "+ anfitrion.apellidoM);
+                    nombre_Anfitrion.setBackground(null);
+                    nombre_Anfitrion.setEnabled(false);
+                    email_Anfitrion.setText(anfitrion.email);
+                    email_Anfitrion.setBackground(null);
+                    email_Anfitrion.setEnabled(false);
+                    telefono_Anfitrion.setText(anfitrion.telefono);
+                    telefono_Anfitrion.setBackground(null);
+                    telefono_Anfitrion.setEnabled(false);
+                }
+                else
+                {
+                    Toast.makeText(InfoEventoExpandida.this, "Error al conseguir info anfitrion", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UsuarioResult> call, Throwable t) {
+                Toast.makeText(InfoEventoExpandida.this, "Error Anfitrion: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
         //////////////////////////////////////////////////
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
