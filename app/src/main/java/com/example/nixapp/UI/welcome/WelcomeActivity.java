@@ -1,10 +1,15 @@
 package com.example.nixapp.UI.welcome;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
@@ -14,13 +19,20 @@ import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.modelotablas.UsuarioToken;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WelcomeActivity extends AppCompatActivity {
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+public class WelcomeActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private final static int MY_PERMISSION_FINE_LOCATION = 101;
+    private GoogleMap mMap;
     /**Crea la vista del activity
      * Primeramente, se define la vista que contendrá el activity.
      * Después se obtendrá el token guardado en la base de datos local, si el token está vacio se
@@ -34,6 +46,9 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_hack);
+        mapFragment.getMapAsync( this);
         UsuarioToken token = TokenController.getToken();
         if (token == null)
             pantallaInicioSesion();
@@ -41,6 +56,22 @@ public class WelcomeActivity extends AppCompatActivity {
             principal(token);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSION_FINE_LOCATION: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        mMap.setMyLocationEnabled(true);
+                    }
+                } else {
+                    Toast.makeText(this, "Nix necesita conocer tu ubicación", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    }
     /**Llama al activity del Usuario General
      * Se instancian las variables nixClient y nixService, para obtener una conexión con la api
      * mediante la librería de retrofit. Después se realiza el metodo Call, buscando una respuesta
@@ -121,4 +152,15 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
+            }
+        }
+    }
 }

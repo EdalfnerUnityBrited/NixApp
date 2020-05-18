@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.proveedor.misServicios.CrearServicioMenu"
+
+    >
+
+    <FrameLayout
+        android:id="@+id/fragment_container_crear_servicio_menu_proveedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/menu_abajo_crear_servicio">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Mis Servicios"
+            app:titleTextColor="#ffffffff"></androidx.appcompat.widget.Toolbar>
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/menu_abajo_crear_servicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/menu_abajo_crear_servicio"></com.google.android.material.bottomnavigation.BottomNavigationView>
+</RelativeLayout>

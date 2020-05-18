@@ -34,7 +34,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
@@ -49,6 +48,9 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -66,6 +68,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,10 +95,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
-    String clickedName, municipio;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
+    String clickedName, municipio,id;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion,checardireccion;
     int cupo;
-    boolean correoagregado = false, imagen_lista = false;
+    boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
     Uri imagen_enviar;
     ImageView InvitacionSeleccionada;
@@ -117,10 +121,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                Intent intent = new Intent(getApplicationContext(), MisEventos.class);
-                startActivity(intent);
-                CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                    startActivity(intent);
+                    CrearEvento.this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
             }
         });
         //////////////////////
@@ -148,6 +152,16 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+        checardireccion = (Button) findViewById(R.id.checardireccion);
+        checardireccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                picadoChecarDireccion = true;
+                if (lugarEvento.getText() != null && spinner.getSelectedItem()!=null)
+                checarIgualdadDireccionMunicipio(lugarEvento.getText().toString(),spinner.getSelectedItem().toString());
+            }
+        });
+
         imagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +185,28 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                eTextHora.setText(sHour + ":" + sMinute);
+                                String minutos;
+                                String horas;
+                                if(sMinute < 10) {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    eTextHora.setText(sHour + ":" + minutos);
+
+                                }
+                                else if(sHour < 10)
+                                {
+                                    horas = "0" + String.valueOf(sHour);
+                                    eTextHora.setText(horas + ":" + sMinute);
+                                }
+                                else if(sHour <0 && sMinute< 0)
+                                {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    horas = "0" + String.valueOf(sHour);
+                                    eTextHora.setText(horas + ":" + minutos);
+                                }
+                                else
+                                {
+                                    eTextHora.setText(sHour + ":" + sMinute);
+                                }
                             }
                         }, hour, minutes, true);
                 picker2.show();
@@ -278,11 +313,42 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 {
                     Toast.makeText(CrearEvento.this, "Ingresa minimo una direccion de correo para poder poder enviar la invtacion", Toast.LENGTH_LONG).show();
                 }
+                else if(nombreEvento.getText().toString().equals("") || descripcionEvento.getText().toString().equals(""))
+                {
+                    Toast.makeText(CrearEvento.this, "Llena los campos de Nombre y Descripcion del evento, porfavor", Toast.LENGTH_SHORT).show();
+                }
                 else
                 {
                     enviarEmail();
                 }
 
+            }
+        });
+        /////////////////////////////////////////////////////////
+        final TextView mostrarCorreos = findViewById(R.id.mostrarCorreos);
+        final EditText correos = findViewById(R.id.correos);
+
+
+        insertar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (correos.getText().toString().isEmpty()) {
+                    Toast.makeText(CrearEvento.this, "Agrega algun correo porfavor", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(validarEmail(correos.getText().toString()))
+                    {
+                        String email=correos.getText().toString();
+                        mostrarCorreos.setText(mostrarCorreos.getText() + "\n" + email);
+                        correos.setText("");
+                        correoagregado = true;
+
+                    }
+                    else
+                    {
+                        Toast.makeText(CrearEvento.this, "Eso no es un correo -.-'", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
         ////////////////////////////////Compartir facebook
@@ -330,7 +396,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
         String[] Minicipios = new String[]{
-                "Elige un municipio:",
+                "Elige un municipio",
                 "Acatic",
                 "Ameca",
                 "Arandas",
@@ -389,6 +455,40 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void checarIgualdadDireccionMunicipio(String direccion, final String municipio){
+        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",direccion);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Toast.makeText(CrearEvento.this, "ERROR API GEOCODING", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myResponse = response.body().string();
+                    CrearEvento.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (myResponse.contains(municipio)){
+                                igualdadDireccionMunicipio=true;
+                                Toast.makeText(CrearEvento.this, "La dirección es correcta", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(CrearEvento.this, "La direccion ingresada no forma parte del municipio elegido", Toast.LENGTH_LONG).show();
+                                igualdadDireccionMunicipio=false;
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public void setToolbarTitle(String title) {
@@ -533,6 +633,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         {
             Toast.makeText(CrearEvento.this, "Elige un municipio", Toast.LENGTH_SHORT).show();
         }
+        if (igualdadDireccionMunicipio != true || picadoChecarDireccion != true) {
+            Toast.makeText(this, "Falta verificar la dirección", Toast.LENGTH_SHORT).show();
+        }
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
@@ -552,7 +655,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                             if (!fotos.isEmpty()){
 
                                 for (String imagenes: fotos){
-
+                                    ImagenEventos imagenEventos1 = new ImagenEventos(imagenes,id);
+                                    imagenEventos.add(imagenEventos1);
                                 }
                                 Call<ResponseBody> callImagen=nixService.image(imagenEventos);
                                 callImagen.enqueue(new Callback<ResponseBody>() {
