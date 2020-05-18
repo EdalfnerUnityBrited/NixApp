@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.proveedor.misServicios.CrearServicio"
     android:background="@drawable/fondoeventos"
     >
 
     <RelativeLayout
-        android:id="@+id/fragment_container_mis_eventos"
+        android:id="@+id/fragment_container_infoservicios_proveedor"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -88,7 +87,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
-                            android:hint="Evento Genial"
+                            android:hint="Servicio Genial"
                             android:inputType="textPersonName"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
@@ -147,7 +146,7 @@
                             android:textSize="20sp" />
 
                         <EditText
-                            android:id="@+id/direccion"
+                            android:id="@+id/direccion_nuevoservicio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
@@ -160,11 +159,11 @@
 
                 </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
                     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:map="http://schemas.android.com/apk/res-auto"
                         xmlns:tools="http://schemas.android.com/tools"
@@ -175,7 +174,7 @@
                         tools:context=".UI.proveedor.misServicios.CrearServicio" />
 
 
-            </LinearLayout>
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -352,9 +351,9 @@
                         android:background="#EFE8E8" />
 
                     <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
                         android:padding="5dp"
                         android:gravity="center_horizontal">
 

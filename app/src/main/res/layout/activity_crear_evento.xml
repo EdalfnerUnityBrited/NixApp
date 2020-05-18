@@ -286,8 +286,22 @@
                                 android:textColor="#FFFFFF"
                                 android:textColorHint="#FFFFFF"
                                 android:textSize="20dp" />
+
                         </TableRow>
 
+                        <Button
+                            android:id="@+id/checardireccion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/custombutom2"
+                            android:padding="5dp"
+                            android:text="Checar Validez De La Dirección"
+                            android:textAlignment="gravity"
+                            android:textColor="@drawable/butom_text"></Button>
                     </LinearLayout>
 
                     <LinearLayout

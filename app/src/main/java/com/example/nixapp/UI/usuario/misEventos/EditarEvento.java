@@ -69,6 +69,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,9 +98,9 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName, municipio, id;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen,checardireccion;
     int cupo;
-    boolean correoagregado = false, imagen_lista = false;
+    boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
     Uri imagen_enviar;
     ImageView InvitacionSeleccionada;
@@ -155,7 +157,15 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
+        checardireccion = (Button) findViewById(R.id.checardireccion_editar);
+        checardireccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                picadoChecarDireccion = true;
+                if (lugarEvento.getText() != null && spinner.getSelectedItem()!=null)
+                    checarIgualdadDireccionMunicipio(lugarEvento.getText().toString(),spinner.getSelectedItem().toString());
+            }
+        });
         eTextHora.setInputType(InputType.TYPE_NULL);
         eTextHora.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -433,6 +443,41 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    private void checarIgualdadDireccionMunicipio(String direccion,final String municipio) {
+        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",direccion);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Toast.makeText(EditarEvento.this, "ERROR API GEOCODING", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myResponse = response.body().string();
+                    EditarEvento.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (myResponse.contains(municipio)){
+                                igualdadDireccionMunicipio=true;
+                                Toast.makeText(EditarEvento.this, "La dirección es correcta", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(EditarEvento.this, "La direccion ingresada no forma parte del municipio elegido", Toast.LENGTH_LONG).show();
+                                igualdadDireccionMunicipio=false;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
@@ -702,82 +747,80 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        int privacidad= privacidad();
+        int privacidad = privacidad();
         String nombre = nombreEvento.getText().toString();
-        String lugar=lugarEvento.getText().toString();
-        String fecha= eTextFecha.getText().toString();
-        String hora=(eTextHora.getText().toString());
-        String cupo= cupoEvento.getText().toString();
-        String precio= coverEvento.getText().toString();
-        final List<ImagenEventos> imagenEventos= new ArrayList<>();
+        String lugar = lugarEvento.getText().toString();
+        String fecha = eTextFecha.getText().toString();
+        String hora = (eTextHora.getText().toString());
+        String cupo = cupoEvento.getText().toString();
+        String precio = coverEvento.getText().toString();
+        final List<ImagenEventos> imagenEventos = new ArrayList<>();
 
         try {
-            String[] fechanueva= fecha.split("/");
-            dia=Integer.parseInt(fechanueva[0]);
-            mes= Integer.parseInt(fechanueva[1]);
-            ano=Integer.parseInt(fechanueva[2]);
-            fecha= (ano+"-"+mes+"-"+dia);
-        }
-        catch (Exception e){
-            fecha=eventos.getFecha();
+            String[] fechanueva = fecha.split("/");
+            dia = Integer.parseInt(fechanueva[0]);
+            mes = Integer.parseInt(fechanueva[1]);
+            ano = Integer.parseInt(fechanueva[2]);
+            fecha = (ano + "-" + mes + "-" + dia);
+        } catch (Exception e) {
+            fecha = eventos.getFecha();
         }
 
         int cover;
-        int numCupo=0;
-        String descripcion=descripcionEvento.getText().toString();
-        if (nombre.isEmpty()){
-            nombre=eventos.getNombre_evento();
+        int numCupo = 0;
+        String descripcion = descripcionEvento.getText().toString();
+        if (nombre.isEmpty()) {
+            nombre = eventos.getNombre_evento();
         }
-        if (lugar.isEmpty()){
-            lugar= eventos.getLugar();
+        if (lugar.isEmpty()) {
+            lugar = eventos.getLugar();
         }
-        if (cupo.isEmpty()){
-            numCupo=eventos.getCupo();
+        if (cupo.isEmpty()) {
+            numCupo = eventos.getCupo();
+        } else {
+            numCupo = Integer.parseInt(cupo);
+        }
+        if (precio.isEmpty()) {
+            cover = eventos.getCover();
+        } else {
+            cover = Integer.parseInt(precio);
+        }
+        if (descripcion.isEmpty()) {
+            descripcion = eventos.getDescripcion();
+        }
+        if (categoria_evento == 0) {
+            categoria_evento = eventos.getCategoria_evento();
+        }
+        if (spinner.getSelectedItem().toString().equals("Elige un municipio:")) {
+            municipio = eventos.getMunicipio();
+        }
+        if (igualdadDireccionMunicipio != true || picadoChecarDireccion != true) {
+            Toast.makeText(this, "Falta verificar la dirección", Toast.LENGTH_SHORT).show();
         }
         else{
-            numCupo= Integer.parseInt(cupo);
-        }
-        if (precio.isEmpty()){
-            cover=eventos.getCover();
-        }else{
-            cover=Integer.parseInt(precio);
-        }
-        if (descripcion.isEmpty()){
-            descripcion=eventos.getDescripcion();
-        }
-        if (categoria_evento==0){
-            categoria_evento=eventos.getCategoria_evento();
-        }
-        if(spinner.getSelectedItem().toString().equals("Elige un municipio:"))
-        {
-            municipio=eventos.getMunicipio();
-        }
-        
-            boolean fechacorrecta=verificarFecha(dia, mes, ano);
-            if (!fechacorrecta){
-
-                final Eventos requestSample = new Eventos(id, nombre,privacidad,categoria_evento,fecha,hora,lugar,descripcion,numCupo,cover, imagenPrincipal,municipio);
-                Call<ResponseBody> call= nixService.actualizarEvento(requestSample);
+            boolean fechacorrecta = verificarFecha(dia, mes, ano);
+            if (!fechacorrecta) {
+                final Eventos requestSample = new Eventos(id, nombre, privacidad, categoria_evento, fecha, hora, lugar, descripcion, numCupo, cover, imagenPrincipal, municipio);
+                Call<ResponseBody> call = nixService.actualizarEvento(requestSample);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             Toast.makeText(EditarEvento.this, "Cambios actializados", Toast.LENGTH_SHORT).show();
 
-                            if (!fotos.isEmpty()){
+                            if (!fotos.isEmpty()) {
 
-                                for (String imagenes: fotos){
-                                   ImagenEventos image= new ImagenEventos(imagenes.toString(), id);
-                                   imagenEventos.add(image);
+                                for (String imagenes : fotos) {
+                                    ImagenEventos image = new ImagenEventos(imagenes.toString(), id);
+                                    imagenEventos.add(image);
                                 }
-                                Call<ResponseBody> callImagen=nixService.image(imagenEventos);
+                                Call<ResponseBody> callImagen = nixService.image(imagenEventos);
                                 callImagen.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if (response.isSuccessful()){
+                                        if (response.isSuccessful()) {
                                             Toast.makeText(EditarEvento.this, "Imagenes añadidas correctamente", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
+                                        } else {
                                             Toast.makeText(EditarEvento.this, "Error al añadir las imagenes", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -791,12 +834,11 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                             finish();
                             Intent intent = new Intent(getApplicationContext(), MisEventos.class);
                             startActivity(intent);
-                            EditarEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
-                        }
-                        else{
+                            EditarEvento.this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+                        } else {
                             Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
                             try {
-                                Log.i("Error",response.errorBody().string().toString());
+                                Log.i("Error", response.errorBody().string().toString());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -812,7 +854,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
 
             }
 
-
+        }
     }
 
     private boolean verificarFecha(int day, int month, int year) {

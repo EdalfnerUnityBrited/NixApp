@@ -22,8 +22,8 @@ public class CrearServiciosFragmentProveedor extends Fragment {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentTendencia = new Intent(getActivity(), CrearServicio.class);
-                startActivity(intentTendencia);
+                Intent intentCrearServicioMenu = new Intent(getActivity(), CrearServicioMenu.class);
+                startActivity(intentCrearServicioMenu);
             }
         });
 

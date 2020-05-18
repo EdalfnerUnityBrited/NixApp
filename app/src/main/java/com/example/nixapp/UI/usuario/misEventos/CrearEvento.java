@@ -48,6 +48,9 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -65,6 +68,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,9 +96,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName, municipio,id;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion,checardireccion;
     int cupo;
-    boolean correoagregado = false, imagen_lista = false;
+    boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
     Uri imagen_enviar;
     ImageView InvitacionSeleccionada;
@@ -116,10 +121,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                Intent intent = new Intent(getApplicationContext(), MisEventos.class);
-                startActivity(intent);
-                CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                    startActivity(intent);
+                    CrearEvento.this.overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
             }
         });
         //////////////////////
@@ -144,6 +149,16 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                             }
                         }, ano, mes, dia);
                 picker.show();
+            }
+        });
+
+        checardireccion = (Button) findViewById(R.id.checardireccion);
+        checardireccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                picadoChecarDireccion = true;
+                if (lugarEvento.getText() != null && spinner.getSelectedItem()!=null)
+                checarIgualdadDireccionMunicipio(lugarEvento.getText().toString(),spinner.getSelectedItem().toString());
             }
         });
 
@@ -442,6 +457,40 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         return super.onKeyDown(keyCode, event);
     }
 
+    private void checarIgualdadDireccionMunicipio(String direccion, final String municipio){
+        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",direccion);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Toast.makeText(CrearEvento.this, "ERROR API GEOCODING", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myResponse = response.body().string();
+                    CrearEvento.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (myResponse.contains(municipio)){
+                                igualdadDireccionMunicipio=true;
+                                Toast.makeText(CrearEvento.this, "La dirección es correcta", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(CrearEvento.this, "La direccion ingresada no forma parte del municipio elegido", Toast.LENGTH_LONG).show();
+                                igualdadDireccionMunicipio=false;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     public void setToolbarTitle(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
@@ -583,6 +632,9 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         if(spinner.getSelectedItem().toString().equals("Elige un municipio"))
         {
             Toast.makeText(CrearEvento.this, "Elige un municipio", Toast.LENGTH_SHORT).show();
+        }
+        if (igualdadDireccionMunicipio != true || picadoChecarDireccion != true) {
+            Toast.makeText(this, "Falta verificar la dirección", Toast.LENGTH_SHORT).show();
         }
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);

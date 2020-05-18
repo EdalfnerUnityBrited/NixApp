@@ -1,5 +1,7 @@
 package com.example.nixapp.UI.proveedor.misServicios;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,7 +11,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,10 +24,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,15 +39,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class CrearServicio extends FragmentActivity implements OnMapReadyCallback {
-
+public class InformacionFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private GoogleMap mMap;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
     Spinner spinner , spinners;
@@ -51,23 +62,24 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
     };
     String municipio = "", clickedName;
     int categoria_evento;
-    EditText hora_inicio,hora_fin;
+    EditText hora_inicio,hora_fin,direccion;
     TextView municipios;
     TimePickerDialog hora_inicial,hora_final;
-    Button agregar_mun;
+    Button agregar_mun,buscar_direccion;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_servicio);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_servicio);
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_infoservicio_proveedor,container,false);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_servicio);
         mapFragment.getMapAsync(this);
-        spinner = findViewById(R.id.spinner1);
+        spinner = view.findViewById(R.id.spinner1);
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.texto_municipios,Minicipios
+                getActivity(),R.layout.texto_municipios,Minicipios
         );
         spinnerArrayAdapter.setDropDownViewResource(R.layout.texto_municipios);
         spinner.setAdapter(spinnerArrayAdapter);
@@ -82,10 +94,10 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
                 municipio = spinner.getSelectedItem().toString();
             }
         });
-        spinners = findViewById(R.id.spinnerSimple);
+        spinners = view.findViewById(R.id.spinnerSimple);
         initList();
 
-        mAdapter = new EventosAdapter(this, mEventsList);
+        mAdapter = new EventosAdapter(getActivity(), mEventsList);
         spinners.setAdapter(mAdapter);
 
         spinners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -94,7 +106,7 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
                 EventosItems clickedItem = (EventosItems) parent.getItemAtPosition(position);
                 categoria_evento= position;
                 clickedName = clickedItem.getEventoName();
-                Toast.makeText(CrearServicio.this, clickedName + " seleccionada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), clickedName + " seleccionada", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -102,7 +114,7 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
 
             }
         });
-        hora_inicio = findViewById(R.id.hora_inicio);
+        hora_inicio = view.findViewById(R.id.hora_inicio);
         hora_inicio.setInputType(InputType.TYPE_NULL);
         hora_inicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +125,7 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
                 final int hour = cldr2.get(Calendar.HOUR_OF_DAY);
                 int minutes = cldr2.get(Calendar.MINUTE);
                 // time picker dialog
-                hora_inicial = new TimePickerDialog(CrearServicio.this,
+                hora_inicial = new TimePickerDialog(getActivity(),
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
@@ -145,7 +157,7 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
                 hora_inicial.show();
             }
         });
-        hora_fin = findViewById(R.id.hora_final);
+        hora_fin = view.findViewById(R.id.hora_final);
         hora_fin.setInputType(InputType.TYPE_NULL);
         hora_fin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +168,7 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
                 int hour = cldr2.get(Calendar.HOUR_OF_DAY);
                 int minutes = cldr2.get(Calendar.MINUTE);
                 // time picker dialog
-                hora_final = new TimePickerDialog(CrearServicio.this,
+                hora_final = new TimePickerDialog(getActivity(),
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
@@ -166,8 +178,8 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
                 hora_final.show();
             }
         });
-        municipios = findViewById(R.id.municipios_mostrar);
-        agregar_mun = findViewById(R.id.otro_municipio);
+        municipios = view.findViewById(R.id.municipios_mostrar);
+        agregar_mun = view.findViewById(R.id.otro_municipio);
         agregar_mun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +208,12 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
 
             }
         });
+        direccion = (EditText) view.findViewById(R.id.direccion_nuevoservicio);
+        buscar_direccion = (Button) view.findViewById(R.id.buscar_direccion);
+        buscar_direccion.setOnClickListener(this);
+        return view;
     }
+
     private void initList() {
         mEventsList = new ArrayList<>();
         mEventsList.add(new EventosItems("Elige una categoria", R.drawable.select_some));
@@ -207,10 +224,11 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
         mEventsList.add(new EventosItems("Festejos", R.drawable.festejos));
         mEventsList.add(new EventosItems("Religiosos", R.drawable.religiosos));
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -218,7 +236,7 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
             }
         }
         //hacer zoom al usuario
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (location != null)
@@ -235,19 +253,66 @@ public class CrearServicio extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MY_PERMISSION_FINE_LOCATION: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         mMap.setMyLocationEnabled(true);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Nix necesita conocer tu ubicación", Toast.LENGTH_LONG).show();
-                    finish();
+                    Toast.makeText(getActivity(), "Nix necesita conocer tu ubicación", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    }
+
+    private void ponerDireccionEnMapa(String direccion){
+        String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&address=%1$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",direccion);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Toast.makeText(getActivity(), "ERROR API GEOCODING", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String myResponse = response.body().string();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            double ltEvento, lnEvento;
+                            String[] ltEvento1Json = myResponse.split("\"lat\"+ +:+ ");
+                            String[] lnEvento1Json = myResponse.split("\"lng\"+ +:+ ");
+                            String[] ltEventoFinalJson = ltEvento1Json[1].split(",");
+                            String[] lnEventoFinalJson = lnEvento1Json[1].split("\n");
+                            ltEvento = Double.parseDouble(ltEventoFinalJson[0]);
+                            lnEvento = Double.parseDouble(lnEventoFinalJson[0]);
+                            LatLng direccionZoom = new LatLng(ltEvento, lnEvento);
+                            float zoomLevel = 16.0f;
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(direccionZoom, zoomLevel));
+                            mMap.addMarker(new MarkerOptions().position(direccionZoom).title("Aquí es tu negocio"));
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.buscar_direccion:{
+                if (direccion.getText()!=null){
+                    ponerDireccionEnMapa(direccion.getText().toString());
                 }
                 break;
             }
