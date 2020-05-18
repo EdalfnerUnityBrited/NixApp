@@ -678,7 +678,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="5dp"
+                        android:layout_marginBottom="10dp"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#FFFFFF"
@@ -841,7 +841,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginRight="5dp"
                         android:background="@drawable/custombutom2"
-                        android:text="Crear Evento"
+                        android:text="Guardar Cambios"
                         android:textAlignment="gravity"
                         android:textColor="@drawable/butom_text" />
                 </LinearLayout>

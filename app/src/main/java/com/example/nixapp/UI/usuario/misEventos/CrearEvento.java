@@ -34,7 +34,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
@@ -91,7 +90,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixService nixService;
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
-    String clickedName, municipio;
+    String clickedName, municipio,id;
     Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion;
     int cupo;
     boolean correoagregado = false, imagen_lista = false;
@@ -171,7 +170,28 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                eTextHora.setText(sHour + ":" + sMinute);
+                                String minutos;
+                                String horas;
+                                if(sMinute < 10) {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    eTextHora.setText(sHour + ":" + minutos);
+
+                                }
+                                else if(sHour < 10)
+                                {
+                                    horas = "0" + String.valueOf(sHour);
+                                    eTextHora.setText(horas + ":" + sMinute);
+                                }
+                                else if(sHour <0 && sMinute< 0)
+                                {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    horas = "0" + String.valueOf(sHour);
+                                    eTextHora.setText(horas + ":" + minutos);
+                                }
+                                else
+                                {
+                                    eTextHora.setText(sHour + ":" + sMinute);
+                                }
                             }
                         }, hour, minutes, true);
                 picker2.show();
@@ -278,11 +298,42 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                 {
                     Toast.makeText(CrearEvento.this, "Ingresa minimo una direccion de correo para poder poder enviar la invtacion", Toast.LENGTH_LONG).show();
                 }
+                else if(nombreEvento.getText().toString().equals("") || descripcionEvento.getText().toString().equals(""))
+                {
+                    Toast.makeText(CrearEvento.this, "Llena los campos de Nombre y Descripcion del evento, porfavor", Toast.LENGTH_SHORT).show();
+                }
                 else
                 {
                     enviarEmail();
                 }
 
+            }
+        });
+        /////////////////////////////////////////////////////////
+        final TextView mostrarCorreos = findViewById(R.id.mostrarCorreos);
+        final EditText correos = findViewById(R.id.correos);
+
+
+        insertar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (correos.getText().toString().isEmpty()) {
+                    Toast.makeText(CrearEvento.this, "Agrega algun correo porfavor", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(validarEmail(correos.getText().toString()))
+                    {
+                        String email=correos.getText().toString();
+                        mostrarCorreos.setText(mostrarCorreos.getText() + "\n" + email);
+                        correos.setText("");
+                        correoagregado = true;
+
+                    }
+                    else
+                    {
+                        Toast.makeText(CrearEvento.this, "Eso no es un correo -.-'", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
         ////////////////////////////////Compartir facebook
@@ -330,7 +381,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
         String[] Minicipios = new String[]{
-                "Elige un municipio:",
+                "Elige un municipio",
                 "Acatic",
                 "Ameca",
                 "Arandas",
@@ -552,7 +603,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                             if (!fotos.isEmpty()){
 
                                 for (String imagenes: fotos){
-
+                                    ImagenEventos imagenEventos1 = new ImagenEventos(imagenes,id);
+                                    imagenEventos.add(imagenEventos1);
                                 }
                                 Call<ResponseBody> callImagen=nixService.image(imagenEventos);
                                 callImagen.enqueue(new Callback<ResponseBody>() {
