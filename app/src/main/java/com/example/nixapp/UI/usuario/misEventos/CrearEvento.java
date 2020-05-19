@@ -552,7 +552,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                             if (!fotos.isEmpty()){
 
                                 for (String imagenes: fotos){
-
+                                    ImagenEventos imagenEventos1= new ImagenEventos(imagenes, id);
+                                    imagenEventos.add(imagenEventos1);
                                 }
                                 Call<ResponseBody> callImagen=nixService.image(imagenEventos);
                                 callImagen.enqueue(new Callback<ResponseBody>() {
