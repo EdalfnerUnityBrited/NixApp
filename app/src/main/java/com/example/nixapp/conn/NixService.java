@@ -3,7 +3,6 @@ package com.example.nixapp.conn;
 import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenEventos;
-import com.example.nixapp.DB.Notificaciones;
 import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.DB.Prospectos;
 import com.example.nixapp.DB.Usuario;
@@ -16,6 +15,7 @@ import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
 import com.example.nixapp.conn.results.NotificationsResult;
 import com.example.nixapp.conn.results.ProspectosResult;
+import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
 
 import java.util.List;
@@ -122,4 +122,10 @@ public interface NixService {
 
     @POST("eventos/id")
     Call<EventosResult> getEventId(@Body Busqueda busqueda);
+
+    @POST("eventos/creador")
+    Call<UsuarioResult> infoAnfitrion (@Body Eventos eventos);
+
+    @POST("eventos/invitados")
+    Call<UsuarioListResult> confirmados (@Body Eventos eventos);
 }
