@@ -59,7 +59,7 @@ public class EventosProximosReciclerView extends RecyclerView.Adapter<EventosPro
                 .load(String.valueOf(holder.mItem.getFotoPrincipal()))
                 .into(holder.eventImage);
 
-        holder.nombre.setOnClickListener(new View.OnClickListener() {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
