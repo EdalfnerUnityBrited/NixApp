@@ -15,7 +15,7 @@
             android:title="Calendario"></item>
         <item
             android:id="@+id/nav_serviciosproximos_proveedor"
-            android:icon="@drawable/ic_serviciosproximos"
+            android:icon="@drawable/ic_eventosproximos"
             android:title="Servicios Proximos"></item>
         <item
             android:id="@+id/nav_ayuda_proveedor"
