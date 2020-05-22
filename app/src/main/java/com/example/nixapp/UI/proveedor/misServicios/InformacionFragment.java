@@ -9,12 +9,14 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,9 +28,14 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
+import com.example.nixapp.conn.NixClient;
+import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.ServicioResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,19 +45,27 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class InformacionFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
     private GoogleMap mMap;
+    private CatalogoServicios catalogoServicio;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
     Spinner spinner , spinners;
+    List<ZonaServicio> zonaServicios = new ArrayList<>();
     String[] Minicipios = new String[]{
             "Elige un municipio", "Acatic", "Ameca", "Arandas", "Atotonilco el alto", "Chapala", "Cocula", "El Arenal", "El Salto", "Guachinango", "Guadalajara",
             "Jocotepec", "La Barca", "Lagos de Moreno", "Mascota", "Mazamitla", "Mezquitic", "Puerto Vallarta", "San Juan de los Lagos", "Tlaquepaque", "Sayula",
@@ -58,31 +73,45 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
     };
     String municipio = "", clickedName;
     int categoria_evento;
-    EditText hora_inicio,hora_fin,direccion;
+    EditText hora_inicio,hora_fin,direccion, name, telefono, nombreProveedor;
     TextView municipios;
     TimePickerDialog hora_inicial,hora_final;
-    Button agregar_mun,buscar_direccion;
+    Button agregar_mun,buscar_direccion, crear;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
-
+    List<String> municipiosAgregados= new ArrayList<>();
+    CheckBox lunes, martes, miercoles, jueves, viernes, sabado, domingo;
+    NixService nixService;
+    NixClient nixClient;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_infoservicio_proveedor,container,false);
-
+        retrofitInit();
+        lunes=view.findViewById(R.id.checkBox_Lunes);
+        martes=view.findViewById(R.id.checkBox_Martes);
+        miercoles=view.findViewById(R.id.checkBox_Miercoles);
+        jueves=view.findViewById(R.id.checkBox_Jueves);
+        viernes=view.findViewById(R.id.checkBox_Viernes);
+        sabado=view.findViewById(R.id.checkBox_Sabado);
+        domingo=view.findViewById(R.id.checkBox_Domingo);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_servicio);
         mapFragment.getMapAsync(this);
         spinner = view.findViewById(R.id.spinner1);
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 getActivity(),R.layout.texto_municipios,Minicipios
         );
+        name= view.findViewById(R.id.nombre);
+        telefono= view.findViewById(R.id.telefonoProveedor);
+        nombreProveedor= view.findViewById(R.id.nombre_p);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.texto_municipios);
         spinner.setAdapter(spinnerArrayAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 municipio = spinner.getSelectedItem().toString();
+
             }
 
             @Override
@@ -92,9 +121,104 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
         });
         spinners = view.findViewById(R.id.spinnerSimple);
         initList();
-
+        crear= view.findViewById(R.id.servicioTerminado);
         mAdapter = new EventosAdapter(getActivity(), mEventsList);
         spinners.setAdapter(mAdapter);
+
+        crear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int monday=0;
+                int tuesday=0;
+                int wednesday=0;
+                int thursday=0;
+                int friday=0;
+                int saturday=0;
+                int sunday=0;
+
+                String nombreServicio=name.getText().toString();
+                String direccionServicio=direccion.getText().toString();
+                String telefonoServicio= telefono.getText().toString();
+                String nombreProvee= nombreProveedor.getText().toString();
+                if (lunes.isChecked()){
+                    monday=1;
+                }
+                if (martes.isChecked()){
+                    tuesday=1;
+                }
+                if (miercoles.isChecked()){
+                    wednesday=1;
+                }
+                if (jueves.isChecked()){
+                    thursday=1;
+                }
+                if (viernes.isChecked()){
+                    friday=1;
+                }
+                if (sabado.isChecked()){
+                    saturday=1;
+                }
+                if (domingo.isChecked()){
+                    sunday=1;
+                }
+                String horaInicio=hora_inicio.getText().toString()+":00";
+                String horaFin=hora_fin.getText().toString()+":00";
+                if (horaInicio.compareTo(horaFin)>0){
+                    Toast.makeText(getActivity(), "Si jala", Toast.LENGTH_SHORT).show();
+                }else{
+
+                    CatalogoServicios catalogoServicios= new CatalogoServicios(nombreServicio, direccionServicio, telefonoServicio, horaInicio, horaFin, "",categoria_evento, monday, tuesday, wednesday, thursday, friday, saturday, sunday);
+                    Call<ServicioResult> call = nixService.crearServicio(catalogoServicios);
+                    call.enqueue(new Callback<ServicioResult>() {
+                        @Override
+                        public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(getActivity(), "Creado correctamente", Toast.LENGTH_SHORT).show();
+                                catalogoServicio=response.body().servicio;
+                                if (!municipiosAgregados.isEmpty()){
+                                    for(String mun : municipiosAgregados){
+                                        ZonaServicio zonaServicio= new ZonaServicio(catalogoServicio.getId(),mun);
+                                        zonaServicios.add(zonaServicio);
+
+                                    }
+                                    Call<ResponseBody> callDos = nixService.munServicio(zonaServicios);
+                                    callDos.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()){
+                                                Toast.makeText(getActivity(), "Actalizada zona de servicio", Toast.LENGTH_SHORT).show();
+                                                CrearServicioMenu.servicio= catalogoServicio.getId();
+                                            }
+                                            else{
+                                                Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                Log.i("error",response.errorBody().toString());
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                }
+                            }
+                            else{
+                                Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                                Log.i("error", response.errorBody().toString());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ServicioResult> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Error en la ruta", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+
+            }
+        });
 
         spinners.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -168,7 +292,28 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                hora_fin.setText(sHour + ":" + sMinute);
+                                String minutos;
+                                String horas;
+                                if(sMinute < 10) {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    hora_fin.setText(sHour + ":" + minutos);
+
+                                }
+                                else if(sHour < 10)
+                                {
+                                    horas = "0" + String.valueOf(sHour);
+                                    hora_fin.setText(horas + ":" + sMinute);
+                                }
+                                else if(sHour <0 && sMinute< 0)
+                                {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    horas = "0" + String.valueOf(sHour);
+                                    hora_fin.setText(horas + ":" + minutos);
+                                }
+                                else
+                                {
+                                    hora_fin.setText(sHour + ":" + sMinute);
+                                }
                             }
                         }, hour, minutes, true);
                 hora_final.show();
@@ -194,6 +339,8 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                     if(ya_se_agrego == false)
                     {
                         municipios.setText(municipios.getText()+"\n"+ spinner.getSelectedItem().toString());
+                        municipiosAgregados.add(spinner.getSelectedItem().toString());
+
                     }
                     else
                     {
@@ -313,5 +460,9 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                 break;
             }
         }
+    }
+    private void retrofitInit() {
+        nixClient= NixClient.getInstance();
+        nixService= nixClient.getNixService();
     }
 }

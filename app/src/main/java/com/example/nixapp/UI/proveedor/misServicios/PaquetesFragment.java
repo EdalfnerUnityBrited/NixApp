@@ -23,6 +23,7 @@ public class PaquetesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intentArticulo = new Intent(getActivity(), CrearPaquetesDatos.class);
+                intentArticulo.putExtra("id",CrearServicioMenu.servicio);
                 startActivity(intentArticulo);
             }
         });

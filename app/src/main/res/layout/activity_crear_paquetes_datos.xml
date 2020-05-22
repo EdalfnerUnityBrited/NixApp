@@ -136,7 +136,7 @@
                         android:orientation="horizontal">
 
                         <EditText
-                            android:id="@+id/editText2"
+                            android:id="@+id/cantidad"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ems="3"
@@ -149,22 +149,13 @@
                             android:textAlignment="center"/>
 
                         <Spinner
-                            android:id="@+id/spinner2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/borderrow"
-                            android:padding="5dp"
-                            android:entries="@array/Precio_por"/>
-
-                        <Spinner
                             android:id="@+id/spinner"
-                            android:layout_width="wrap_content"
+                            android:layout_width="310dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/borderrow"
-                            android:padding="5dp"
-                            android:entries="@array/Articulos"/>
+                            android:entries="@array/Articulos"
+                            android:padding="5dp" />
 
                     </TableRow>
                     <Button
