@@ -283,6 +283,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                             }
+                            mProgressDialog.dismiss();
                             Toast.makeText(InicioSesion.this, "Error en la contraseña", Toast.LENGTH_SHORT).show();
                             signOut();
                         }
@@ -354,6 +355,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                                 ex.printStackTrace();
                             }
                             Toast.makeText(InicioSesion.this, "Error en la contraseña", Toast.LENGTH_SHORT).show();
+                            mProgressDialog.dismiss();
                             LoginManager.getInstance().logOut();
                         }
                     }
@@ -362,6 +364,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     public void onFailure(Call<LoginResult> call, Throwable t) {
                         t.printStackTrace();
                         Toast.makeText(InicioSesion.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+                        mProgressDialog.dismiss();
                     }
                 });
             }

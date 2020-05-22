@@ -1,5 +1,6 @@
 package com.example.nixapp.UI.proveedor.misServicios;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -83,12 +84,14 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
     CheckBox lunes, martes, miercoles, jueves, viernes, sabado, domingo;
     NixService nixService;
     NixClient nixClient;
+    private ProgressDialog mProgressDialog;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_infoservicio_proveedor,container,false);
         retrofitInit();
+        mProgressDialog= new ProgressDialog(getContext());
         lunes=view.findViewById(R.id.checkBox_Lunes);
         martes=view.findViewById(R.id.checkBox_Martes);
         miercoles=view.findViewById(R.id.checkBox_Miercoles);
@@ -166,7 +169,10 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                 if (horaInicio.compareTo(horaFin)>0){
                     Toast.makeText(getActivity(), "Si jala", Toast.LENGTH_SHORT).show();
                 }else{
-
+                    mProgressDialog.setTitle("Creando servicio...");
+                    mProgressDialog.setMessage("Por favor espere");
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
                     CatalogoServicios catalogoServicios= new CatalogoServicios(nombreServicio, direccionServicio, telefonoServicio, horaInicio, horaFin, "",categoria_evento, monday, tuesday, wednesday, thursday, friday, saturday, sunday);
                     Call<ServicioResult> call = nixService.crearServicio(catalogoServicios);
                     call.enqueue(new Callback<ServicioResult>() {
@@ -216,7 +222,7 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                     });
                 }
 
-
+            mProgressDialog.dismiss();
             }
         });
 

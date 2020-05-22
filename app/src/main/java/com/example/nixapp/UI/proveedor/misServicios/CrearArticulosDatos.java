@@ -103,7 +103,10 @@ public class CrearArticulosDatos extends AppCompatActivity {
                 String descripcionArticulo= descripcion.getText().toString();
                 String precio= costo.getText().toString();
                 String precioPorArticulo= precio_por.getSelectedItem().toString();
-
+                mProgressDialog.setTitle("Creando articulo...");
+                mProgressDialog.setMessage("Por favor espere");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
                 Articulos articulos = new Articulos(nombreArticulo,descripcionArticulo,precioPorArticulo,precio,cat,idArticulo);
                 Call<ArticuloResult> call= nixService.nuevoArticulo(articulos);
                 call.enqueue(new Callback<ArticuloResult>() {
@@ -136,10 +139,12 @@ public class CrearArticulosDatos extends AppCompatActivity {
                                     }
                                 });
                             }
+                            mProgressDialog.dismiss();
                         }
                         else{
                             Toast.makeText(CrearArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
                             Log.i("error",response.errorBody().toString());
+                            mProgressDialog.dismiss();
                         }
                     }
 

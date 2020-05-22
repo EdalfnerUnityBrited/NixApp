@@ -161,6 +161,10 @@ public class CrearPaquetesDatos extends AppCompatActivity {
         terminado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mProgressDialog.setTitle("Creando paquete...");
+                mProgressDialog.setMessage("Por favor espere");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
             String name= nombre.getText().toString();
             String price= precio.getText().toString();
             String desc= descripcion.getText().toString();
@@ -220,16 +224,17 @@ public class CrearPaquetesDatos extends AppCompatActivity {
                                     }
                                 });
                             }
-
+                            mProgressDialog.dismiss();
                         }
                         else{
                             Toast.makeText(CrearPaquetesDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            mProgressDialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<PaqueteResult> call, Throwable t) {
-
+                    mProgressDialog.dismiss();
                     }
                 });
             
