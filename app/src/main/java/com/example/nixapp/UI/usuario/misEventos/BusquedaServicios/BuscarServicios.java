@@ -26,7 +26,6 @@ import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.proveedor.misServicios.ServiciosRecyclerViewAdapter;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticulosListResult;
@@ -68,6 +67,7 @@ public class BuscarServicios extends AppCompatActivity{
         retrofitinit();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("¿Buscas Servicios?");
         toolbar.setNavigationIcon(R.drawable.ic_backarrow);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +81,6 @@ public class BuscarServicios extends AppCompatActivity{
             public boolean onMenuItemClick(MenuItem item) {
 
                 Intent intentBusqueda = new Intent(getApplicationContext(), BusquedaFiltrosServicio.class);
-                finish();
                 startActivity(intentBusqueda);
                 overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
                 return false;

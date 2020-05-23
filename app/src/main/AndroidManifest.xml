@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".UI.usuario.misEventos.BusquedaServicios.BusquedaFiltrosServicio"
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity android:name=".UI.proveedor.misServicios.Paquetes.CrearPaquetesDatos"></activity>
         <activity android:name=".UI.proveedor.misServicios.Articulos.CrearArticulosDatos" />
         <activity android:name=".UI.proveedor.misServicios.CrearServicioMenu" />
