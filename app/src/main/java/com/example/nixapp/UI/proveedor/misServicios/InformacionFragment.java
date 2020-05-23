@@ -29,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.R;
@@ -164,65 +165,128 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                 if (domingo.isChecked()){
                     sunday=1;
                 }
-                String horaInicio=hora_inicio.getText().toString()+":00";
-                String horaFin=hora_fin.getText().toString()+":00";
-                if (horaInicio.compareTo(horaFin)>0){
-                    Toast.makeText(getActivity(), "Si jala", Toast.LENGTH_SHORT).show();
-                }else{
-                    mProgressDialog.setTitle("Creando servicio...");
-                    mProgressDialog.setMessage("Por favor espere");
-                    mProgressDialog.setCancelable(false);
-                    mProgressDialog.show();
-                    CatalogoServicios catalogoServicios= new CatalogoServicios(nombreServicio, direccionServicio, telefonoServicio, horaInicio, horaFin, "",categoria_evento, monday, tuesday, wednesday, thursday, friday, saturday, sunday);
-                    Call<ServicioResult> call = nixService.crearServicio(catalogoServicios);
-                    call.enqueue(new Callback<ServicioResult>() {
-                        @Override
-                        public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
-                            if (response.isSuccessful()){
-                                Toast.makeText(getActivity(), "Creado correctamente", Toast.LENGTH_SHORT).show();
-                                catalogoServicio=response.body().servicio;
-                                if (!municipiosAgregados.isEmpty()){
-                                    for(String mun : municipiosAgregados){
-                                        ZonaServicio zonaServicio= new ZonaServicio(catalogoServicio.getId(),mun);
-                                        zonaServicios.add(zonaServicio);
+                if (CrearServicioMenu.servicio==0){
+                    String horaInicio=hora_inicio.getText().toString()+":00";
+                    String horaFin=hora_fin.getText().toString()+":00";
+                    if (horaInicio.compareTo(horaFin)>0){
+                        Toast.makeText(getActivity(), "Si jala", Toast.LENGTH_SHORT).show();
+                    }else{
+                        mProgressDialog.setTitle("Creando servicio...");
+                        mProgressDialog.setMessage("Por favor espere");
+                        mProgressDialog.setCancelable(false);
+                        mProgressDialog.show();
+                        CatalogoServicios catalogoServicios= new CatalogoServicios(nombreServicio, direccionServicio, telefonoServicio, horaInicio, horaFin, "",categoria_evento, monday, tuesday, wednesday, thursday, friday, saturday, sunday, nombreProvee);
+                        Call<ServicioResult> call = nixService.crearServicio(catalogoServicios);
+                        call.enqueue(new Callback<ServicioResult>() {
+                            @Override
+                            public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(getActivity(), "Creado correctamente", Toast.LENGTH_SHORT).show();
+                                    catalogoServicio=response.body().servicio;
+                                    if (!municipiosAgregados.isEmpty()){
+                                        for(String mun : municipiosAgregados){
+                                            ZonaServicio zonaServicio= new ZonaServicio(catalogoServicio.getId(),mun);
+                                            zonaServicios.add(zonaServicio);
+
+                                        }
+                                        Call<ResponseBody> callDos = nixService.munServicio(zonaServicios);
+                                        callDos.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.isSuccessful()){
+                                                    Toast.makeText(getActivity(), "Actalizada zona de servicio", Toast.LENGTH_SHORT).show();
+                                                    CrearServicioMenu.servicio= catalogoServicio.getId();
+                                                }
+                                                else{
+                                                    Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                    Log.i("error",response.errorBody().toString());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                            }
+                                        });
 
                                     }
-                                    Call<ResponseBody> callDos = nixService.munServicio(zonaServicios);
-                                    callDos.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            if (response.isSuccessful()){
-                                                Toast.makeText(getActivity(), "Actalizada zona de servicio", Toast.LENGTH_SHORT).show();
-                                                CrearServicioMenu.servicio= catalogoServicio.getId();
-                                            }
-                                            else{
-                                                Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
-                                                Log.i("error",response.errorBody().toString());
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                        }
-                                    });
-
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                                    Log.i("error", response.errorBody().toString());
                                 }
                             }
-                            else{
-                                Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
-                                Log.i("error", response.errorBody().toString());
+
+                            @Override
+                            public void onFailure(Call<ServicioResult> call, Throwable t) {
+                                Toast.makeText(getActivity(), "Error en la ruta", Toast.LENGTH_SHORT).show();
                             }
-                        }
+                        });
+                    }
 
-                        @Override
-                        public void onFailure(Call<ServicioResult> call, Throwable t) {
-                            Toast.makeText(getActivity(), "Error en la ruta", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    mProgressDialog.dismiss();
                 }
+                else{
+                    String horaInicio=hora_inicio.getText().toString();
+                    String horaFin=hora_fin.getText().toString();
+                    if (horaInicio.compareTo(horaFin)>0){
+                        Toast.makeText(getActivity(), "Si jala", Toast.LENGTH_SHORT).show();
+                    }else{
+                        mProgressDialog.setTitle("Actualizando servicio...");
+                        mProgressDialog.setMessage("Por favor espere");
+                        mProgressDialog.setCancelable(false);
+                        mProgressDialog.show();
+                        CatalogoServicios catalogoServicios= new CatalogoServicios(nombreServicio, direccionServicio, telefonoServicio, horaInicio, horaFin, nombreProvee,categoria_evento, monday, tuesday, wednesday, thursday, friday, saturday, sunday, CrearServicioMenu.servicio);
+                        Call<ServicioResult> call = nixService.actualizarServicio(catalogoServicios);
+                        call.enqueue(new Callback<ServicioResult>() {
+                            @Override
+                            public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(getActivity(), "Actualizado correctamente", Toast.LENGTH_SHORT).show();
+                                    catalogoServicio=response.body().servicio;
+                                    if (!municipiosAgregados.isEmpty()){
+                                        for(String mun : municipiosAgregados){
+                                            ZonaServicio zonaServicio= new ZonaServicio(catalogoServicio.getId(),mun);
+                                            zonaServicios.add(zonaServicio);
 
-            mProgressDialog.dismiss();
+                                        }
+                                        Call<ResponseBody> callDos = nixService.munServicio(zonaServicios);
+                                        callDos.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.isSuccessful()){
+                                                    Toast.makeText(getActivity(), "Actalizada zona de servicio", Toast.LENGTH_SHORT).show();
+                                                    CrearServicioMenu.servicio= catalogoServicio.getId();
+                                                }
+                                                else{
+                                                    Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                    Log.i("error",response.errorBody().toString());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                            }
+                                        });
+
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                                    Log.i("error", response.errorBody().toString());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ServicioResult> call, Throwable t) {
+                                Toast.makeText(getActivity(), "Error en la ruta", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    mProgressDialog.dismiss();
+                }
             }
         });
 
@@ -360,6 +424,52 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
         direccion = (EditText) view.findViewById(R.id.direccion_nuevoservicio);
         buscar_direccion = (Button) view.findViewById(R.id.buscar_direccion);
         buscar_direccion.setOnClickListener(this);
+       if (CrearServicioMenu.servicio!=0){
+           Articulos articulos= new Articulos(CrearServicioMenu.servicio);
+           Call<ServicioResult> call = nixService.servicioId(articulos);
+           call.enqueue(new Callback<ServicioResult>() {
+               @Override
+               public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
+                   if (response.isSuccessful()){
+                       Toast.makeText(getActivity(), "Servicio obtenido correctamente", Toast.LENGTH_SHORT).show();
+                       CatalogoServicios catalogoServicios= response.body().servicio;
+                       name.setText(catalogoServicios.getNombre());
+                       direccion.setText(catalogoServicios.getDireccion());
+                       telefono.setText(catalogoServicios.getTelefono());
+                       nombreProveedor.setText(catalogoServicios.getNombreProveedor());
+                       if (catalogoServicios.getLunes()==1){
+                           lunes.setChecked(true);
+                       }
+                       if (catalogoServicios.getMartes()==1){
+                           martes.setChecked(true);
+                       }
+                       if (catalogoServicios.getMiercoles()==1){
+                           miercoles.setChecked(true);
+                       }
+                       if (catalogoServicios.getJueves()==1){
+                           jueves.setChecked(true);
+                       }
+                       if (catalogoServicios.getViernes()==1){
+                           viernes.setChecked(true);
+                       }
+                       if (catalogoServicios.getSabado()==1){
+                           sabado.setChecked(true);
+                       }
+                       if (catalogoServicios.getDomingo()==1){
+                           domingo.setChecked(true);
+                       }
+                   }
+                   else{
+                       Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
+                   }
+               }
+
+               @Override
+               public void onFailure(Call<ServicioResult> call, Throwable t) {
+
+               }
+           });
+       }
         return view;
     }
 

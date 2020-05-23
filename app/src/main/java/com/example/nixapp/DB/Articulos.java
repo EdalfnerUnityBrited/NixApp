@@ -23,6 +23,7 @@ public class Articulos {
         this.id = id;
     }
 
+
     public int getId() {
         return id;
     }

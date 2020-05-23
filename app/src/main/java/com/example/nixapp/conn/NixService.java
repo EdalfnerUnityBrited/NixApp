@@ -24,8 +24,10 @@ import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
 import com.example.nixapp.conn.results.NotificationsResult;
 import com.example.nixapp.conn.results.PaqueteResult;
+import com.example.nixapp.conn.results.PaquetesListResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 import com.example.nixapp.conn.results.ServicioResult;
+import com.example.nixapp.conn.results.ServiciosListResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
 
@@ -164,4 +166,31 @@ public interface NixService {
 
     @POST("proveedor/articuloServicio")
     Call<ArticulosListResult> articulosServicio(@Body Articulos articulos);
+
+    @POST("proveedor/paqueteServicio")
+    Call<PaquetesListResult> paquetesServicio(@Body Articulos articulos);
+
+    @GET("proveedor/usuarioServicio")
+    Call<ServiciosListResult> servicioUsuario();
+
+    @POST("proveedor/serviceId")
+    Call<ServicioResult> servicioId(@Body Articulos articulos);
+
+    @POST("proveedor/actualizarServicio")
+    Call<ServicioResult> actualizarServicio(@Body CatalogoServicios catalogoServicios);
+
+    @POST("proveedor/articuloId")
+    Call<ArticuloResult> articuloId(@Body Articulos articulos);
+
+    @POST("proveedor/actualizarArticulo")
+    Call<ArticuloResult> actualizarArticulos(@Body Articulos articulos);
+
+    @POST("proveedor/borrarArticulo")
+    Call<ResponseBody> borrarArticulo(@Body Articulos articulos);
+
+    @POST("proveedor/borrarServicio")
+    Call<ResponseBody> borrarServicio(@Body CatalogoServicios articulos);
+
+    @POST("proveedor/borrarPaquete")
+    Call<ResponseBody> borrarPaquete(@Body Paquetes articulos);
 }

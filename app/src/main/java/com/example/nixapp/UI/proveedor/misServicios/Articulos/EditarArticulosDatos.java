@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.proveedor.misServicios;
+package com.example.nixapp.UI.proveedor.misServicios.Articulos;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,13 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.ImagenArticulo;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.ViewPagerAdapter;
-import com.example.nixapp.UI.usuario.misEventos.CrearEvento;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticuloResult;
@@ -49,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrearArticulosDatos extends AppCompatActivity {
+public class EditarArticulosDatos extends AppCompatActivity {
 
     private StorageReference mStorage;
     private ProgressDialog mProgressDialog;
@@ -103,17 +100,17 @@ public class CrearArticulosDatos extends AppCompatActivity {
                 String descripcionArticulo= descripcion.getText().toString();
                 String precio= costo.getText().toString();
                 String precioPorArticulo= precio_por.getSelectedItem().toString();
-                mProgressDialog.setTitle("Creando articulo...");
+                mProgressDialog.setTitle("Actualizando articulo...");
                 mProgressDialog.setMessage("Por favor espere");
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
-                Articulos articulos = new Articulos(nombreArticulo,descripcionArticulo,precioPorArticulo,precio,cat,idArticulo);
-                Call<ArticuloResult> call= nixService.nuevoArticulo(articulos);
+                Articulos articulos = new Articulos(nombreArticulo,descripcionArticulo,precioPorArticulo,precio,cat,1,idArticulo);
+                Call<ArticuloResult> call= nixService.actualizarArticulos(articulos);
                 call.enqueue(new Callback<ArticuloResult>() {
                     @Override
                     public void onResponse(Call<ArticuloResult> call, Response<ArticuloResult> response) {
                         if (response.isSuccessful()){
-                            Toast.makeText(CrearArticulosDatos.this, "Articulo añadido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarArticulosDatos.this, "Articulo actualizado", Toast.LENGTH_SHORT).show();
                             arti= response.body().articulo;
                             if (!fotos.isEmpty()){
                                 for (String imagenes: fotos){
@@ -125,10 +122,10 @@ public class CrearArticulosDatos extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                        if (response.isSuccessful()){
-                                           Toast.makeText(CrearArticulosDatos.this, "Imagenes añadidas", Toast.LENGTH_SHORT).show();
+                                           Toast.makeText(EditarArticulosDatos.this, "Imagenes añadidas", Toast.LENGTH_SHORT).show();
                                        }
                                        else {
-                                           Toast.makeText(CrearArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                           Toast.makeText(EditarArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
                                            Log.i("error", response.errorBody().toString());
                                        }
                                     }
@@ -142,7 +139,7 @@ public class CrearArticulosDatos extends AppCompatActivity {
                             mProgressDialog.dismiss();
                         }
                         else{
-                            Toast.makeText(CrearArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
                             Log.i("error",response.errorBody().toString());
                             mProgressDialog.dismiss();
                         }
@@ -199,6 +196,29 @@ public class CrearArticulosDatos extends AppCompatActivity {
             }
         });
 
+        /////////////////////////
+        Articulos articulos= new Articulos(idArticulo);
+        Call<ArticuloResult> call = nixService.articuloId(articulos);
+        call.enqueue(new Callback<ArticuloResult>() {
+            @Override
+            public void onResponse(Call<ArticuloResult> call, Response<ArticuloResult> response) {
+                if (response.isSuccessful()){
+                    
+                    Articulos arti= response.body().articulo;
+                    nombre.setText(arti.getNombre());
+                    costo.setText(arti.getPrecio());
+                    descripcion.setText(arti.getDescripcion());
+                }
+                else{
+                    Toast.makeText(EditarArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArticuloResult> call, Throwable t) {
+
+            }
+        });
     }
     private void retrofitinit() {
         nixClient= NixClient.getInstance();
@@ -222,12 +242,12 @@ public class CrearArticulosDatos extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             String message = e.toString();
-                            Toast.makeText(CrearArticulosDatos.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarArticulosDatos.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(CrearArticulosDatos.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditarArticulosDatos.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
                             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                 @Override
                                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {

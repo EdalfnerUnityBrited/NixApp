@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.proveedor.misServicios;
+package com.example.nixapp.UI.proveedor.misServicios.Articulos;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,17 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Articulos;
-import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.proveedor.misServicios.Articulos.ArticuloFragment;
-import com.example.nixapp.UI.proveedor.misServicios.Articulos.ArticuloRecyclerViewAdapter;
+import com.example.nixapp.UI.proveedor.misServicios.CrearServicioMenu;
+import com.example.nixapp.UI.proveedor.misServicios.Paquetes.CrearPaquetesDatos;
 import com.example.nixapp.UI.proveedor.misServicios.Paquetes.PaqueteRecyclerViewAdapter;
 import com.example.nixapp.UI.proveedor.misServicios.Paquetes.PaquetesFragment;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
-import com.example.nixapp.conn.results.ServiciosListResult;
+import com.example.nixapp.conn.results.ArticulosListResult;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -35,38 +34,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CrearServiciosFragmentProveedor extends Fragment {
+public class ArticuloFragment extends Fragment {
     NixService nixService;
     NixClient nixClient;
-    List<CatalogoServicios> serviciosList;
+    List<Articulos> articulosList;
     RecyclerView recyclerView;
-    ServiciosRecyclerViewAdapter adapterEventos;
+    ArticuloRecyclerViewAdapter adapterEventos;
     Eventos eventos;
-    private CrearServiciosFragmentProveedor.OnListFragmentInteractionListener mListener;
+    private ArticuloFragment.OnListFragmentInteractionListener mListener;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_crear_servicios_proveedor,container,false);
-        FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.nuevo_servicio);
-        recyclerView= view.findViewById(R.id.serviciosRecycler);
-        serviciosList= new ArrayList<>();
-        retrofitInit();
+        View view = inflater.inflate(R.layout.fragment_articulo_proveedor,container,false);
+        FloatingActionButton actionButton = (FloatingActionButton) view.findViewById(R.id.nuevo_articulo);
+        recyclerView= view.findViewById(R.id.recyclerUserEvents);
+        articulosList= new ArrayList<>();
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentCrearServicioMenu = new Intent(getActivity(), CrearServicioMenu.class);
-                intentCrearServicioMenu.putExtra("id",0);
-                startActivity(intentCrearServicioMenu);
+                if (CrearServicioMenu.servicio!=0){
+                Intent intentArticulo = new Intent(getActivity(), CrearArticulosDatos.class);
+                intentArticulo.putExtra("id",CrearServicioMenu.servicio);
+                startActivity(intentArticulo);
+                }
+                else{
+                    Toast.makeText(getActivity(), "Debes haber creado un servicio primero", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        Call<ServiciosListResult> call = nixService.servicioUsuario();
-        call.enqueue(new Callback<ServiciosListResult>() {
+        retrofitInit();
+        Articulos articulos= new Articulos(CrearServicioMenu.servicio);
+        Call<ArticulosListResult> call = nixService.articulosServicio(articulos);
+        call.enqueue(new Callback<ArticulosListResult>() {
             @Override
-            public void onResponse(Call<ServiciosListResult> call, Response<ServiciosListResult> response) {
+            public void onResponse(Call<ArticulosListResult> call, Response<ArticulosListResult> response) {
                 if (response.isSuccessful()){
-                    Toast.makeText(getActivity(), "Servicios obtenidos correctamente", Toast.LENGTH_SHORT).show();
-                    serviciosList=  response.body().servicios;
-                    adapterEventos=  new ServiciosRecyclerViewAdapter(serviciosList, mListener);
+                    articulosList=response.body().articulos;
+                    adapterEventos=  new ArticuloRecyclerViewAdapter(articulosList, mListener);
                     recyclerView.setAdapter(adapterEventos);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
@@ -76,7 +80,7 @@ public class CrearServiciosFragmentProveedor extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ServiciosListResult> call, Throwable t) {
+            public void onFailure(Call<ArticulosListResult> call, Throwable t) {
 
             }
         });
@@ -88,15 +92,15 @@ public class CrearServiciosFragmentProveedor extends Fragment {
     }
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(CatalogoServicios item);
-        void onClickDelete(CatalogoServicios item);
-        void onClickEdit(CatalogoServicios item);
+        void onListFragmentInteraction(Articulos item);
+        void onClickDelete(Articulos item);
+        void onClickEdit(Articulos item);
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CrearServiciosFragmentProveedor.OnListFragmentInteractionListener) {
-            mListener = (CrearServiciosFragmentProveedor.OnListFragmentInteractionListener) context;
+        if (context instanceof ArticuloFragment.OnListFragmentInteractionListener) {
+            mListener = (ArticuloFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");

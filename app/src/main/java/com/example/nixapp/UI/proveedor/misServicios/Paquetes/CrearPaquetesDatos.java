@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.proveedor.misServicios;
+package com.example.nixapp.UI.proveedor.misServicios.Paquetes;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -22,15 +22,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Articulos;
-import com.example.nixapp.DB.ImagenArticulo;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.ImagenPaquete;
 import com.example.nixapp.DB.PaqueteArticulo;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.misEventos.CrearEvento;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticulosListResult;
