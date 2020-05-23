@@ -28,7 +28,7 @@ public class ServiciosBuscarRecyclerViewAdapter extends RecyclerView.Adapter<Ser
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_articulos_servicios_list, parent, false);
+                .inflate(R.layout.fragment_articulos_servicios_list_buscar, parent, false);
         return new ViewHolder(view);
 
         
@@ -62,15 +62,12 @@ public class ServiciosBuscarRecyclerViewAdapter extends RecyclerView.Adapter<Ser
         public final View mView;
         public final TextView nombre;
         public final ImageView eventImage;
-        public  final Button btnBorrar, btnEditar;
         public CatalogoServicios mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
            nombre = view.findViewById(R.id.textViewTitulo);
-           btnBorrar=view.findViewById(R.id.buttonDelete);
-           btnEditar=view.findViewById(R.id.buttonEdit);
         eventImage=view.findViewById(R.id.imageViewEvento);
 
 
