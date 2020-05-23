@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.usuario.misEventos.BusquedaEventos;
+package com.example.nixapp.UI.usuario.misEventos.BusquedaServicios;
 
 public class ServiciosItems {
     private String mEventName;

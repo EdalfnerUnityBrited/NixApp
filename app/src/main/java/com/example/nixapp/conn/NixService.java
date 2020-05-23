@@ -2,6 +2,9 @@ package com.example.nixapp.conn;
 
 import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.Busqueda;
+import com.example.nixapp.DB.BusquedaArticulos;
+import com.example.nixapp.DB.BusquedaPaquetes;
+import com.example.nixapp.DB.BusquedaServicios;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenArticulo;
@@ -193,4 +196,13 @@ public interface NixService {
 
     @POST("proveedor/borrarPaquete")
     Call<ResponseBody> borrarPaquete(@Body Paquetes articulos);
+
+    @POST("proveedor/buscarServicio")
+    Call<ServiciosListResult> buscarServicio(@Body BusquedaServicios busquedaServicios);
+
+    @POST("proveedor/buscarPaquete")
+    Call<PaquetesListResult> buscarPaquete(@Body BusquedaPaquetes busquedaPaquetes);
+
+    @POST("proveedor/buscarArticulo")
+    Call<ArticulosListResult> buscarArticulos(@Body BusquedaArticulos busquedaArticulos);
 }

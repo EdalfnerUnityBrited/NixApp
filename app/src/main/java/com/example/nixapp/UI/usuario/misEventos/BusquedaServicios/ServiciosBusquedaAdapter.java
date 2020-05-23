@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.usuario.misEventos.BusquedaEventos;
+package com.example.nixapp.UI.usuario.misEventos.BusquedaServicios;
 
 import android.content.Context;
 import android.view.LayoutInflater;

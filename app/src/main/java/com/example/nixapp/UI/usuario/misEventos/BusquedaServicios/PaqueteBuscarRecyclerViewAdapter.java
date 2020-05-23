@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.usuario.misEventos.BusquedaEventos;
+package com.example.nixapp.UI.usuario.misEventos.BusquedaServicios;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +10,19 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.proveedor.misServicios.Paquetes.PaquetesFragment;
 
 import java.util.List;
 
-import static com.example.nixapp.R.drawable.ic_privado;
-import static com.example.nixapp.R.drawable.ic_public;
+public class PaqueteBuscarRecyclerViewAdapter extends RecyclerView.Adapter<PaqueteBuscarRecyclerViewAdapter.ViewHolder> {
 
-public class ServiciosRecyclerViewAdapter extends RecyclerView.Adapter<ServiciosRecyclerViewAdapter.ViewHolder> {
-
-    private final List<Eventos> mValues;
+    private final List<Paquetes> mValues;
     private final BuscarServicios.OnListFragmentInteractionListener mListener;
 
-    public ServiciosRecyclerViewAdapter(List<Eventos> items, BuscarServicios.OnListFragmentInteractionListener listener) {
+    public PaqueteBuscarRecyclerViewAdapter(List<Paquetes> items, BuscarServicios.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -31,7 +30,7 @@ public class ServiciosRecyclerViewAdapter extends RecyclerView.Adapter<Servicios
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_eventosbuscar_list, parent, false);
+                .inflate(R.layout.fragment_paquetes_list, parent, false);
         return new ViewHolder(view);
 
         
@@ -40,33 +39,22 @@ public class ServiciosRecyclerViewAdapter extends RecyclerView.Adapter<Servicios
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.nombre.setText(String.valueOf(holder.mItem.getNombre_evento()));
-        holder.statusUsuario.setText(String.valueOf(holder.mItem.getFecha()));
-        holder.direccion.setText(String.valueOf(holder.mItem.getLugar()));
-        holder.cupo.setText(String.valueOf(holder.mItem.getCupo())+" Personas");
-        if (holder.mItem.getPrivacidad()==0){
-            holder.privacidad.setImageResource(ic_public);
-        }
-        else {
-            holder.privacidad.setImageResource(ic_privado);
-        }
+        holder.nombre.setText(String.valueOf(holder.mItem.getNombre()));
         Glide.with(holder.eventImage)
-                .load(String.valueOf(holder.mItem.getFotoPrincipal()))
+                .load(String.valueOf(holder.mItem.getFotoPaquete()))
                 .into(holder.eventImage);
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.nombre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onPaqueteFragmentInteraction(holder.mItem);
                 }
 
 
             }
         });
-
     }
 
     @Override
@@ -77,21 +65,15 @@ public class ServiciosRecyclerViewAdapter extends RecyclerView.Adapter<Servicios
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView nombre;
-        public final TextView statusUsuario, direccion, cupo;
-        public final ImageView eventImage, privacidad;
-        public  final Button btnBorrar, btnEditar;
-        public Eventos mItem;
+        public final ImageView eventImage;
+        public  final Button btnBorrar;
+        public Paquetes mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
            nombre = view.findViewById(R.id.textViewTitulo);
-           statusUsuario= view.findViewById(R.id.textViewFecha);
-           direccion=view.findViewById(R.id.textViewContenido);
-           privacidad= view.findViewById(R.id.textViewPrivacidad);
-           cupo= view.findViewById(R.id.textViewCupo);
            btnBorrar=view.findViewById(R.id.buttonDelete);
-           btnEditar=view.findViewById(R.id.buttonEdit);
         eventImage=view.findViewById(R.id.imageViewEvento);
 
 

@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.usuario.misEventos.BusquedaEventos;
+package com.example.nixapp.UI.usuario.misEventos.BusquedaServicios;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +26,7 @@ public class ServiciosBusquedaFragment extends Fragment implements View.OnClickL
     View view;
     RecyclerView recyclerView;
     List<Eventos> eventosList;
-    ServiciosRecyclerViewAdapter adapterEventos;
+    ServiciosBuscarRecyclerViewAdapter adapterEventos;
     NixService nixService;
     NixClient nixClient;
     Eventos eventos;

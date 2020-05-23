@@ -31,6 +31,9 @@
             android:name=".UI.proveedor.misServicios.Articulos.EditarArticulosDatos"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".UI.usuario.misEventos.BusquedaServicios.BuscarServicios"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".UI.proveedor.misServicios.MisServiciosProveedor"
             android:screenOrientation="portrait" />
         <activity
