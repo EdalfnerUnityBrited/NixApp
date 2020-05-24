@@ -77,34 +77,34 @@ public class BusquedaFiltrosServicio extends AppCompatActivity {
                     String preciomin=precioMinArt.getText().toString();
                     String preciomax=precioMaxArt.getText().toString();
                     if (preciomin.isEmpty()){
-                        precioMin="";
+                        preciomin="";
                     }
                     if (preciomax.isEmpty()){
-                        precioMax="";
+                        preciomax="";
                     }
 
                     Intent busqueda = new Intent(getApplicationContext(), BuscarServicios.class);
                     busqueda.putExtra("tipo",2);
                     busqueda.putExtra("categoriaArticulo",categoria_articulo);
-                    busqueda.putExtra("precioFin",precioMax);
-                    busqueda.putExtra("precioIni",precioMin);
+                    busqueda.putExtra("precioFin",preciomax);
+                    busqueda.putExtra("precioIni",preciomin);
                     startActivity(busqueda);
                     finish();
                 }
                 else if (filt_p.isChecked()){
-                    String preciomin=precioMinArt.getText().toString();
-                    String preciomax=precioMaxArt.getText().toString();
+                    String preciomin=precioMinPaq.getText().toString();
+                    String preciomax=precioMaxpaq.getText().toString();
                     if (preciomin.isEmpty()){
-                        precioMin="";
+                        preciomin="";
                     }
                     if (preciomax.isEmpty()){
-                        precioMax="";
+                        preciomax="";
                     }
 
                     Intent busqueda = new Intent(getApplicationContext(), BuscarServicios.class);
                     busqueda.putExtra("tipo",1);
-                    busqueda.putExtra("precioFin",precioMax);
-                    busqueda.putExtra("precioIni",precioMin);
+                    busqueda.putExtra("precioFin",preciomax);
+                    busqueda.putExtra("precioIni",preciomin);
                     startActivity(busqueda);
                     finish();
                 }
