@@ -1,11 +1,23 @@
 package com.example.nixapp.conn;
 
+import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.Busqueda;
+import com.example.nixapp.DB.BusquedaArticulos;
+import com.example.nixapp.DB.BusquedaPaquetes;
+import com.example.nixapp.DB.BusquedaServicios;
+import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.ImagenArticulo;
 import com.example.nixapp.DB.ImagenEventos;
+import com.example.nixapp.DB.ImagenPaquete;
 import com.example.nixapp.DB.Pagos;
+import com.example.nixapp.DB.PaqueteArticulo;
+import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.DB.Prospectos;
 import com.example.nixapp.DB.Usuario;
+import com.example.nixapp.DB.ZonaServicio;
+import com.example.nixapp.conn.results.ArticuloResult;
+import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.EventosListResult;
@@ -14,12 +26,17 @@ import com.example.nixapp.conn.results.EventosTodosResult;
 import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.LoginResult;
 import com.example.nixapp.conn.results.NotificationsResult;
+import com.example.nixapp.conn.results.PaqueteResult;
+import com.example.nixapp.conn.results.PaquetesListResult;
 import com.example.nixapp.conn.results.ProspectosResult;
+import com.example.nixapp.conn.results.ServicioResult;
+import com.example.nixapp.conn.results.ServiciosListResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
 
 import java.util.List;
 
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -128,4 +145,64 @@ public interface NixService {
 
     @POST("eventos/invitados")
     Call<UsuarioListResult> confirmados (@Body Eventos eventos);
+
+    @POST("proveedor/articulo")
+    Call<ArticuloResult> nuevoArticulo(@Body Articulos articulos);
+
+    @POST("proveedor/nuevoServicio")
+    Call<ServicioResult> crearServicio(@Body CatalogoServicios catalogoServicios);
+
+    @POST("proveedor/zonaServicio")
+    Call<ResponseBody> munServicio(@Body List<ZonaServicio> zonaServicio);
+
+    @POST("imagen/articulo")
+    Call<ResponseBody> imagenArticulo(@Body List<ImagenArticulo> imagenArticulos);
+
+    @POST("proveedor/paquete")
+    Call<PaqueteResult> nuevoPaquete(@Body Paquetes paquetes);
+
+    @POST("imagen/paquete")
+    Call<ResponseBody> imagenPaquete(@Body List<ImagenPaquete> imagenPaquetes);
+
+    @POST("proveedor/paqueteArticulo")
+    Call<ResponseBody> paqueteArticulo(@Body List<PaqueteArticulo> paqueteArticulos);
+
+    @POST("proveedor/articuloServicio")
+    Call<ArticulosListResult> articulosServicio(@Body Articulos articulos);
+
+    @POST("proveedor/paqueteServicio")
+    Call<PaquetesListResult> paquetesServicio(@Body Articulos articulos);
+
+    @GET("proveedor/usuarioServicio")
+    Call<ServiciosListResult> servicioUsuario();
+
+    @POST("proveedor/serviceId")
+    Call<ServicioResult> servicioId(@Body Articulos articulos);
+
+    @POST("proveedor/actualizarServicio")
+    Call<ServicioResult> actualizarServicio(@Body CatalogoServicios catalogoServicios);
+
+    @POST("proveedor/articuloId")
+    Call<ArticuloResult> articuloId(@Body Articulos articulos);
+
+    @POST("proveedor/actualizarArticulo")
+    Call<ArticuloResult> actualizarArticulos(@Body Articulos articulos);
+
+    @POST("proveedor/borrarArticulo")
+    Call<ResponseBody> borrarArticulo(@Body Articulos articulos);
+
+    @POST("proveedor/borrarServicio")
+    Call<ResponseBody> borrarServicio(@Body CatalogoServicios articulos);
+
+    @POST("proveedor/borrarPaquete")
+    Call<ResponseBody> borrarPaquete(@Body Paquetes articulos);
+
+    @POST("proveedor/buscarServicio")
+    Call<ServiciosListResult> buscarServicio(@Body BusquedaServicios busquedaServicios);
+
+    @POST("proveedor/buscarPaquete")
+    Call<PaquetesListResult> buscarPaquete(@Body BusquedaPaquetes busquedaPaquetes);
+
+    @POST("proveedor/buscarArticulo")
+    Call<ArticulosListResult> buscarArticulos(@Body BusquedaArticulos busquedaArticulos);
 }

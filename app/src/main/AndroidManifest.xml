@@ -20,11 +20,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.proveedor.misServicios.CrearServicioMenu"></activity>
-        <activity android:name=".UI.proveedor.misServicios.CrearServicio" />
+        <activity android:name=".UI.usuario.misEventos.BusquedaServicios.BusquedaFiltrosServicio"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".UI.proveedor.misServicios.Paquetes.CrearPaquetesDatos"></activity>
+        <activity android:name=".UI.proveedor.misServicios.Articulos.CrearArticulosDatos" />
+        <activity android:name=".UI.proveedor.misServicios.CrearServicioMenu" />
         <activity android:name=".UI.usuario.creadorInvitaciones.Plantillas" />
         <activity
             android:name=".UI.proveedor.serviciosProximos.ServiciosProximosProveedor"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UI.proveedor.misServicios.Articulos.EditarArticulosDatos"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UI.usuario.misEventos.BusquedaServicios.BuscarServicios"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UI.proveedor.misServicios.MisServiciosProveedor"

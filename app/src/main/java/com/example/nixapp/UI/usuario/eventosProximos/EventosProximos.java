@@ -87,13 +87,46 @@ public class EventosProximos extends AppCompatActivity implements EventosProximo
 
     @Override
     public void onListFragmentInteraction(Eventos item) {
-        Toast.makeText(this, "Me seleccionaste", Toast.LENGTH_SHORT).show();
+
+
+        Busqueda busqueda= new Busqueda(item.getId());
+        Call<EventosResult> call= nixService.getEventId(busqueda);
+        call.enqueue(new Callback<EventosResult>() {
+            @Override
+            public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
+                if (response.isSuccessful()){
+                    eventos= response.body().eventos;
+                    Intent intentInfoExpandida = new Intent(EventosProximos.this, InfoEventoExpandida.class);
+                    intentInfoExpandida.putExtra("nombre",eventos.getNombre_evento());
+                    intentInfoExpandida.putExtra("privacidad",eventos.getPrivacidad());
+                    intentInfoExpandida.putExtra("categoria",eventos.getCategoria_evento());
+                    intentInfoExpandida.putExtra("fecha",eventos.getFecha());
+                    intentInfoExpandida.putExtra("hora",eventos.getHora());
+                    intentInfoExpandida.putExtra("lugar",eventos.getLugar());
+                    intentInfoExpandida.putExtra("descripcion",eventos.getDescripcion());
+                    intentInfoExpandida.putExtra("cupo",eventos.getCupo());
+                    intentInfoExpandida.putExtra("cover",eventos.getCover());
+                    intentInfoExpandida.putExtra("fotoPrincipal",eventos.getFotoPrincipal());
+                    intentInfoExpandida.putExtra("id",eventos.getId());
+                    intentInfoExpandida.putExtra("municipio",eventos.getMunicipio());
+                    startActivity(intentInfoExpandida);
+                }
+                else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EventosResult> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
     public void onNotificationFragmentInteraction(Notificaciones item) {
         Notificaciones notificaciones= item;
-        if (notificaciones.getTipoNotificacion()==3){
+        if (notificaciones.getTipoNotificacion()==3||notificaciones.getTipoNotificacion()==4){
 
         }
         else{

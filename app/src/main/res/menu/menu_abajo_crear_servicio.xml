@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_infoservicio_menu"
-        android:icon="@drawable/ic_serviciosproximos"
+        android:icon="@drawable/ic_info_servicio_creado"
         android:title="Info"></item>
     <item android:id="@+id/nav_articulos"
         android:icon="@drawable/ic_guardados"
         android:title="Articulos"></item>
     <item android:id="@+id/nav_paquetes"
-        android:icon="@drawable/ic_chats"
+        android:icon="@drawable/ic_nuevo_paquete"
         android:title="Paquetes"></item>
 </menu>

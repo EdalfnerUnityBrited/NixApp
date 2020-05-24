@@ -39,6 +39,7 @@ import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
+import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.BuscarServicios;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -555,7 +556,8 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         catalogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i= new Intent(CrearEvento.this, MainActivity.class);
+                Intent i= new Intent(CrearEvento.this, BuscarServicios.class);
+                i.putExtra("categoria",categoria_evento);
                 startActivity(i);
             }
         });

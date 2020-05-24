@@ -48,6 +48,7 @@
         <item>Deciembre</item>
     </array>
     <string name="listaBase">Elige un municipio</string>
+    <string name="listaCatArt">Elige una Categoria</string>
     <string-array name="listaMunicipios">
         <item>Acatic</item>
         <item>Ameca</item>
@@ -77,6 +78,23 @@
         <item>Tototlan</item>
         <item>Zapopan</item>
         <item>Zapotlanejo</item>
+
+    </string-array>
+    <string-array name="Articulos">
+        <item>Elige un articulo para agregar</item>
+        <item>Tacos</item>
+        <item>Camote</item>
+        <item>Chorizo</item>
+        <item>Venado</item>
+        <item>Dulces</item>
+        <item>Ajolotes</item>
+
+    </string-array>
+    <string-array name="Precio_por">
+        <item>Elige tipo de precio</item>
+        <item>Por Cantidad</item>
+        <item>Por Hora</item>
+        <item>Por persona</item>
 
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -127,6 +128,7 @@ public class WelcomeActivity extends FragmentActivity implements OnMapReadyCallb
                     Toast.makeText(WelcomeActivity.this,
                             "Revisa tu conexion a internet.\n Intentalo de nuevo mas tarde",
                             Toast.LENGTH_SHORT).show();
+                    Log.i("error",response.errorBody().toString());
                 }
             }
 
@@ -135,6 +137,7 @@ public class WelcomeActivity extends FragmentActivity implements OnMapReadyCallb
                 Toast.makeText(WelcomeActivity.this,
                         "Revisa tu conexion a internet.\n Intentalo de nuevo mas tarde",
                         Toast.LENGTH_SHORT).show();
+                Log.i("error",t.getMessage());
             }
         });
 

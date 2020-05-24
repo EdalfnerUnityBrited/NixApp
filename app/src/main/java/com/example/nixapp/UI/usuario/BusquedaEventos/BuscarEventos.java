@@ -23,10 +23,13 @@ import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.Calendario.CalendarioReciclerview;
+import com.example.nixapp.UI.usuario.InfoEventoExpandida;
+import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;
 import com.example.nixapp.UI.usuario.misEventos.EventosCerradosFragment;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosListResult;
+import com.example.nixapp.conn.results.EventosResult;
 
 import java.util.List;
 
@@ -44,6 +47,7 @@ public class BuscarEventos extends AppCompatActivity{
     private NixClient nixClient;
     public List<Eventos> eventosList;
     private RecyclerView recyclerView;
+    Eventos eventos;
     EventosRecyclerViewAdapter adapterEventos;
     private BuscarEventos.OnListFragmentInteractionListener mListener;
     @Override
@@ -115,7 +119,39 @@ public class BuscarEventos extends AppCompatActivity{
                             adapterEventos = new EventosRecyclerViewAdapter(eventosList, new OnListFragmentInteractionListener() {
                                 @Override
                                 public void onListFragmentInteraction(Eventos item) {
-                                    Toast.makeText(BuscarEventos.this, "Me has apretado", Toast.LENGTH_SHORT).show();
+
+                                    Busqueda busqueda= new Busqueda(item.getId());
+                                    Call<EventosResult> call= nixService.getEventId(busqueda);
+                                    call.enqueue(new Callback<EventosResult>() {
+                                        @Override
+                                        public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
+                                            if (response.isSuccessful()){
+                                                eventos= response.body().eventos;
+                                                Intent intentInfoExpandida = new Intent(BuscarEventos.this, InfoEventoExpandida.class);
+                                                intentInfoExpandida.putExtra("nombre",eventos.getNombre_evento());
+                                                intentInfoExpandida.putExtra("privacidad",eventos.getPrivacidad());
+                                                intentInfoExpandida.putExtra("categoria",eventos.getCategoria_evento());
+                                                intentInfoExpandida.putExtra("fecha",eventos.getFecha());
+                                                intentInfoExpandida.putExtra("hora",eventos.getHora());
+                                                intentInfoExpandida.putExtra("lugar",eventos.getLugar());
+                                                intentInfoExpandida.putExtra("descripcion",eventos.getDescripcion());
+                                                intentInfoExpandida.putExtra("cupo",eventos.getCupo());
+                                                intentInfoExpandida.putExtra("cover",eventos.getCover());
+                                                intentInfoExpandida.putExtra("fotoPrincipal",eventos.getFotoPrincipal());
+                                                intentInfoExpandida.putExtra("id",eventos.getId());
+                                                intentInfoExpandida.putExtra("municipio",eventos.getMunicipio());
+                                                startActivity(intentInfoExpandida);
+                                            }
+                                            else{
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<EventosResult> call, Throwable t) {
+
+                                        }
+                                    });
                                 }
 
                                 @Override
