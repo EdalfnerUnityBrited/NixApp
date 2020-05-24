@@ -81,17 +81,17 @@
                             android:textColor="@color/white"
                             android:textSize="20sp" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/nombre"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
                             android:hint="Servicio Genial"
                             android:inputType="textPersonName"
+                            android:maxLength="30"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
-                            android:textSize="20dp"
-                            android:maxLength="30"/>
+                            android:textSize="20dp" />
                     </TableRow>
                 </LinearLayout>
 
@@ -145,17 +145,17 @@
                             android:textColor="@color/white"
                             android:textSize="20sp" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/direccion_nuevoservicio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
                             android:hint="Calle: ---- 111, Col: -----"
                             android:inputType="textPersonName"
+                            android:maxLength="100"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
-                            android:textSize="20dp"
-                            android:maxLength="100"/>
+                            android:textSize="20dp" />
                     </TableRow>
 
                 </LinearLayout>
@@ -222,17 +222,17 @@
                             android:textSize="20sp"
                             />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/telefonoProveedor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
                             android:hint="3314633635"
-                            android:textSize="20sp"
                             android:inputType="phone"
+                            android:maxLength="10"
                             android:textColor="@color/white"
                             android:textColorHint="@color/white"
-                            android:backgroundTint="@color/white"
-                            android:maxLength="10"/>
+                            android:textSize="20sp" />
 
 
                     </TableRow>
@@ -259,17 +259,17 @@
                             android:textColor="@color/white"
                             android:textSize="20sp" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/nombre_p"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
                             android:hint="Paquito BB"
                             android:inputType="textPersonName"
+                            android:maxLength="50"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
-                            android:textSize="20dp"
-                            android:maxLength="50"/>
+                            android:textSize="20dp" />
                     </TableRow>
                 </LinearLayout>
                 <LinearLayout
@@ -449,13 +449,13 @@
                             android:textColor="@color/white"
                             android:textSize="20dp" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/hora_inicio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
-                            android:text="14:00"
                             android:inputType="textPersonName"
+                            android:text="14:00"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
                             android:textSize="20sp" />
@@ -469,13 +469,13 @@
                             android:textSize="20dp"
                             android:backgroundTint="@color/white"/>
 
-                        <EditText
+                        <TextView
                             android:id="@+id/hora_final"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
-                            android:text="01:00"
                             android:inputType="textPersonName"
+                            android:text="01:00"
                             android:textColor="#FFFFFF"
                             android:textSize="20sp" />
                     </TableRow>

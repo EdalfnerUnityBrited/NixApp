@@ -82,7 +82,7 @@
                     android:textSize="15dp"
                     android:textAlignment="center"
                     android:textColor="@color/colorDescripcion"
-                    android:text="Estos maletines fueron hechos por los antiguos cherookees llenos de puta genialidad donde mataron mles de ciervos <3"/>
+                    android:text="Estos maletines fueron hechos por los antiguos cherookees"/>
 
 
             </LinearLayout>

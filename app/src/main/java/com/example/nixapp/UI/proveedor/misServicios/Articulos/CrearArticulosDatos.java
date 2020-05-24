@@ -104,7 +104,7 @@ public class CrearArticulosDatos extends AppCompatActivity {
                 mProgressDialog.setMessage("Por favor espere");
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
-                Articulos articulos = new Articulos(nombreArticulo,descripcionArticulo,precioPorArticulo,precio,cat,idArticulo);
+                Articulos articulos = new Articulos(nombreArticulo,descripcionArticulo,precioPorArticulo,precio,imagenPrincipal,cat,idArticulo);
                 Call<ArticuloResult> call= nixService.nuevoArticulo(articulos);
                 call.enqueue(new Callback<ArticuloResult>() {
                     @Override

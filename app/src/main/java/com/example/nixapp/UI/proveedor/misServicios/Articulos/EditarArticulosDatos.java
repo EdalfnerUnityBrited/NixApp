@@ -104,7 +104,7 @@ public class EditarArticulosDatos extends AppCompatActivity {
                 mProgressDialog.setMessage("Por favor espere");
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
-                Articulos articulos = new Articulos(nombreArticulo,descripcionArticulo,precioPorArticulo,precio,cat,1,idArticulo);
+                Articulos articulos = new Articulos(nombreArticulo, descripcionArticulo, precioPorArticulo, precio, imagenPrincipal, cat, idArticulo);
                 Call<ArticuloResult> call= nixService.actualizarArticulos(articulos);
                 call.enqueue(new Callback<ArticuloResult>() {
                     @Override
