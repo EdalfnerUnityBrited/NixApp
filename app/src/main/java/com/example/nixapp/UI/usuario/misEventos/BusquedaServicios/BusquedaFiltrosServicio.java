@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,20 +31,23 @@ public class BusquedaFiltrosServicio extends AppCompatActivity {
     private ArrayList<ServiciosItems> mEventsList;
     private ServiciosAdapter mAdapter;
     CheckBox filt_s,filt_a,filt_p;
-    int categoria_evento;
-    String fechaInicio, fechaFinal, cover, cupo, municipio;
+    int categoria_evento, categoria_articulo;
+    String precioMin, precioMax;
     Spinner spinner;
+    EditText precioMinArt, precioMaxArt, precioMinPaq,precioMaxpaq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtros_servicios);
+        precioMinArt= findViewById(R.id.precio_minArt);
+        precioMaxArt=findViewById(R.id.precio_maxArt);
+        precioMinPaq=findViewById(R.id.precio_minPaq);
+        precioMaxpaq=findViewById(R.id.precio_maxPaq);
 
-        cupo="";
-        cover="";
-        fechaInicio="";
-        fechaFinal="";
-        municipio="";
+
+        precioMin="";
+        precioMax="";
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,19 +64,51 @@ public class BusquedaFiltrosServicio extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
 
                 Toast.makeText(getApplicationContext(), "Filtros Aplicados", Toast.LENGTH_SHORT).show();
-                municipio=spinner.getSelectedItem().toString();
-                if (municipio.equals("Elige un municipio:")){
-                    municipio="";
+
+                if (filt_s.isChecked()){
+
+                    Intent busqueda = new Intent(getApplicationContext(), BuscarServicios.class);
+                    busqueda.putExtra("tipo",0);
+                    busqueda.putExtra("categoria", categoria_evento);
+                    startActivity(busqueda);
+                    finish();
                 }
-                Intent busqueda = new Intent(getApplicationContext(), BuscarServicios.class);
-                busqueda.putExtra("municipio", municipio);
-                busqueda.putExtra("categoria", categoria_evento);
-                busqueda.putExtra("fechaInicio",fechaInicio);
-                busqueda.putExtra("fechaFinal", fechaFinal);
-                busqueda.putExtra("cupo",cupo);
-                busqueda.putExtra("cover",cover);
-                startActivity(busqueda);
-                finish();
+                else if (filt_a.isChecked()){
+                    String preciomin=precioMinArt.getText().toString();
+                    String preciomax=precioMaxArt.getText().toString();
+                    if (preciomin.isEmpty()){
+                        precioMin="";
+                    }
+                    if (preciomax.isEmpty()){
+                        precioMax="";
+                    }
+
+                    Intent busqueda = new Intent(getApplicationContext(), BuscarServicios.class);
+                    busqueda.putExtra("tipo",2);
+                    busqueda.putExtra("categoriaArticulo",categoria_articulo);
+                    busqueda.putExtra("precioFin",precioMax);
+                    busqueda.putExtra("precioIni",precioMin);
+                    startActivity(busqueda);
+                    finish();
+                }
+                else if (filt_p.isChecked()){
+                    String preciomin=precioMinArt.getText().toString();
+                    String preciomax=precioMaxArt.getText().toString();
+                    if (preciomin.isEmpty()){
+                        precioMin="";
+                    }
+                    if (preciomax.isEmpty()){
+                        precioMax="";
+                    }
+
+                    Intent busqueda = new Intent(getApplicationContext(), BuscarServicios.class);
+                    busqueda.putExtra("tipo",1);
+                    busqueda.putExtra("precioFin",precioMax);
+                    busqueda.putExtra("precioIni",precioMin);
+                    startActivity(busqueda);
+                    finish();
+                }
+
                 return false;
             }
         });
@@ -118,6 +154,17 @@ public class BusquedaFiltrosServicio extends AppCompatActivity {
         );
         spinnerArrayAdapter.setDropDownViewResource(R.layout.texto_municipios);
         spinner.setAdapter(spinnerArrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categoria_articulo= position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
 

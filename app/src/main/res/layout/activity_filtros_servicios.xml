@@ -166,16 +166,13 @@
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/precio-max"
+                android:id="@+id/precio_maxArt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="3"
-                android:inputType="number"
-                android:hint="400"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:backgroundTint="@color/white"
-                android:layout_marginRight="2dp"/>
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" />
+
             <TextView
                 android:id="@+id/filtroArtprecioMin"
                 android:layout_width="wrap_content"
@@ -185,15 +182,13 @@
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/precio-min"
+                android:id="@+id/precio_minArt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="3"
-                android:inputType="number"
-                android:hint="10"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:backgroundTint="@color/white"/>
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" />
+
         </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="5dp"
@@ -248,16 +243,13 @@
                     android:textStyle="bold"/>
 
                 <EditText
-                    android:id="@+id/precio-max-paq"
+                    android:id="@+id/precio_maxPaq"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="number"
-                    android:hint="400"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:backgroundTint="@color/white"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
                 <TextView
                     android:id="@+id/filtroArtprecioMin-p"
                     android:layout_width="wrap_content"
@@ -267,15 +259,13 @@
                     android:textStyle="bold"/>
 
                 <EditText
-                    android:id="@+id/precio-min-paq"
+                    android:id="@+id/precio_minPaq"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="3"
-                    android:inputType="number"
-                    android:hint="10"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:backgroundTint="@color/white"/>
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
             </LinearLayout>
 
         </LinearLayout>

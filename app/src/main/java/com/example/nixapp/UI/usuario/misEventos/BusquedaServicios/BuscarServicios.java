@@ -98,8 +98,7 @@ public class BuscarServicios extends AppCompatActivity{
         catch (Exception e){
             categoria=5;
         }
-
-        Toast.makeText(this, cupo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Tipo de busqueda"+Integer.toString(tipoBusqueda), Toast.LENGTH_SHORT).show();
         BusquedaServicios busquedaServicios= new BusquedaServicios("",categoria);
         Call<ServiciosListResult> call = nixService.buscarServicio(busquedaServicios);
         call.enqueue(new Callback<ServiciosListResult>() {
@@ -249,7 +248,7 @@ public class BuscarServicios extends AppCompatActivity{
 
                                     }
                                 });
-                                        recyclerView.setAdapter(adapterEventos);
+                                        recyclerView.setAdapter(adapterPaquete);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(BuscarServicios.this));
                             }
                             else{
@@ -268,13 +267,12 @@ public class BuscarServicios extends AppCompatActivity{
                     try {
                         precioIni=(String) getIntent().getSerializableExtra("precioIni");
                         precioFin=(String) getIntent().getSerializableExtra("precioFin");
-                        precioPor=(String) getIntent().getSerializableExtra("precioPor");
                         catArticulo=(int) getIntent().getSerializableExtra("categoriaArticulo");
                     }
                     catch (Exception e){
                         categoria=5;
                     }
-                    BusquedaArticulos busquedaArticulos= new BusquedaArticulos(nombre,precioPor,precioIni,precioFin,catArticulo);
+                    BusquedaArticulos busquedaArticulos= new BusquedaArticulos(nombre,precioIni,precioFin,catArticulo);
                     Call<ArticulosListResult> call= nixService.buscarArticulos(busquedaArticulos);
                     call.enqueue(new Callback<ArticulosListResult>() {
                         @Override
@@ -305,7 +303,7 @@ public class BuscarServicios extends AppCompatActivity{
                                         Toast.makeText(BuscarServicios.this, "Articulo apretado", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                recyclerView.setAdapter(adapterEventos);
+                                recyclerView.setAdapter(adapterArticulo);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(BuscarServicios.this));
                             }
                             else{
