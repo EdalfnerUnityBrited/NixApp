@@ -33,10 +33,10 @@ import com.example.nixapp.conn.results.ServicioResult;
 import com.example.nixapp.conn.results.ServiciosListResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
+import com.example.nixapp.conn.results.ZonaListResult;
 
 import java.util.List;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -205,4 +205,8 @@ public interface NixService {
 
     @POST("proveedor/buscarArticulo")
     Call<ArticulosListResult> buscarArticulos(@Body BusquedaArticulos busquedaArticulos);
+
+    @POST("proveedor/municipioServicio")
+    Call<ZonaListResult> municipiosServicio(@Body Articulos articulos);
+
 }

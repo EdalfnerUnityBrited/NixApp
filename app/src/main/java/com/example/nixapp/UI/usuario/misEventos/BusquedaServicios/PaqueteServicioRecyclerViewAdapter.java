@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
@@ -21,6 +20,7 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
 
     private final List<Paquetes> mValues;
     private final CotizacionServicio.OnListFragmentInteractionListener mListener;
+    String digitos;
 
     public PaqueteServicioRecyclerViewAdapter(List<Paquetes> items, CotizacionServicio.OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -64,6 +64,8 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
+                    holder.CambioDigitoMas();
+                    digitos = String.valueOf(holder.cantidad.getText());
                     mListener.onClickAdd(holder.mItem);
                 }
             }
@@ -74,7 +76,10 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
+                    digitos = String.valueOf(holder.cantidad.getText());
                     mListener.onClickSub(holder.mItem);
+                    holder.CambioDigitoMenos();
+                    digitos = String.valueOf(holder.cantidad.getText());
                 }
             }
         });
@@ -83,6 +88,11 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public String numeros()
+    {
+        return digitos;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -102,16 +112,31 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
         desc= view.findViewById(R.id.idProductPrice);
         precioPor=view.findViewById(R.id.precio_por);
         price=view.findViewById(R.id.idProductWeight);
-        cantidad= view.findViewById(R.id.idProductQty);
+        cantidad= view.findViewById(R.id.numero_pedido);
 
 
         }
 
-
-
         @Override
         public String toString() {
             return super.toString() + " '" + nombre.getText() + "'";
+        }
+
+        public void CambioDigitoMas()
+        {
+            String numeros = String.valueOf(cantidad.getText());
+            int numeroActual = Integer.valueOf(numeros) + 1;
+            cantidad.setText(String.valueOf(numeroActual));
+        }
+        public void CambioDigitoMenos()
+        {
+            String numeros = String.valueOf(cantidad.getText());
+            if(!numeros.equals("0"))
+            {
+                int numeroActual = Integer.valueOf(numeros) - 1;
+                cantidad.setText(String.valueOf(numeroActual));
+            }
+
         }
 
     }
