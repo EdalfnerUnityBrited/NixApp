@@ -15,16 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.Cotizacion;
+import com.example.nixapp.DB.CotizacionArticulo;
+import com.example.nixapp.DB.CotizacionPaquete;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.ArticuloServicioRecyclerViewAdapter;
 import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.PaqueteServicioRecyclerViewAdapter;
+import com.example.nixapp.UI.usuario.misEventos.EditarEvento;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticulosListResult;
+import com.example.nixapp.conn.results.CotizacionResult;
 import com.example.nixapp.conn.results.PaquetesListResult;
 import com.example.nixapp.conn.results.ServicioResult;
 import com.example.nixapp.conn.results.ZonaListResult;
@@ -32,6 +37,7 @@ import com.example.nixapp.conn.results.ZonaListResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,7 +71,7 @@ public class CotizacionServicio extends AppCompatActivity {
         }
     }
 
-
+    Cotizacion coti;
     List<ArticulosFinales> articulosFinales = new ArrayList<>();
     List<ArticulosFinales> paquetesFinales = new ArrayList<>();
     int servicioid;
@@ -89,7 +95,7 @@ public class CotizacionServicio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         articulosList= new ArrayList<>();
         paquetesList= new ArrayList<>();
-
+        retrofitInit();
         setContentView(R.layout.activity_cotizacion_servicio);
         recyclerArticles= findViewById(R.id.recicler_servicios_Articulos);
         recyclerPaquetes =findViewById(R.id.recicler_servicios_Paquetes);
@@ -119,44 +125,106 @@ public class CotizacionServicio extends AppCompatActivity {
         guardar_Cotizacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Articulos = "";
-                int contador = 0;
-                Articulos chequear = null;
-                Paquetes chequeo = null;
+                String total= precioTotal.getText().toString();
+                final Cotizacion cotizacion= new Cotizacion(total, servicioid, EditarEvento.id_evento);
+                Call<CotizacionResult> callCot = nixService.guardarCotizacion(cotizacion);
+                callCot.enqueue(new Callback<CotizacionResult>() {
+                    @Override
+                    public void onResponse(Call<CotizacionResult> call, Response<CotizacionResult> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(CotizacionServicio.this, "Guardada correctamente", Toast.LENGTH_SHORT).show();
+                            coti= response.body().cotizacion;
+                            List<CotizacionArticulo> cotizacionArticuloList= new ArrayList<>();
+                            List<CotizacionPaquete> cotizacionPaqueteList= new ArrayList<>();
+                            String Articulos = "";
+                            int contador = 0;
+                            Articulos chequear = null;
+                            Paquetes chequeo = null;
 
-                for (ArticulosFinales art: articulosFinales)
-                {
-                    for (Articulos ar: articulosList)
-                    {
-                        if(ar.getId() == art.id)
-                        {
-                            chequear = articulosList.get(contador);
-                            Articulos+="Articulo: "+art.id + " " + chequear.getNombre() + " " + art.Cantidad + "\n";
+                            for (ArticulosFinales art: articulosFinales)
+                            {
+                                for (Articulos ar: articulosList)
+                                {
+                                    if(ar.getId() == art.id)
+                                    {
+                                        chequear = articulosList.get(contador);
+                                        CotizacionArticulo cotiart= new CotizacionArticulo(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
+                                        cotizacionArticuloList.add(cotiart);
+                                        Articulos+="Articulo: "+art.id + " " + chequear.getNombre() + " " + art.Cantidad + "\n";
+                                    }
+                                    contador++;
+                                }
+                                contador = 0;
+
+                            }
+                            for (ArticulosFinales art: paquetesFinales)
+                            {
+                                for (Paquetes ar: paquetesList)
+                                {
+                                    if(ar.getId() == art.id)
+                                    {
+                                        chequeo = paquetesList.get(contador);
+                                        CotizacionPaquete cotipaq= new CotizacionPaquete(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
+                                        cotizacionPaqueteList.add(cotipaq);
+                                        Articulos+= "Paquete: "+art.id + " " + chequeo.getNombre() + " " + art.Cantidad + "\n";
+                                    }
+                                    contador++;
+                                }
+                                contador = 0;
+                            }
+                            Call<ResponseBody> callArt= nixService.articulosCotización(cotizacionArticuloList);
+                            callArt.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (response.isSuccessful()){
+                                        Toast.makeText(CotizacionServicio.this, "Articulos añadidoa", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                }
+                            });
+                            Call<ResponseBody> callPaq = nixService.paquetesCotizacion(cotizacionPaqueteList);
+                            callPaq.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (response.isSuccessful()){
+                                        Toast.makeText(CotizacionServicio.this, "Paqutes añadidos", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();   
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Toast.makeText(CotizacionServicio.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            Toast.makeText(getApplicationContext(), Articulos, Toast.LENGTH_LONG).show();
                         }
-                        contador++;
-                    }
-                    contador = 0;
-
-                }
-                for (ArticulosFinales art: paquetesFinales)
-                {
-                    for (Paquetes ar: paquetesList)
-                    {
-                        if(ar.getId() == art.id)
-                        {
-                            chequeo = paquetesList.get(contador);
-                            Articulos+= "Paquete: "+art.id + " " + chequeo.getNombre() + " " + art.Cantidad + "\n";
+                        else{
+                            Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            Log.i("error", response.errorBody().toString());
                         }
-                        contador++;
                     }
-                    contador = 0;
-                }
 
-                Toast.makeText(getApplicationContext(), Articulos, Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onFailure(Call<CotizacionResult> call, Throwable t) {
+
+                    }
+                });
+
+
             }
         });
 
-        Toast.makeText(this, "Numero servicio"+Integer.toString(servicioid), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Numero evento :"+Integer.toString(EditarEvento.id_evento), Toast.LENGTH_SHORT).show();
         retrofitInit();
         final Articulos articulos= new Articulos(servicioid);
         Call<ServicioResult> call = nixService.servicioId(articulos);

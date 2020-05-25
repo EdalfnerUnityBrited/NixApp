@@ -6,6 +6,9 @@ import com.example.nixapp.DB.BusquedaArticulos;
 import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
 import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.Cotizacion;
+import com.example.nixapp.DB.CotizacionArticulo;
+import com.example.nixapp.DB.CotizacionPaquete;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenArticulo;
 import com.example.nixapp.DB.ImagenEventos;
@@ -19,6 +22,7 @@ import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.CotizacionResult;
 import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
@@ -209,4 +213,12 @@ public interface NixService {
     @POST("proveedor/municipioServicio")
     Call<ZonaListResult> municipiosServicio(@Body Articulos articulos);
 
+    @POST("proveedor/nuevaCotizacion")
+    Call<CotizacionResult> guardarCotizacion(@Body Cotizacion cotizacion);
+
+    @POST("proveedor/articulosCotizacion")
+    Call<ResponseBody> articulosCotización(@Body List<CotizacionArticulo> cotizacionArticulos);
+
+    @POST("proveedor/paquetesCotizacion")
+    Call<ResponseBody> paquetesCotizacion(@Body List<CotizacionPaquete> cotizacionPaquetes);
 }
