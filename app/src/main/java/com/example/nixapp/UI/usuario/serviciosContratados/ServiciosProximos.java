@@ -3,6 +3,8 @@ package com.example.nixapp.UI.usuario.serviciosContratados;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,13 +14,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.DashboardFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ServiciosProximos extends AppCompatActivity implements DashboardFragment.OnListFragmentInteractionListener{
+public class ServiciosProximos extends AppCompatActivity implements DashboardFragment.OnListFragmentInteractionListener, CotizacionesGuardadasFragment.OnListFragmentInteractionListener{
     private RecyclerView chatsList;
     Usuario usuario;
     @Override
@@ -83,4 +86,13 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
 
     }
 
+    @Override
+    public void onListFragmentInteraction(Cotizacion item) {
+        Toast.makeText(this, "Apretaste la cotización: "+item.getId(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
 }

@@ -23,6 +23,7 @@ import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.CotizacionResult;
+import com.example.nixapp.conn.results.CotizacionesListResult;
 import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
@@ -221,4 +222,7 @@ public interface NixService {
 
     @POST("proveedor/paquetesCotizacion")
     Call<ResponseBody> paquetesCotizacion(@Body List<CotizacionPaquete> cotizacionPaquetes);
+
+    @POST("proveedor/usuarioCotizaciones")
+    Call<CotizacionesListResult> cotizacionesUsuario();
 }
