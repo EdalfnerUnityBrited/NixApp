@@ -22,6 +22,8 @@ import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.CotizacionArticuloResult;
+import com.example.nixapp.conn.results.CotizacionPaqueteResult;
 import com.example.nixapp.conn.results.CotizacionResult;
 import com.example.nixapp.conn.results.CotizacionesListResult;
 import com.example.nixapp.conn.results.EventoLlenoResult;
@@ -225,4 +227,10 @@ public interface NixService {
 
     @POST("proveedor/usuarioCotizaciones")
     Call<CotizacionesListResult> cotizacionesUsuario();
+
+    @POST("proveedor/obtenerArticulosCotizacion")
+    Call<CotizacionArticuloResult> articulosEnCotizacion(@Body Articulos articulos);
+
+    @POST("proveedor/obtenerPaquetesCotizacion")
+    Call<CotizacionPaqueteResult> paquetesEnCotizacion(@Body Articulos articulos);
 }

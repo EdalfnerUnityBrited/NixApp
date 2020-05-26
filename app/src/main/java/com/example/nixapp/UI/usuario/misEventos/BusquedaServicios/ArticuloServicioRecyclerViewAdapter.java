@@ -14,6 +14,7 @@ import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticuloServicioRecyclerViewAdapter extends RecyclerView.Adapter<ArticuloServicioRecyclerViewAdapter.ViewHolder> {
@@ -26,6 +27,12 @@ public class ArticuloServicioRecyclerViewAdapter extends RecyclerView.Adapter<Ar
     private final CotizacionServicio.OnListFragmentInteractionListener mListener;
     String digitos;
 
+    public List<ViewHolder> getVistas() {
+        return vistas;
+    }
+
+    List<ViewHolder> vistas = new ArrayList<>();
+
     public ArticuloServicioRecyclerViewAdapter(List<Articulos> items, CotizacionServicio.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -35,6 +42,7 @@ public class ArticuloServicioRecyclerViewAdapter extends RecyclerView.Adapter<Ar
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.lista_articulos, parent, false);
+
         return new ViewHolder(view);
 
 
@@ -42,6 +50,7 @@ public class ArticuloServicioRecyclerViewAdapter extends RecyclerView.Adapter<Ar
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        vistas.add(holder);
         holder.mItem = mValues.get(position);
         holder.nombre.setText(String.valueOf(holder.mItem.getNombre()));
         holder.price.setText(String.valueOf(holder.mItem.getPrecio()));
@@ -142,7 +151,7 @@ public class ArticuloServicioRecyclerViewAdapter extends RecyclerView.Adapter<Ar
             }
 
         }
-        public void NumerosFinales()
+        public void sumarArticulos()
         {
 
         }

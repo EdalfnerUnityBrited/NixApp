@@ -112,8 +112,8 @@ public class BuscarServicios extends AppCompatActivity{
                         public void onListFragmentInteraction(CatalogoServicios item) {
                             Intent intent= new Intent(BuscarServicios.this, CotizacionServicio.class);
                             intent.putExtra("id", item.getId());
+                            intent.putExtra("id_cotizacion", 5);
                             startActivity(intent);
-                            finish();
                         }
                         @Override
                         public void onClick(View v) {

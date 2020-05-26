@@ -636,6 +636,17 @@
                         android:textColor="@drawable/butom_text"
                         android:padding="8dp"/>
                     <Button
+                        android:id="@+id/agregarArticulos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutom2"
+                        android:text="Agregar articulos"
+                        android:layout_marginRight="20dp"
+                        android:textAlignment="gravity"
+                        android:textColor="@drawable/butom_text"
+                        android:padding="8dp"
+                        android:visibility="gone"/>
+                    <Button
                         android:id="@+id/servicioContratado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
