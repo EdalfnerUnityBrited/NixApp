@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -240,7 +242,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
 
         ///////////////////////////////////////////////////////////////
         dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Importante");
+        dialog.setTitle("Aviso");
         dialog.setCancelable(false);
         dialog.setPositiveButton("Iniciar Sesion", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -310,7 +312,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
         //////////////////////////////////////////////////////////////
         editTextField2 = new EditText(this);
         dialogFace = new AlertDialog.Builder(this);
-        dialogFace.setTitle("Importante");
+        dialogFace.setTitle("Aviso");
         dialogFace.setView(editTextField2);
         dialogFace.setCancelable(false);
         dialogFace.setPositiveButton("Iniciar Sesion", new DialogInterface.OnClickListener() {
@@ -534,8 +536,11 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
 
                             Toast.makeText(getApplicationContext(),"Ya tienes cuenta de Google",Toast.LENGTH_SHORT).show();
                             editTextField = new EditText(InicioSesion.this);
+                            editTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                            editTextField.setTypeface(Typeface.DEFAULT);
+                            editTextField.setHint("Introduce tu contraseña...");
                             dialog.setView(editTextField);
-                            dialog.setMessage("Deseas iniciar sesion con la cuenta registrada con el correo: " + emailG+"?");
+                            dialog.setMessage("¿Deseas iniciar sesion con la cuenta registrada con el correo: " + emailG+"?");
                             dialog.show();
 
 
@@ -683,8 +688,11 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                     {
                         Toast.makeText(getApplicationContext(),"Ya tienes cuenta de Facebook",Toast.LENGTH_SHORT).show();
                         editTextField2 = new EditText(InicioSesion.this);
+                        editTextField2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        editTextField2.setTypeface(Typeface.DEFAULT);
+                        editTextField2.setHint("Introduce tu contraseña...");
                         dialogFace.setView(editTextField2);
-                        dialogFace.setMessage("Deseas iniciar sesion con la cuenta registrada con el correo: " + emailF+"?");
+                        dialogFace.setMessage("¿Deseas iniciar sesion con la cuenta registrada con el correo: " + emailF+"?");
                         dialogFace.show();
                     }
 

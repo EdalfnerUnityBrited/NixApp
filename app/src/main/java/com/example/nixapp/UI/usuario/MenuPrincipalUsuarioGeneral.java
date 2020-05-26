@@ -1,6 +1,7 @@
 package com.example.nixapp.UI.usuario;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -86,6 +88,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     GoogleSignInClient mGoogleSignInClient;
     Button buscar;
     Eventos eventos;
+    AlertDialog.Builder dialogo1;
 
     private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
@@ -97,6 +100,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
+
         drawer = findViewById(R.id.drawer_layout_usuario_general);
         NavigationView navigationView = findViewById(R.id.nav_view_usuario_general);
         navigationView.setNavigationItemSelectedListener(this);
@@ -160,19 +164,33 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                     break;
                 }
                 case R.id.nav_salir:{
-                    TokenController.getToken().delete();
-                    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-                    if(AccessToken.getCurrentAccessToken()!=null)
-                    {
-                        LoginManager.getInstance().logOut();
-                    }
-                    if(account != null)
-                    {
-                        signOut();
-                    }
-                    Intent intentVuelta = new Intent(this, MainActivity.class);
-                    startActivity(intentVuelta);
-                    finish();
+                    dialogo1 = new AlertDialog.Builder(this);
+                    dialogo1.setTitle("Importante");
+                    dialogo1.setMessage("¿ Quieres salir de la sesion iniciada ?");
+                    dialogo1.setCancelable(false);
+                    dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            TokenController.getToken().delete();
+                            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                            if(AccessToken.getCurrentAccessToken()!=null)
+                            {
+                                LoginManager.getInstance().logOut();
+                            }
+                            if(account != null)
+                            {
+                                signOut();
+                            }
+                            Intent intentVuelta = new Intent(MenuPrincipalUsuarioGeneral.this, MainActivity.class);
+                            startActivity(intentVuelta);
+                            finish();
+                        }
+                    });
+                    dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            //cancelar();
+                        }
+                    });
+                    dialogo1.show();
                     break;
                 }
                 case R.id.nav_perfil:{

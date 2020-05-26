@@ -409,6 +409,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/linearCover"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
@@ -482,64 +483,6 @@
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
                             android:textSize="20sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:orientation="vertical">
-                        <TableRow
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/borderrow"
-                            android:layout_marginRight="20dp">
-
-
-                            <TextView
-                                android:id="@+id/servicio_enable"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text="Deseas agregar algun servicio? : "
-                                android:textColor="@color/white"
-                                android:textSize="20dp" />
-
-                            <Switch
-                                android:id="@+id/servicios"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="5dp"
-                                android:layout_marginBottom="5dp"/>
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_gravity="center_horizontal">
-                            <Button
-                                android:id="@+id/buttonIrCatalogo"
-                                android:layout_width="155dp"
-                                android:layout_height="54dp"
-                                android:layout_marginRight="20dp"
-                                android:background="@drawable/custombutom2"
-                                android:text="Ir al catalogo"
-                                android:textAlignment="gravity"
-                                android:textColor="@drawable/butom_text"
-                                android:visibility="gone" />
-                            <Button
-                                android:id="@+id/info"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:background="@drawable/informacion"
-                                android:visibility="gone" />
-                        </TableRow>
-
 
                     </LinearLayout>
 

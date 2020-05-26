@@ -1,14 +1,5 @@
 package com.example.nixapp.UI.proveedor;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -31,6 +22,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
@@ -49,6 +49,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -111,6 +112,8 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
     private TextView mDisplayDate=null;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private int ano, mes, dia;
+    AlertDialog.Builder dialogo1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -573,10 +576,33 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
                 break;
             }
             case R.id.nav_salir:{
-                TokenController.getToken().delete();
-                Intent intentVuelta = new Intent(this, MainActivity.class);
-                startActivity(intentVuelta);
-                finish();
+                dialogo1 = new AlertDialog.Builder(this);
+                dialogo1.setTitle("Importante");
+                dialogo1.setMessage("¿ Quieres salir de la sesion iniciada ?");
+                dialogo1.setCancelable(false);
+                dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        TokenController.getToken().delete();
+                        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                        if(AccessToken.getCurrentAccessToken()!=null)
+                        {
+                            LoginManager.getInstance().logOut();
+                        }
+                        if(account != null)
+                        {
+                            signOut();
+                        }
+                        Intent intentVuelta = new Intent(MenuPrincipalUsuarioProveedor.this, MainActivity.class);
+                        startActivity(intentVuelta);
+                        finish();
+                    }
+                });
+                dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        //cancelar();
+                    }
+                });
+                dialogo1.show();
                 break;
             }
         }
