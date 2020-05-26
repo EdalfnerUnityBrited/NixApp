@@ -14,6 +14,7 @@ import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<PaqueteServicioRecyclerViewAdapter.ViewHolder> {
@@ -21,6 +22,12 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
     private final List<Paquetes> mValues;
     private final CotizacionServicio.OnListFragmentInteractionListener mListener;
     String digitos;
+
+    public List<PaqueteServicioRecyclerViewAdapter.ViewHolder> getVistas() {
+        return vistas;
+    }
+
+    List<PaqueteServicioRecyclerViewAdapter.ViewHolder> vistas = new ArrayList<>();
 
     public PaqueteServicioRecyclerViewAdapter(List<Paquetes> items, CotizacionServicio.OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -38,6 +45,7 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        vistas.add(holder);
         holder.mItem = mValues.get(position);
         holder.nombre.setText(String.valueOf(holder.mItem.getNombre()));
         holder.price.setText(String.valueOf(holder.mItem.getPrecio()));
