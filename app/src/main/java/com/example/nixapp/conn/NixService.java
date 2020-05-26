@@ -233,4 +233,7 @@ public interface NixService {
 
     @POST("proveedor/obtenerPaquetesCotizacion")
     Call<CotizacionPaqueteResult> paquetesEnCotizacion(@Body Articulos articulos);
+
+    @POST("auth/forgot")
+    Call<ResponseBody> passwordForgot(@Body Usuario usuario);
 }
