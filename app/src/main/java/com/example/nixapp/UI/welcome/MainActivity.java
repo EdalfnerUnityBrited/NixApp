@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -92,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 case R.id.passwordFor:{
                     dialogo1 = new AlertDialog.Builder(this);
-                    dialogo1.setTitle("Importante");
-                    dialogo1.setMessage("Ingrese su correo");
+                    dialogo1.setTitle("Recuperacion de Contraseña");
+                    dialogo1.setMessage("Ingrese el correo del cual necesitas la reposicion de tu contraseña:");
                     final EditText input = new EditText(MainActivity.this);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     input.setLayoutParams(lp);
                     dialogo1.setView(input);
                     dialogo1.setCancelable(false);
-                    dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    dialogo1.setPositiveButton("Recuperar", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
                             String correo= input.getText().toString();
                             Usuario usuario= new Usuario(correo);
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             });
                         }
                     });
-                    dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    dialogo1.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
                             //cancelar();
                         }

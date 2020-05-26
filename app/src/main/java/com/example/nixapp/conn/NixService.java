@@ -10,6 +10,7 @@ import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.CotizacionArticulo;
 import com.example.nixapp.DB.CotizacionPaquete;
 import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.HorarioVerificar;
 import com.example.nixapp.DB.ImagenArticulo;
 import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.DB.ImagenPaquete;
@@ -236,4 +237,7 @@ public interface NixService {
 
     @POST("auth/forgot")
     Call<ResponseBody> passwordForgot(@Body Usuario usuario);
+
+    @POST("proveedor/verificarFecha")
+    Call<ResponseBody> fechaVerificada(@Body HorarioVerificar horarioVerificar);
 }

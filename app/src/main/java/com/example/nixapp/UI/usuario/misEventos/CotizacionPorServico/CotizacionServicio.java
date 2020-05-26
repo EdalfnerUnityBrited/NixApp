@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Articulos;
+import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.CotizacionArticulo;
 import com.example.nixapp.DB.CotizacionPaquete;
+import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.HorarioVerificar;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.R;
@@ -33,6 +36,7 @@ import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
 import com.example.nixapp.conn.results.CotizacionPaqueteResult;
 import com.example.nixapp.conn.results.CotizacionResult;
+import com.example.nixapp.conn.results.EventosResult;
 import com.example.nixapp.conn.results.PaquetesListResult;
 import com.example.nixapp.conn.results.ServicioResult;
 import com.example.nixapp.conn.results.ZonaListResult;
@@ -66,6 +70,7 @@ public class CotizacionServicio extends AppCompatActivity {
         }
     }
 
+    boolean ZonaPermitida = false,horarioPermitido = false, horarioDentrodelHorario = false;
     Cotizacion coti;
     List<ArticulosFinales> articulosFinales = new ArrayList<>();
     List<ArticulosFinales> paquetesFinales = new ArrayList<>();
@@ -83,12 +88,14 @@ public class CotizacionServicio extends AppCompatActivity {
     List<Paquetes> paquetesList;
     ArticuloServicioRecyclerViewAdapter articuloAdapter;
     PaqueteServicioRecyclerViewAdapter paqueteAdapter;
-    int precios;
+    int precios, id_evento;
     RecyclerView recyclerArticles, recyclerPaquetes;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     boolean agregados = false;
+    List<ZonaServicio> municipiosTotales;
     String id_cot = "";
+    Eventos eventos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,9 +140,84 @@ public class CotizacionServicio extends AppCompatActivity {
 
         mAdapter = new EventosAdapter(this, mEventsList);
         categorias.setAdapter(mAdapter);
-
         servicioid=(int) getIntent().getSerializableExtra("id");
         try {
+            id_evento =(int) getIntent().getSerializableExtra("id_Evento");
+            Busqueda busqueda = new Busqueda(String.valueOf(id_evento));
+            Call<EventosResult> llamadaEvento  = nixService.buscarEventoId(busqueda);
+            llamadaEvento.enqueue(new Callback<EventosResult>() {
+                @Override
+                public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
+                    if(response.isSuccessful())
+                    {
+                        eventos = response.body().eventos;
+                        HorarioVerificar horaV = new HorarioVerificar(servicioid,eventos.getFecha(),eventos.getHora());
+                        Call<ResponseBody> llamadaHorario = nixService.fechaVerificada(horaV);
+                        llamadaHorario.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if(response.isSuccessful())
+                                {
+                                    horarioPermitido = true;
+                                }
+                                else
+                                {
+                                    horarioPermitido = false;
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(CotizacionServicio.this, "Error al verificar Horiario", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        servicio_contratado.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(CotizacionServicio.this, eventos.getHora(), Toast.LENGTH_LONG).show();
+                                for (ZonaServicio mun: municipiosTotales) {
+                                    if(mun.getMunicipio().equals(eventos.getMunicipio()))
+                                    {
+                                        ZonaPermitida = true;
+                                    }
+
+                                }
+                                if(ZonaPermitida == true)
+                                {
+                                    if(horarioPermitido == true)
+                                    {
+                                        //Falta otra condicion!!! Pero aqui mero va eso;
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(CotizacionServicio.this, "Este Servicio tiene esa fecha ocupada", Toast.LENGTH_LONG).show();
+                                    }
+
+                                    horarioPermitido = false;
+                                    ZonaPermitida = false;
+                                }
+                                else
+                                {
+                                    Toast.makeText(CotizacionServicio.this, "Este Servicio no esta disponible en tu region", Toast.LENGTH_LONG).show();
+                                }
+
+
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(CotizacionServicio.this, "Evento no encontrado", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EventosResult> call, Throwable t) {
+                    Toast.makeText(CotizacionServicio.this, "Error al buscar el evento", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
             id_cot =(String) getIntent().getSerializableExtra("id_cotizacion");
             guardar_Cotizacion.setVisibility(View.GONE);
             agregar_articulos.setVisibility(View.VISIBLE);
@@ -383,7 +465,7 @@ public class CotizacionServicio extends AppCompatActivity {
 
                         if(response.isSuccessful())
                         {
-                            List<ZonaServicio> municipiosTotales = response.body().municipios;
+                            municipiosTotales = response.body().municipios;
                             String municip = "";
                             for (ZonaServicio mun: municipiosTotales)
                             {

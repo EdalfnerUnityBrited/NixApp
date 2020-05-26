@@ -1,22 +1,23 @@
 package com.example.nixapp.UI.welcome;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
-import com.example.nixapp.conn.results.UsuarioResult;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -46,24 +47,28 @@ public class RecuperarContra extends AppCompatActivity {
                 Toast.makeText(RecuperarContra.this, date, Toast.LENGTH_SHORT).show();
                 if (date.equals(usuario.fechaNac)){
                     dialogo1 = new AlertDialog.Builder(RecuperarContra.this);
-                    dialogo1.setTitle("Importante");
-                    dialogo1.setMessage("Ingrese su correo");
+                    dialogo1.setTitle("Cambio de Contraseña");
+                    dialogo1.setMessage("Ingrese tu nueva contraseña del correo: " + usuario.email);
                     LinearLayout layout = new LinearLayout(RecuperarContra.this);
                     layout.setOrientation(LinearLayout.VERTICAL);
 
 // Add a TextView here for the "Title" label, as noted in the comments
                     final EditText titleBox = new EditText(RecuperarContra.this);
                     titleBox.setHint("Contraseña");
+                    titleBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    titleBox.setTypeface(Typeface.DEFAULT);
                     layout.addView(titleBox); // Notice this is an add method
 
 // Add another TextView here for the "Description" label
                     final EditText descriptionBox = new EditText(RecuperarContra.this);
                     descriptionBox.setHint("Confirmar Contraseña");
+                    descriptionBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    descriptionBox.setTypeface(Typeface.DEFAULT);
                     layout.addView(descriptionBox); // Another add method
 
                     dialogo1.setView(layout);
                     dialogo1.setCancelable(false);
-                    dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    dialogo1.setPositiveButton("Confirmar cambios", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
                             String contrasena= titleBox.getText().toString();
                             String confirmacion= descriptionBox.getText().toString();
@@ -91,7 +96,7 @@ public class RecuperarContra extends AppCompatActivity {
 
                         }
                     });
-                    dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogo1, int id) {
                             //cancelar();
                         }

@@ -60,7 +60,8 @@
                     android:hint="Nombre"
                     android:inputType="textPersonName"
                     android:textColor="#ffffffff"
-                    android:textColorHint="#ffffffff" />
+                    android:textColorHint="#ffffffff"
+                    android:maxLength="50"/>
 
             </LinearLayout>
             <LinearLayout
@@ -77,6 +78,7 @@
                     android:ems="10"
                     android:hint="Apellido Paterno"
                     android:layout_marginLeft="70dp"
+                    android:maxLength="50"
                     android:textColor="#ffffffff"
                     android:textColorHint="#ffffffff"
                     android:inputType="textPersonName"
@@ -97,6 +99,7 @@
                         android:layout_height="40dp"
                         android:layout_marginLeft="70dp"
                         android:ems="10"
+                        android:maxLength="50"
                         android:hint="Apellido Materno"
                         android:textColor="#ffffffff"
                         android:textColorHint="#ffffffff"
@@ -127,6 +130,7 @@
                         android:layout_marginLeft="35dp"
                         android:ems="10"
                         android:hint="Correo"
+                        android:maxLength="255"
                         android:textColor="#ffffffff"
                         android:textColorHint="#ffffffff"
                         android:inputType="textEmailAddress"
@@ -180,6 +184,7 @@
                         android:layout_height="40dp"
                         android:layout_marginLeft="35dp"
                         android:ems="10"
+                        android:maxLength="12"
                         android:hint="Telefono"
                         android:textColor="#ffffffff"
                         android:textColorHint="#ffffffff"

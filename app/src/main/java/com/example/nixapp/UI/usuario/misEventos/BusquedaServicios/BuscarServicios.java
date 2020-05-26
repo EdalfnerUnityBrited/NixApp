@@ -27,6 +27,7 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
+import com.example.nixapp.UI.usuario.misEventos.EditarEvento;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticulosListResult;
@@ -113,6 +114,7 @@ public class BuscarServicios extends AppCompatActivity{
                             Intent intent= new Intent(BuscarServicios.this, CotizacionServicio.class);
                             intent.putExtra("id", item.getId());
                             intent.putExtra("id_cotizacion", 5);
+                            intent.putExtra("id_Evento", EditarEvento.id_evento);//int
                             startActivity(intent);
                         }
                         @Override

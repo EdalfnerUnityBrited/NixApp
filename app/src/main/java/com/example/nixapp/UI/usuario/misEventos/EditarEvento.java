@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -43,7 +42,6 @@ import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
 import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.BuscarServicios;
-import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
@@ -100,7 +98,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName, municipio, id;
     public static int id_evento;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen,checardireccion;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen,checardireccion,info_cotrataciones;
     int cupo;
     boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
@@ -111,7 +109,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     Spinner spinner,spinners;
     List<ImagenEventos> eventosUsuario;
     ViewPagerAdapter viewPagerAdapter;
-    AlertDialog.Builder dialogo1;
+    AlertDialog.Builder dialogo1,informacion;
     ViewPager viewPager;
     String[] Minicipios;
     int contador;
@@ -138,27 +136,24 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
         mProgressDialog= new ProgressDialog(this);
         eTextFecha.setInputType(InputType.TYPE_NULL);
-        eTextFecha.setOnClickListener(new View.OnClickListener() {
+        ////////////////////////////
+        info_cotrataciones = findViewById(R.id.info);
+        info_cotrataciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Locale locale = getResources().getConfiguration().locale;
-                Locale.setDefault(locale);
-                final Calendar cldr = Calendar.getInstance();
-                dia = cldr.get(Calendar.DAY_OF_MONTH);
-                mes = cldr.get(Calendar.MONTH);
-                ano = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(EditarEvento.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                eTextFecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                            }
-                        }, ano, mes, dia);
-                picker.show();
+                informacion = new AlertDialog.Builder(EditarEvento.this);
+                informacion.setTitle("Informacion acerca de las cotizaciones:");
+                informacion.setMessage("Aqui es donde se podra cotizar y contratar diferentes servicios para tu evento, podras guardar ver todo lo que te ofrece cada uno y saber el aproximado de lo que te saldria contratarlo");
+                informacion.setCancelable(false);
+                informacion.setPositiveButton("Leido", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+
+                    }
+                });
+                informacion.show();
             }
         });
-
+        ///////////////////////////
         checardireccion = (Button) findViewById(R.id.checardireccion_editar);
         checardireccion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,10 +313,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         agregar_imagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agregarImagen();//Aqui se pone pa agregar una imagen a la BD... (se carga a la vista despues pero para añadirla)
-                //ImagenEventos nueva = new ImagenEventos("la nueva string","1");//Creas la ImagenEventos con el id del evento
-                //viewPagerAdapter.getImagenes().add(viewPagerAdapter.getImagenes().size()+1,nueva);//Se la agregas a la lista del adapter solo para que se vea....
-            }
+                        agregarImagen();
+                    }
         });
         quitar_imagen = findViewById(R.id.quitar_ima);
         quitar_imagen.setOnClickListener(new View.OnClickListener() {
@@ -913,6 +906,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                     mProgressDialog.setCancelable(false);
                     mProgressDialog.show();
                     Uri uri = data.getData();
+
                     final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
                     final UploadTask uploadTask = filePath.putFile(uri);
                     uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -939,6 +933,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     downloadUrl = task.getResult().toString();
                                     ImagenEventos image= new ImagenEventos(downloadUrl, id);
+                                    viewPagerAdapter.getImagenes().add(viewPagerAdapter.getImagenes().size()+1,image);//Se la agregas a la lista del adapter solo para que se vea....
                                     Call<ResponseBody> call = nixService.imagenUna(image);
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override

@@ -113,7 +113,8 @@
                                 android:background="@null"
                                 android:textColor="#ffffffff"
                                 android:hint="¿Quieres editar tu nombre?"
-                                android:inputType="textPersonName" />
+                                android:inputType="textPersonName"
+                                android:maxLength="50"/>
                         </TableRow>
 
                         <View
@@ -142,7 +143,8 @@
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:inputType="textPersonName"
-                                android:textColor="#ffffffff" />
+                                android:textColor="#ffffffff"
+                                android:maxLength="50"/>
 
 
                         </TableRow>
@@ -177,7 +179,8 @@
                                 android:background="@null"
                                 android:hint="Apellido materno usuario"
                                 android:inputType="textPersonName"
-                                android:textColor="#ffffffff" />
+                                android:textColor="#ffffffff"
+                                android:maxLength="50"/>
                         </TableRow>
 
                         <View
@@ -255,7 +258,8 @@
                                 android:background="@null"
                                 android:hint="*Inserte numero de usuario*"
                                 android:inputType="phone"
-                                android:textColor="#ffffffff" />
+                                android:textColor="#ffffffff"
+                                android:maxLength="12"/>
                         </TableRow>
                     </TableLayout>
 
