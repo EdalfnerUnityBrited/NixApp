@@ -13,6 +13,8 @@ import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.BuscarServicios;
 
+import org.bouncycastle.asn1.x509.Holder;
+
 import java.util.List;
 
 public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<CotizacionesRecyclerViewAdapter.ViewHolder> {
@@ -38,6 +40,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.nombre.setText(String.valueOf(holder.mItem.getTotal()));
+        holder.nombreServicio.setText(holder.mItem.getNombre());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +63,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView nombre;
+        public final TextView nombre, nombreServicio;
         public final ImageView eventImage;
         public Cotizacion mItem;
 
@@ -68,6 +71,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
             super(view);
             mView = view;
            nombre = view.findViewById(R.id.textViewTitulo);
+           nombreServicio= view.findViewById(R.id.nombreServicio);
         eventImage=view.findViewById(R.id.imageViewEvento);
 
 
