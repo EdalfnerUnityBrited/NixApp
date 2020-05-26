@@ -42,6 +42,7 @@ import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
+import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.BuscarServicios;
 import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -98,6 +99,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName, municipio, id;
+    public static int id_evento;
     Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen,checardireccion;
     int cupo;
     boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
@@ -548,6 +550,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     /////////////////////////////
     private void iniciarcomponentes() {
         id = (String) getIntent().getSerializableExtra("id");
+        id_evento= Integer.parseInt(id);
         r1=findViewById(R.id.publico);
         r2=findViewById(R.id.privado);
         terminar = findViewById(R.id.eventoTerminado);
@@ -616,7 +619,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         catalogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i= new Intent(EditarEvento.this, MainActivity.class);
+                Intent i= new Intent(EditarEvento.this, BuscarServicios.class);
+                i.putExtra("categoria",categoria_evento);
                 startActivity(i);
             }
         });

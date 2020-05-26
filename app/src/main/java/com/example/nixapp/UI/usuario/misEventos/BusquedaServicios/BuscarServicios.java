@@ -26,6 +26,7 @@ import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticulosListResult;
@@ -109,7 +110,10 @@ public class BuscarServicios extends AppCompatActivity{
                     adapterEventos=  new ServiciosBuscarRecyclerViewAdapter(serviciosList, new OnListFragmentInteractionListener() {
                         @Override
                         public void onListFragmentInteraction(CatalogoServicios item) {
-                            Toast.makeText(BuscarServicios.this, "Me apretaste", Toast.LENGTH_SHORT).show();
+                            Intent intent= new Intent(BuscarServicios.this, CotizacionServicio.class);
+                            intent.putExtra("id", item.getId());
+                            intent.putExtra("id_cotizacion", 5);
+                            startActivity(intent);
                         }
                         @Override
                         public void onClick(View v) {
@@ -174,7 +178,10 @@ public class BuscarServicios extends AppCompatActivity{
                                 adapterEventos=  new ServiciosBuscarRecyclerViewAdapter(serviciosList, new OnListFragmentInteractionListener() {
                                     @Override
                                     public void onListFragmentInteraction(CatalogoServicios item) {
-                                        Toast.makeText(BuscarServicios.this, "Me apretaste", Toast.LENGTH_SHORT).show();
+                                        Intent intent= new Intent(BuscarServicios.this, CotizacionServicio.class);
+                                        intent.putExtra("id",item.getId());
+                                        startActivity(intent);
+                                        finish();
                                     }
 
 
@@ -240,7 +247,10 @@ public class BuscarServicios extends AppCompatActivity{
 
                                     @Override
                                     public void onPaqueteFragmentInteraction(Paquetes mItem) {
-                                        Toast.makeText(BuscarServicios.this, "Me apretaste", Toast.LENGTH_SHORT).show();
+                                        Intent intent= new Intent(BuscarServicios.this, CotizacionServicio.class);
+                                        intent.putExtra("id",mItem.getId_servicio());
+                                        startActivity(intent);
+                                        finish();
                                     }
 
                                     @Override
@@ -300,7 +310,10 @@ public class BuscarServicios extends AppCompatActivity{
 
                                     @Override
                                     public void onListArticuloInteraction(Articulos mItem) {
-                                        Toast.makeText(BuscarServicios.this, "Articulo apretado", Toast.LENGTH_SHORT).show();
+                                        Intent intent= new Intent(BuscarServicios.this, CotizacionServicio.class);
+                                        intent.putExtra("id",mItem.getId_catalogoServicio());
+                                        startActivity(intent);
+                                        finish();
                                     }
                                 });
                                 recyclerView.setAdapter(adapterArticulo);

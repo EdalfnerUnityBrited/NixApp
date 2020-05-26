@@ -9,11 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Articulos;
-import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.proveedor.misServicios.Paquetes.PaquetesFragment;
 
 import java.util.List;
 
@@ -81,28 +78,30 @@ public class ArticuloRecyclerViewAdapter extends RecyclerView.Adapter<ArticuloRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView nombre;
+        public TextView nombre;
+
         public final ImageView eventImage;
-        public  final Button btnBorrar, btnEditar;
+        public final Button btnBorrar, btnEditar;
         public Articulos mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-           nombre = view.findViewById(R.id.textViewTitulo);
-           btnBorrar=view.findViewById(R.id.buttonDelete);
-           btnEditar=view.findViewById(R.id.buttonEdit);
-        eventImage=view.findViewById(R.id.imageViewEvento);
+            nombre = view.findViewById(R.id.textViewTitulo);
+            btnBorrar=view.findViewById(R.id.buttonDelete);
+            btnEditar=view.findViewById(R.id.buttonEdit);
+            eventImage=view.findViewById(R.id.imageViewEvento);
 
 
         }
-
-
 
         @Override
         public String toString() {
             return super.toString() + " '" + nombre.getText() + "'";
         }
 
+
     }
+
+
 }

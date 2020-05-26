@@ -15,4 +15,5 @@
     <color name="sheetDark">#0d4360</color>
     <color name="colorfiltros">#E6C5F9</color>
     <color name="colorDistancia">#B04AEA</color>
+    <color name="colorDescripcion">#686868</color>
 </resources>

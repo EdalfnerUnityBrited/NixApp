@@ -6,6 +6,9 @@ import com.example.nixapp.DB.BusquedaArticulos;
 import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
 import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.Cotizacion;
+import com.example.nixapp.DB.CotizacionArticulo;
+import com.example.nixapp.DB.CotizacionPaquete;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.ImagenArticulo;
 import com.example.nixapp.DB.ImagenEventos;
@@ -19,6 +22,10 @@ import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.CotizacionArticuloResult;
+import com.example.nixapp.conn.results.CotizacionPaqueteResult;
+import com.example.nixapp.conn.results.CotizacionResult;
+import com.example.nixapp.conn.results.CotizacionesListResult;
 import com.example.nixapp.conn.results.EventoLlenoResult;
 import com.example.nixapp.conn.results.EventosListResult;
 import com.example.nixapp.conn.results.EventosResult;
@@ -33,10 +40,10 @@ import com.example.nixapp.conn.results.ServicioResult;
 import com.example.nixapp.conn.results.ServiciosListResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
+import com.example.nixapp.conn.results.ZonaListResult;
 
 import java.util.List;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -205,4 +212,25 @@ public interface NixService {
 
     @POST("proveedor/buscarArticulo")
     Call<ArticulosListResult> buscarArticulos(@Body BusquedaArticulos busquedaArticulos);
+
+    @POST("proveedor/municipioServicio")
+    Call<ZonaListResult> municipiosServicio(@Body Articulos articulos);
+
+    @POST("proveedor/nuevaCotizacion")
+    Call<CotizacionResult> guardarCotizacion(@Body Cotizacion cotizacion);
+
+    @POST("proveedor/articulosCotizacion")
+    Call<ResponseBody> articulosCotización(@Body List<CotizacionArticulo> cotizacionArticulos);
+
+    @POST("proveedor/paquetesCotizacion")
+    Call<ResponseBody> paquetesCotizacion(@Body List<CotizacionPaquete> cotizacionPaquetes);
+
+    @POST("proveedor/usuarioCotizaciones")
+    Call<CotizacionesListResult> cotizacionesUsuario();
+
+    @POST("proveedor/obtenerArticulosCotizacion")
+    Call<CotizacionArticuloResult> articulosEnCotizacion(@Body Articulos articulos);
+
+    @POST("proveedor/obtenerPaquetesCotizacion")
+    Call<CotizacionPaqueteResult> paquetesEnCotizacion(@Body Articulos articulos);
 }

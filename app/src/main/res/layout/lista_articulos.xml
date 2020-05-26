@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_myevent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardElevation="5dp"
+        android:background="@drawable/fondoclaro"
+        card_view:cardUseCompatPadding="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borderrow_articulo"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            >
+
+            <!-- Rest of the product info and add/remove to/from cart symbols -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:id="@+id/idTopLayout"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="8dp"
+                    android:id="@+id/idProductName"
+                    android:layout_width="210dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="Maletices de cuero tañados a mano perrones"
+                    android:layout_toRightOf="@+id/idLinearLayout"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textSize="18dp"
+                    tools:textColor="@android:color/black" />
+
+
+                <!-- Product Image -->
+
+
+                    <ImageView
+                        android:id="@+id/idProductImage"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_marginLeft="50dp"
+                        card_view:srcCompat="@drawable/empresariales" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/idBottomLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/idTopLayout"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/idProductPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:paddingRight="8dp"
+                    android:textSize="15dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorDescripcion"
+                    android:text="Estos maletines fueron hechos por los antiguos cherookees"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/idinformacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/idBottomLayout"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:id="@+id/precio_portxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="15dp"
+                    tools:textColor="@android:color/black"
+                    android:text="Precio por: "/>
+                <TextView
+                    android:id="@+id/precio_por"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="15dp"
+                    tools:textColor="@android:color/black"
+                    android:text="Cantidad"
+                    android:layout_marginRight="15dp"/>
+                <TextView
+                    android:id="@+id/idsigno"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="$"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    tools:textColor="@android:color/black" />
+                <TextView
+                    android:id="@+id/idProductWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="18000"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    tools:textColor="@android:color/black" />
+                <TextView
+                    android:id="@+id/idmoneda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="  MXN"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    tools:textColor="@android:color/black" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/idbuttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/idinformacion"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal">
+                <Button
+                    android:id="@+id/idMinusICon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_remove_articulo"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/numero_pedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:textSize="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="0"
+                    tools:textColor="@android:color/black"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/idAddICon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_add_circle"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <!-- Product Image -->
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

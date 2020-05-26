@@ -1,28 +1,30 @@
 package com.example.nixapp.DB;
 
 public class Articulos {
-    String nombre, descripcion, precioPor, precio;
+    String nombre, descripcion, precioPor, precio, fotoArticulo;
     int categoria_articulo, id_catalogoServicio, id;
 
-    public Articulos(String nombre, String descripcion, String precioPor, String precio, int categoria_articulo, int id_catalogoServicio) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precioPor = precioPor;
-        this.precio = precio;
-        this.categoria_articulo = categoria_articulo;
-        this.id_catalogoServicio = id_catalogoServicio;
-    }
 
-    public Articulos(String nombre, String descripcion, String precioPor, String precio, int categoria_articulo, int id_catalogoServicio, int id) {
+    public Articulos(String nombre, String descripcion, String precioPor, String precio, String fotoArticulo, int categoria_articulo, int id_catalogoServicio, int id) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precioPor = precioPor;
         this.precio = precio;
+        this.fotoArticulo = fotoArticulo;
         this.categoria_articulo = categoria_articulo;
         this.id_catalogoServicio = id_catalogoServicio;
         this.id = id;
     }
 
+    public Articulos(String nombre, String descripcion, String precioPor, String precio, String fotoArticulo, int categoria_articulo, int id_catalogoServicio) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precioPor = precioPor;
+        this.precio = precio;
+        this.fotoArticulo = fotoArticulo;
+        this.categoria_articulo = categoria_articulo;
+        this.id_catalogoServicio = id_catalogoServicio;
+    }
 
     public int getId() {
         return id;
@@ -82,5 +84,13 @@ public class Articulos {
 
     public void setId_catalogoServicio(int id_catalogoServicio) {
         this.id_catalogoServicio = id_catalogoServicio;
+    }
+
+    public String getFotoArticulo() {
+        return fotoArticulo;
+    }
+
+    public void setFotoArticulo(String fotoArticulo) {
+        this.fotoArticulo = fotoArticulo;
     }
 }
