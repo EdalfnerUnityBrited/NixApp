@@ -6,8 +6,18 @@
     >
 
     <item
+        android:id="@+id/action_camera"
+        android:orderInCategory="99"
+        android:icon="@drawable/ic_camera_black"
+        app:showAsAction="always"
+        android:enabled="true"
+        android:title="Camara"
+        ></item>
+
+    <item
         android:id="@+id/action_open"
         android:orderInCategory="100"
+        android:icon="@drawable/ic_open_black"
         app:showAsAction="always"
         android:enabled="true"
         android:title="Abrir"
@@ -15,10 +25,12 @@
 
     <item
         android:id="@+id/action_save"
-        android:orderInCategory="100"
+        android:orderInCategory="101"
+        android:icon="@drawable/ic_save_black"
         app:showAsAction="always"
         android:enabled="true"
         android:title="Guardar Invitación"
         ></item>
+
 
 </menu>

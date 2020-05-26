@@ -138,7 +138,7 @@ public class BitmapUtils {
         return bitmap;
     }
 
-    public static String insertImage (ContentResolver cr, Bitmap source, String title, String description){
+    public static String insertImage (ContentResolver cr, Bitmap source, String title, String description,int quality){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE,title);
         values.put(MediaStore.Images.Media.DISPLAY_NAME,title);
@@ -161,7 +161,7 @@ public class BitmapUtils {
                     }
                 long id = ContentUris.parseId(uri);
                 Bitmap miniThumb = MediaStore.Images.Thumbnails.getThumbnail(cr,id,MediaStore.Images.Thumbnails.MINI_KIND,null);
-                storeThumbnail(cr,miniThumb,id,50f,50f,MediaStore.Images.Thumbnails.MICRO_KIND);
+                storeThumbnail(cr,miniThumb,id,50f,50f,MediaStore.Images.Thumbnails.MICRO_KIND,quality);
                 }
             else{
                 cr.delete(uri,null,null);
@@ -181,7 +181,7 @@ public class BitmapUtils {
         return stringUrl;
     }
 
-    private static final Bitmap storeThumbnail(ContentResolver cr, Bitmap source,long id, float width, float height, int kind) {
+    private static final Bitmap storeThumbnail(ContentResolver cr, Bitmap source,long id, float width, float height, int kind,int quality) {
         Matrix matrix = new Matrix();
         float scaleX = width/source.getWidth();
         float scaleY = height/source.getHeight();
@@ -198,7 +198,7 @@ public class BitmapUtils {
         Uri uri = cr.insert(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI,contentValues);
         try{
             OutputStream outputStream = cr.openOutputStream(uri);
-            thumb.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+            thumb.compress(Bitmap.CompressFormat.JPEG,quality,outputStream);
             outputStream.close();
             return thumb;
         } catch (FileNotFoundException e) {
