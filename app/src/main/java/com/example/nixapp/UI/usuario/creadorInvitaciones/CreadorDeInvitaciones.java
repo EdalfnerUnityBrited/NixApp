@@ -1,14 +1,18 @@
 package com.example.nixapp.UI.usuario.creadorInvitaciones;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +35,9 @@ import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.BrushFragment
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.EditImageFragmentListener;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.EmojiFragmentListener;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.FiltersListFragmentListener;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.GenerateQRListener;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.SetImageSizeListener;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.SetInvitationQualityListener;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Utils.BitmapUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
@@ -48,17 +55,20 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 import ja.burhanrashid52.photoeditor.OnSaveBitmap;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoEditorView;
 
-public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersListFragmentListener, EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener, AddFrameListener, AddShapeListener {
+public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersListFragmentListener, EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener, AddFrameListener, AddShapeListener, SetImageSizeListener, SetInvitationQualityListener, GenerateQRListener {
 
 
 
     public static String pictureName ="dientedeleon.jpeg";
     public static final int PERMISSION_PICK_IMAGE = 1000;
     public static final int PERMISSION_INSERT_IMAGE = 1001;
+    public static final int CAMERA_REQUEST = 1002;
 
     PhotoEditorView photoEditorView;
     PhotoEditor photoEditor;
@@ -70,9 +80,11 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
 
-    CardView btn_filters_list, btn_edit_card,btn_brush,btn_emoji,btn_add_text,btn_add_image,btn_add_frame,btn_crop,btn_shape;
+    private boolean pedirImagen = false, pedirCalidad=false;
 
-    int brightnessFinal = 0;
+    CardView btn_filters_list, btn_edit_card,btn_brush,btn_emoji,btn_add_text,btn_add_image,btn_add_frame,btn_crop,btn_shape,btn_qr;
+
+    int brightnessFinal = 0,imageHeight = 0,imageWidth=0, quality =0;
     float contrastFinal = 1.0f, saturationFinal = 1.0f;
 
     Uri image_selected_uri;
@@ -118,6 +130,16 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         btn_add_frame = (CardView) findViewById(R.id.btn_add_frame_editor);
         btn_crop = (CardView) findViewById(R.id.btn_crop_editor);
         btn_shape = (CardView) findViewById(R.id.btn_shape_editor);
+        btn_qr = (CardView) findViewById(R.id.btn_qr_editor);
+
+        btn_qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                QrCodeFragment qrCodeFragment = QrCodeFragment.getInstance();
+                qrCodeFragment.setListener(CreadorDeInvitaciones.this);
+                qrCodeFragment.show(getSupportFragmentManager(),qrCodeFragment.getTag());
+            }
+        });
 
         btn_shape.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +213,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         btn_add_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                askForImageSize();
                 addImageToPicture();
             }
         });
@@ -208,6 +231,12 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
 
     }
 
+    private void askForImageSize() {
+        AskSizeImageFragment askSizeImageFragment = AskSizeImageFragment.getInstance();
+        askSizeImageFragment.setListener(CreadorDeInvitaciones.this);
+        askSizeImageFragment.show(getSupportFragmentManager(),askSizeImageFragment.getTag());
+    }
+
     private void startCrop(Uri uri) {
         String destinationFileName = new StringBuilder(UUID.randomUUID().toString()).append(".jpg").toString();
 
@@ -216,24 +245,27 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
     }
 
     private void addImageToPicture() {
-        Dexter.withActivity(this)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted()){
-                            Intent intent = new Intent(Intent.ACTION_PICK);
-                            intent.setType("image/*");
-                            startActivityForResult(intent,PERMISSION_INSERT_IMAGE);
+        if (pedirImagen) {
+            pedirImagen=false;
+            Dexter.withActivity(this)
+                    .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
+                                Intent intent = new Intent(Intent.ACTION_PICK);
+                                intent.setType("image/*");
+                                startActivityForResult(intent, PERMISSION_INSERT_IMAGE);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        Toast.makeText(CreadorDeInvitaciones.this, "Permiso denegado para insertar imagen", Toast.LENGTH_SHORT).show();
-                    }
-                }).check();
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                            Toast.makeText(CreadorDeInvitaciones.this, "Permiso denegado para insertar imagen", Toast.LENGTH_SHORT).show();
+                        }
+                    }).check();
+        }
     }
 
     private void loadImage() {
@@ -332,53 +364,38 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
             return true;
         }
         else if (id == R.id.action_save){
+            selectQuality();
             saveImageToGallery();
+            return true;
+        }
+        else if (id == R.id.action_camera){
+            openCamera();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveImageToGallery() {
+    private void selectQuality(){
+        AskQualityInvitationFragment askQualityInvitationFragment = AskQualityInvitationFragment.getInstance();
+        askQualityInvitationFragment.setListener(CreadorDeInvitaciones.this);
+        askQualityInvitationFragment.show(getSupportFragmentManager(),askQualityInvitationFragment.getTag());
+    }
+
+    private void openCamera() {
         Dexter.withActivity(this)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                .withPermissions(Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()){
-                            photoEditor.saveAsBitmap(new OnSaveBitmap() {
-                                @Override
-                                public void onBitmapReady(Bitmap saveBitmap) {
-                                    try {
-                                        photoEditorView.getSource().setImageBitmap(saveBitmap);
-                                        final String path = BitmapUtils.insertImage(getContentResolver(), saveBitmap, System.currentTimeMillis() + "_invitacion.jpg", null);
-                                        if (!TextUtils.isEmpty(path)){
-                                            Snackbar snackbar = Snackbar.make(coordinatorLayout,
-                                                    "Invitacion guardada a la galería",
-                                                    Snackbar.LENGTH_LONG).setAction("ABRIR", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    openImage(path);
-                                                }
-                                            });
-                                            snackbar.show();
-                                        }
-                                        else{
-                                            Snackbar snackbar = Snackbar.make(coordinatorLayout,
-                                                    "No se pudo guardar en galería",
-                                                    Snackbar.LENGTH_LONG);
-                                            snackbar.show();
-                                        }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-
-                                }
-                            });
+                            ContentValues values = new ContentValues();
+                            values.put(MediaStore.Images.Media.TITLE,"Nueva foto");
+                            values.put(MediaStore.Images.Media.DESCRIPTION,"De La Camera");
+                            image_selected_uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,image_selected_uri);
+                            startActivityForResult(cameraIntent,CAMERA_REQUEST);
                         }
                         else{
                             Toast.makeText(CreadorDeInvitaciones.this,"Permiso denegado de guardado",Toast.LENGTH_SHORT).show();
@@ -390,6 +407,61 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
                         token.continuePermissionRequest();
                     }
                 }).check();
+    }
+
+    private void saveImageToGallery() {
+        if (pedirCalidad) {
+            pedirCalidad=false;
+            Dexter.withActivity(this)
+                    .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
+                                photoEditor.saveAsBitmap(new OnSaveBitmap() {
+                                    @Override
+                                    public void onBitmapReady(Bitmap saveBitmap) {
+                                        try {
+                                            photoEditorView.getSource().setImageBitmap(saveBitmap);
+                                            final String path = BitmapUtils.insertImage(getContentResolver(), saveBitmap, System.currentTimeMillis() + "_invitacion.jpg", null,quality);
+                                            if (!TextUtils.isEmpty(path)) {
+                                                Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                                                        "Invitacion guardada a la galería",
+                                                        Snackbar.LENGTH_LONG).setAction("ABRIR", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        openImage(path);
+                                                    }
+                                                });
+                                                snackbar.show();
+                                            } else {
+                                                Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                                                        "No se pudo guardar en galería",
+                                                        Snackbar.LENGTH_LONG);
+                                                snackbar.show();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(CreadorDeInvitaciones.this, "Permiso denegado de guardado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                    }).check();
+        }
     }
 
     private void openImage(String path) {
@@ -445,8 +517,22 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
 
 
             }
+            else if (requestCode == CAMERA_REQUEST) {
+                Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this, image_selected_uri, 800, 800);
+                //limpio la memoria del bitmap
+                originalBitmap.recycle();
+                finalBitmap.recycle();
+                filteredBitmap.recycle();
+                originalBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                finalBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                filteredBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                photoEditorView.getSource().setImageBitmap(originalBitmap);
+                bitmap.recycle();
+                filtersListFragment = FiltersListFragment.getInstance(originalBitmap);
+                filtersListFragment.setListener(this);
+            }
             else if (requestCode == PERMISSION_INSERT_IMAGE){
-                Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this,data.getData(),250,250);
+                Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this,data.getData(),imageHeight,imageWidth);
                 photoEditor.addImage(bitmap);
             }
             else if (requestCode== UCrop.REQUEST_CROP){
@@ -527,6 +613,33 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
     @Override
     public void onAddShape(int frame) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),frame);
+        photoEditor.addImage(bitmap);
+    }
+
+    @Override
+    public void setImageSize(int alto, int ancho) {
+        this.imageHeight = alto;
+        this.imageWidth = ancho;
+        pedirImagen=true;
+        addImageToPicture();
+    }
+
+    @Override
+    public void setImageQuality(int quality) {
+        this.quality = quality;
+        pedirCalidad=true;
+        saveImageToGallery();
+    }
+
+    @Override
+    public void generateCodeQr(String enlace) {
+        Bitmap bitmap = null;
+        QRGEncoder qrgEncoder = new QRGEncoder(enlace, null, QRGContents.Type.TEXT,400);
+        try{
+            bitmap = qrgEncoder.encodeAsBitmap();
+        }
+        catch (Exception e){
+        }
         photoEditor.addImage(bitmap);
     }
 }
