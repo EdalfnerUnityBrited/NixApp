@@ -6,13 +6,16 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera2" android:required="false"></uses-feature>
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
 
     <application
         android:name=".common.MyApp"
@@ -23,7 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio"></activity>
+        <activity android:name=".UI.usuario.misEventos.CotizacionPorServico.PagoLinea"></activity>
+        <activity android:name=".UI.usuario.misEventos.CotizacionPorServico.EleccionPago" />
+        <activity android:name=".UI.welcome.RecuperarContra" />
+        <activity android:name=".UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio" />
         <activity
             android:name=".UI.usuario.misEventos.BusquedaServicios.BusquedaFiltrosServicio"
             android:screenOrientation="portrait" />

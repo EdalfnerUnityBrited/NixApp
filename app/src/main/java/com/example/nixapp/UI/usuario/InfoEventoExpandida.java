@@ -59,6 +59,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
     List<ImagenEventos> eventosUsuario;
     LinearLayout botones;
     String confir = "";
+    LinearLayout linearCover;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -255,11 +256,12 @@ public class InfoEventoExpandida extends AppCompatActivity {
         municipios.setText(municipio);
         municipios.setBackground(null);
         municipios.setEnabled(false);
+        linearCover = findViewById(R.id.linearCover);
         ///////////////////////////////////////////////////
         if(cover == 0)
         {
-            cover_even.setChecked(false);
-            cover_even.setEnabled(false);
+            linearCover.setVisibility(View.GONE);
+            cover_even.setVisibility(View.GONE);
         }
         else
         {

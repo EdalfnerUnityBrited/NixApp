@@ -1,7 +1,7 @@
 package com.example.nixapp.DB;
 
 public class Cotizacion {
-    String total, estado, id;
+    String total, estado, id, nombre;
     int id_servicio, id_evento;
 
 
@@ -17,6 +17,23 @@ public class Cotizacion {
         this.id = id;
         this.id_servicio = id_servicio;
         this.id_evento = id_evento;
+    }
+
+    public Cotizacion(String total, String estado, String id, String nombre, int id_servicio, int id_evento) {
+        this.total = total;
+        this.estado = estado;
+        this.id = id;
+        this.nombre = nombre;
+        this.id_servicio = id_servicio;
+        this.id_evento = id_evento;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getTotal() {

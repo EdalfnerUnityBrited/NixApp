@@ -105,6 +105,7 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
         Intent intent= new Intent(ServiciosProximos.this, CotizacionServicio.class);
         intent.putExtra("id", item.getId_servicio());
         intent.putExtra("id_cotizacion", item.getId());
+        intent.putExtra("id_Evento", item.getId_evento());//int
         startActivity(intent);
     }
 

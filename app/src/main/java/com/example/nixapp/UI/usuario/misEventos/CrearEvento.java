@@ -20,9 +20,9 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -39,8 +39,6 @@ import com.example.nixapp.DB.ImagenEventos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.ViewPagerAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Plantillas;
-import com.example.nixapp.UI.usuario.misEventos.BusquedaServicios.BuscarServicios;
-import com.example.nixapp.UI.welcome.MainActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
@@ -49,9 +47,6 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareButton;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,7 +84,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     Calendar currentTime = Calendar.getInstance();
     List<String> fotos;
     int contador = 0;
-    Switch simpleSwitch1;
     CheckBox cover;
     TextView correosAgregados;
     String downloadUrl, imagenPrincipal="";
@@ -236,21 +230,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        simpleSwitch1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String statusSwitch1, statusSwitch2;
-                if (simpleSwitch1.isChecked()) {
-                    info.setVisibility(View.VISIBLE);
-                    enables.setVisibility(View.VISIBLE);
-                    Toast.makeText(CrearEvento.this, "Ve al catalogo para ver los servicios", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    info.setVisibility(View.GONE);
-                    enables.setVisibility(View.GONE);
-                }
-            }
-        });
 
         cover = (CheckBox) findViewById(R.id.cover);
         final EditText cover_val = findViewById(R.id.cover_valor);
@@ -540,7 +519,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         terminar = findViewById(R.id.eventoTerminado);
         eTextFecha=(EditText) findViewById(R.id.fecha);
         insertar = findViewById(R.id.correoAgregado);
-        simpleSwitch1 = (Switch) findViewById(R.id.servicios);
         enables = findViewById(R.id.buttonIrCatalogo);
         info = findViewById(R.id.info);
         eTextHora=(EditText) findViewById(R.id.hora_evento);
@@ -552,15 +530,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         descripcionEvento= findViewById(R.id.descripcion);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         imagen= findViewById(R.id.buttonImagen);
-        catalogo=findViewById(R.id.buttonIrCatalogo);
-        catalogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i= new Intent(CrearEvento.this, BuscarServicios.class);
-                i.putExtra("categoria",categoria_evento);
-                startActivity(i);
-            }
-        });
         downloadUrl="";
         imagenPrincipal="";
         fotos= new ArrayList<>();
@@ -822,7 +791,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                     imagen_lista = true;
                     Glide.with(this).load(imagen_enviar).into(InvitacionSeleccionada);
                     InvitacionSeleccionada.setVisibility(View.VISIBLE);
-                    Toast.makeText(this, "Imagen Agregada", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();

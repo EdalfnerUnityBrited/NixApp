@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroundnormal"
+    tools:context=".UI.usuario.misEventos.CotizacionPorServico.EleccionPago">
+
+    <Button
+        android:id="@+id/botonEfectivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="269dp"
+        android:layout_marginBottom="414dp"
+        android:text="PAGO EN EFECTIVO"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/nopress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/botonLinea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="300dp"
+        android:text="PAGO EN LINEA"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/nopress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonEfectivo" />
+</androidx.constraintlayout.widget.ConstraintLayout>

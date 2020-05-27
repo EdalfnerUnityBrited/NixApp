@@ -41,6 +41,8 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
+
+
     public Usuario(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
