@@ -24,6 +24,7 @@ import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.ContratacionesListResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
 import com.example.nixapp.conn.results.CotizacionPaqueteResult;
 import com.example.nixapp.conn.results.CotizacionResult;
@@ -250,4 +251,7 @@ public interface NixService {
 
     @POST("proveedor/borrarCotizacion")
     Call<ResponseBody> borrarCotizacion(@Body Cotizacion cotizacion);
+
+    @GET("proveedor/contrataciones")
+    Call<ContratacionesListResult> contrataciones();
 }

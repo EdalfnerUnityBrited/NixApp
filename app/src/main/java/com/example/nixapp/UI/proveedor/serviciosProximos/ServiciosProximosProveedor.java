@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Notificaciones;
 import com.example.nixapp.DB.Usuario;
@@ -26,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ServiciosProximosProveedor extends AppCompatActivity implements ChatsFragmentProveedor.OnListFragmentInteractionListener, NotificacionesFragmentProveedor.OnListFragmentInteractionListener{
+public class ServiciosProximosProveedor extends AppCompatActivity implements ChatsFragmentProveedor.OnListFragmentInteractionListener, NotificacionesFragmentProveedor.OnListFragmentInteractionListener, ServiciosPendientesFragmentProveedor.OnListFragmentInteractionListener{
     Usuario usuario;
     Eventos eventos;
     NixService nixService;
@@ -123,5 +126,15 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
     private void retrofitInit() {
         nixClient= NixClient.getInstance();
         nixService= nixClient.getNixService();
+    }
+
+    @Override
+    public void onListFragmentInteraction(Contrataciones item) {
+        Toast.makeText(this, "Apretaste el servicio", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

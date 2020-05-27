@@ -58,8 +58,7 @@ public class ChatsFragmentProveedor extends Fragment {
             public void onResponse(Call<ChatResult> call, Response<ChatResult> response) {
                 if (response.isSuccessful()) {
                     Log.i("respuesta", response.body().toString());
-                    Toast.makeText(getActivity(), "Chats Obtenidos correctamente",
-                            Toast.LENGTH_SHORT).show();
+
 
                     chatsList=  response.body().chats;
                     adapterChats= new PruebaChatsProveedorRecyclerViewAdapter(chatsList, mListener);
