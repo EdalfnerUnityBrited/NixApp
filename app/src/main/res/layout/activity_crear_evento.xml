@@ -694,6 +694,16 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
                                 />
+                            <Button
+                                android:id="@+id/Whatsapp"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:background="@drawable/logowh"
+                                android:layout_marginLeft="20dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                />
                             <com.facebook.share.widget.ShareButton
                                 android:id="@+id/fb_share_button"
                                 android:layout_width="1dp"
@@ -706,6 +716,7 @@
                         </TableRow>
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

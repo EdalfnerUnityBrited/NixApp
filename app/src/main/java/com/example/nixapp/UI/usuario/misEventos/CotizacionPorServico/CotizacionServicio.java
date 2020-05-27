@@ -42,7 +42,11 @@ import com.example.nixapp.conn.results.PaquetesListResult;
 import com.example.nixapp.conn.results.ServicioResult;
 import com.example.nixapp.conn.results.ZonaListResult;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -71,7 +75,7 @@ public class CotizacionServicio extends AppCompatActivity {
         }
     }
 
-    boolean ZonaPermitida = false,horarioPermitido = false, horarioDentrodelHorario = false;
+    boolean ZonaPermitida = false,horarioPermitido = false;
     Cotizacion coti;
     List<ArticulosFinales> articulosFinales = new ArrayList<>();
     List<ArticulosFinales> paquetesFinales = new ArrayList<>();
@@ -98,6 +102,7 @@ public class CotizacionServicio extends AppCompatActivity {
     List<ZonaServicio> municipiosTotales;
     String id_cot = "";
     Eventos eventos;
+    CatalogoServicios catalogoServicios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,22 +194,44 @@ public class CotizacionServicio extends AppCompatActivity {
                                 {
                                     if(horarioPermitido == true)
                                     {
-                                        //Falta otra condicion!!! Pero aqui mero va eso;
-                                        costoTotal= precioTotal.getText().toString();
-                                        nombreServicio= name.getText().toString();
-                                        nombreProvee= nombreProveedor.getText().toString();
-                                        Intent intent= new Intent(CotizacionServicio.this,EleccionPago.class);
-                                        startActivity(intent);
+
+                                        String date = eventos.getFecha();
+                                        String[] dateS = date.split("-");
+                                        Calendar calendar = Calendar.getInstance();
+                                        Date fechaEvento = null;
+                                        int dia_semana = 177;
+                                        try {
+                                            fechaEvento = new SimpleDateFormat("dd/MM/yyyy").parse(dateS[2]+ "/"+dateS[1]+"/"+dateS[0]);
+                                            calendar.setTime(fechaEvento);
+                                            dia_semana = calendar.get(Calendar.DAY_OF_WEEK);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(getApplicationContext(),"Error al cambiar fecha",Toast.LENGTH_LONG).show();
+                                        }
+
+                                        if(((dia_semana == 1 && catalogoServicios.getDomingo() == 1))||(dia_semana == 2 && catalogoServicios.getLunes() == 1)||(dia_semana == 3 && catalogoServicios.getMartes() == 1)||(dia_semana == 4 && catalogoServicios.getMiercoles() == 1)||(dia_semana == 5 && catalogoServicios.getJueves() == 1)||(dia_semana == 6 && catalogoServicios.getViernes() == 1)||(dia_semana == 7 && catalogoServicios.getSabado() == 1))
+                                        {
+                                            costoTotal= precioTotal.getText().toString();
+                                            nombreServicio= name.getText().toString();
+                                            nombreProvee= nombreProveedor.getText().toString();
+                                            Intent intent= new Intent(CotizacionServicio.this,EleccionPago.class);
+                                            startActivity(intent);
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(getApplicationContext(),"No se trabaja ese dia, lo sentimos",Toast.LENGTH_LONG).show();
+                                        }
+
                                     }
                                     else
                                     {
-                                        Toast.makeText(CotizacionServicio.this, "Este Servicio tiene esa fecha ocupada", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(CotizacionServicio.this, "Este Servicio tiene esa fecha ocupada, lo sentimos", Toast.LENGTH_LONG).show();
                                     }
 
                                 }
                                 else
                                 {
-                                    Toast.makeText(CotizacionServicio.this, "Este Servicio no esta disponible en tu region", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(CotizacionServicio.this, "Este Servicio no esta disponible en tu region, lo sentimos", Toast.LENGTH_LONG).show();
                                 }
 
 
@@ -423,7 +450,7 @@ public class CotizacionServicio extends AppCompatActivity {
             public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
                 if (response.isSuccessful()){
                     //Toast.makeText(CotizacionServicio.this, "Servicio obtenido correctamente", Toast.LENGTH_SHORT).show();
-                    CatalogoServicios catalogoServicios= response.body().servicio;
+                    catalogoServicios= response.body().servicio;
                     name.setText(catalogoServicios.getNombre());
                     direccion.setText(catalogoServicios.getDireccion());
                     telefono.setText(catalogoServicios.getTelefono());

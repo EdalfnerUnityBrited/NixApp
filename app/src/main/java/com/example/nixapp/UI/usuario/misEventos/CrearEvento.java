@@ -20,7 +20,6 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -91,7 +90,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     NixClient nixClient;
     int privacidad, categoria_evento, dia, ano, mes;
     String clickedName, municipio,id;
-    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion,checardireccion;
+    Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion,checardireccion, whats;
     int cupo;
     boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
@@ -208,6 +207,23 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
         });
 
+        ///////////////////////////////////
+        whats = findViewById(R.id.Whatsapp);
+        whats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imagen_enviar == null)
+                {
+                    Toast.makeText(getApplicationContext(),"No has elegido la invitacion para compartir" ,Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    enviarEmail();
+                }
+
+            }
+        });
+        //////////////////////////////////
         initList();
 
         Spinner spinners = findViewById(R.id.spinnerSimple);
