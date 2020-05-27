@@ -8,17 +8,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Eventos;
+import com.example.nixapp.DB.Notificaciones;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.InfoEventoExpandida;
+import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
+import com.example.nixapp.conn.NixClient;
+import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.EventosResult;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ServiciosProximosProveedor extends AppCompatActivity implements ChatsFragmentProveedor.OnListFragmentInteractionListener{
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ServiciosProximosProveedor extends AppCompatActivity implements ChatsFragmentProveedor.OnListFragmentInteractionListener, NotificacionesFragmentProveedor.OnListFragmentInteractionListener{
     Usuario usuario;
+    Eventos eventos;
+    NixService nixService;
+    NixClient nixClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        retrofitInit();
         setContentView(R.layout.activity_servicios_proximos_proveedor);
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_servicios_proximos_proveedor);
@@ -59,5 +75,53 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
         chatSelected.putExtra("reciver", idProveedor);
         startActivity(chatSelected);
 
+    }
+
+    @Override
+    public void onNotificationFragmentInteraction(Notificaciones item) {
+        Notificaciones notificaciones= item;
+        if (notificaciones.getTipoNotificacion()==3||notificaciones.getTipoNotificacion()==4){
+
+        }
+        else{
+
+            Busqueda busqueda= new Busqueda(Integer.toString(item.getId_evento()));
+            Call<EventosResult> call= nixService.getEventId(busqueda);
+            call.enqueue(new Callback<EventosResult>() {
+                @Override
+                public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
+                    if (response.isSuccessful()){
+                        eventos= response.body().eventos;
+                        Intent intentInfoExpandida = new Intent(ServiciosProximosProveedor.this, InfoEventoExpandida.class);
+                        intentInfoExpandida.putExtra("nombre",eventos.getNombre_evento());
+                        intentInfoExpandida.putExtra("privacidad",eventos.getPrivacidad());
+                        intentInfoExpandida.putExtra("categoria",eventos.getCategoria_evento());
+                        intentInfoExpandida.putExtra("fecha",eventos.getFecha());
+                        intentInfoExpandida.putExtra("hora",eventos.getHora());
+                        intentInfoExpandida.putExtra("lugar",eventos.getLugar());
+                        intentInfoExpandida.putExtra("descripcion",eventos.getDescripcion());
+                        intentInfoExpandida.putExtra("cupo",eventos.getCupo());
+                        intentInfoExpandida.putExtra("cover",eventos.getCover());
+                        intentInfoExpandida.putExtra("fotoPrincipal",eventos.getFotoPrincipal());
+                        intentInfoExpandida.putExtra("id",eventos.getId());
+                        intentInfoExpandida.putExtra("municipio",eventos.getMunicipio());
+                        startActivity(intentInfoExpandida);
+                    }
+                    else{
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EventosResult> call, Throwable t) {
+
+                }
+            });
+
+        }
+    }
+    private void retrofitInit() {
+        nixClient= NixClient.getInstance();
+        nixService= nixClient.getNixService();
     }
 }

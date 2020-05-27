@@ -1,5 +1,6 @@
 package com.example.nixapp.UI.usuario.serviciosContratados;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -16,21 +18,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Chat;
 import com.example.nixapp.DB.Cotizacion;
+import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
+import com.example.nixapp.UI.usuario.misEventos.MisEventos;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.DashboardFragment;
+import com.example.nixapp.conn.NixClient;
+import com.example.nixapp.conn.NixService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ServiciosProximos extends AppCompatActivity implements DashboardFragment.OnListFragmentInteractionListener, CotizacionesGuardadasFragment.OnListFragmentInteractionListener{
     private RecyclerView chatsList;
     Usuario usuario;
+    NixService nixService;
+    NixClient nixClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         setContentView(R.layout.activity_servicios_proximos);
+        retrofitInit();
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
@@ -101,7 +115,6 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
 
     @Override
     public void onListFragmentInteraction(Cotizacion item) {
-        Toast.makeText(this, "Apretaste la cotización: "+item.getId(), Toast.LENGTH_SHORT).show();
         Intent intent= new Intent(ServiciosProximos.this, CotizacionServicio.class);
         intent.putExtra("id", item.getId_servicio());
         intent.putExtra("id_cotizacion", item.getId());
@@ -112,5 +125,44 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onClickDelete(final Cotizacion mItem) {
+        final AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("¿Quiere borrar la cotizacion del servicio: "+mItem.getNombre()+"?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                Call<ResponseBody> call = nixService.borrarCotizacion(mItem);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(ServiciosProximos.this, "Cotizacion borrada satisfactoriamente", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(ServiciosProximos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(ServiciosProximos.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                //cancelar();
+            }
+        });
+        dialogo1.show();
+    }
+    private void retrofitInit() {
+        nixClient= NixClient.getInstance();
+        nixService= nixClient.getNixService();
     }
 }

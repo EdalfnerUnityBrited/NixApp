@@ -3,6 +3,7 @@ package com.example.nixapp.UI.usuario.serviciosContratados;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_articulos_servicios_list_buscar, parent, false);
+                .inflate(R.layout.fragment_cotizaciones_buscar, parent, false);
         return new ViewHolder(view);
 
         
@@ -41,7 +42,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
         holder.mItem = mValues.get(position);
         holder.nombre.setText(String.valueOf(holder.mItem.getTotal()));
         holder.nombreServicio.setText(holder.mItem.getNombre());
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.nombreServicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
@@ -53,6 +54,19 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
 
             }
         });
+        holder.borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onClickDelete(holder.mItem);
+                }
+
+
+            }
+        });
+
 
     }
 
@@ -66,6 +80,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
         public final TextView nombre, nombreServicio;
         public final ImageView eventImage;
         public Cotizacion mItem;
+        public final Button borrar;
 
         public ViewHolder(View view) {
             super(view);
@@ -73,6 +88,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
            nombre = view.findViewById(R.id.textViewTitulo);
            nombreServicio= view.findViewById(R.id.nombreServicio);
         eventImage=view.findViewById(R.id.imageViewEvento);
+        borrar=view.findViewById(R.id.buttonDelete);
 
 
         }

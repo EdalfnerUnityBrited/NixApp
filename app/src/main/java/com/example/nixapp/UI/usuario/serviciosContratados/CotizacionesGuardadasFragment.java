@@ -78,6 +78,8 @@ public class CotizacionesGuardadasFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Cotizacion item);
         void onClick(View v);
+
+        void onClickDelete(Cotizacion mItem);
     }
     @Override
     public void onAttach(Context context) {

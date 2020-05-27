@@ -247,4 +247,7 @@ public interface NixService {
 
     @POST("proveedor/nuevaContratacion")
     Call<ResponseBody> nuevaContratacion(@Body Chat chat);
+
+    @POST("proveedor/borrarCotizacion")
+    Call<ResponseBody> borrarCotizacion(@Body Cotizacion cotizacion);
 }
