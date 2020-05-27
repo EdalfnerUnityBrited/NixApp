@@ -6,6 +6,7 @@ import com.example.nixapp.DB.BusquedaArticulos;
 import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
 import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.Chat;
 import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.CotizacionArticulo;
 import com.example.nixapp.DB.CotizacionPaquete;
@@ -240,4 +241,10 @@ public interface NixService {
 
     @POST("proveedor/verificarFecha")
     Call<ResponseBody> fechaVerificada(@Body HorarioVerificar horarioVerificar);
+
+    @POST("chats")
+    Call<ResponseBody> nuevoChat(@Body Chat chat);
+
+    @POST("proveedor/nuevaContratacion")
+    Call<ResponseBody> nuevaContratacion(@Body Chat chat);
 }

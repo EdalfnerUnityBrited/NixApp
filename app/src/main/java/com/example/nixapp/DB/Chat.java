@@ -7,8 +7,20 @@ public class Chat implements Serializable {
     public String name;
     public String email;
 
+    public String id_catalogo;
+    public String metodo_pago;
+
+    public Chat(String id_catalogo) {
+        this.id_catalogo = id_catalogo;
+    }
+
     public Chat(int id){
 
+    }
+
+    public Chat(String id_catalogo, String metodo_pago) {
+        this.id_catalogo = id_catalogo;
+        this.metodo_pago = metodo_pago;
     }
 
     public Chat(int id, String name, String email) {

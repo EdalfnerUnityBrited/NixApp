@@ -1,5 +1,6 @@
 package com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,6 +78,7 @@ public class CotizacionServicio extends AppCompatActivity {
     List<CotizacionArticulo> articulosEnCotizacion = new ArrayList<>();
     List<CotizacionPaquete> paquetesEnCotizacion = new ArrayList<>();
     int servicioid;
+    public static String costoTotal, nombreServicio, nombreProvee, idService;
     Button guardar_Cotizacion, servicio_contratado, agregar_articulos;
     CheckBox lunes, martes, miercoles, jueves, viernes, sabado, domingo;
     Spinner categorias;
@@ -141,6 +143,7 @@ public class CotizacionServicio extends AppCompatActivity {
         mAdapter = new EventosAdapter(this, mEventsList);
         categorias.setAdapter(mAdapter);
         servicioid=(int) getIntent().getSerializableExtra("id");
+        idService= Integer.toString(servicioid);
         try {
             id_evento =(int) getIntent().getSerializableExtra("id_Evento");
             Busqueda busqueda = new Busqueda(String.valueOf(id_evento));
@@ -187,14 +190,17 @@ public class CotizacionServicio extends AppCompatActivity {
                                     if(horarioPermitido == true)
                                     {
                                         //Falta otra condicion!!! Pero aqui mero va eso;
+                                        costoTotal= precioTotal.getText().toString();
+                                        nombreServicio= name.getText().toString();
+                                        nombreProvee= nombreProveedor.getText().toString();
+                                        Intent intent= new Intent(CotizacionServicio.this,EleccionPago.class);
+                                        startActivity(intent);
                                     }
                                     else
                                     {
                                         Toast.makeText(CotizacionServicio.this, "Este Servicio tiene esa fecha ocupada", Toast.LENGTH_LONG).show();
                                     }
 
-                                    horarioPermitido = false;
-                                    ZonaPermitida = false;
                                 }
                                 else
                                 {
