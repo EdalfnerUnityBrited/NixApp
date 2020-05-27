@@ -5,6 +5,9 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -75,7 +78,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
 
     CoordinatorLayout coordinatorLayout;
 
-    Bitmap originalBitmap,filteredBitmap,finalBitmap;
+    Bitmap originalBitmap,filteredBitmap,finalBitmap,marcaAgua;
 
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
@@ -273,6 +276,12 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         filteredBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         finalBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         photoEditorView.getSource().setImageBitmap(originalBitmap);
+        marcaAgua = BitmapUtils.getBitmapFromAssets(this,"marcaagua.jpeg",10,10);
+        Bitmap mutableBitmap = marcaAgua.isMutable()?marcaAgua:marcaAgua.copy(Bitmap.Config.ARGB_8888,true);
+        Canvas canvas = new Canvas(mutableBitmap);
+        int color = (25 & 0xFF) <<24;
+        canvas.drawColor(color, PorterDuff.Mode.DST_IN);
+        photoEditor.addImage(mutableBitmap);
     }
 
     private void setupViewPager(ViewPager viewPager) {
