@@ -28,6 +28,7 @@ import com.example.nixapp.conn.results.ArticulosPaqueteResult;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.ContratacionesListResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
+import com.example.nixapp.conn.results.CotizacionExpandidaResult;
 import com.example.nixapp.conn.results.CotizacionPaqueteResult;
 import com.example.nixapp.conn.results.CotizacionResult;
 import com.example.nixapp.conn.results.CotizacionesListResult;
@@ -259,4 +260,7 @@ public interface NixService {
 
     @POST("proveedor/articulosPaquete")
     Call<ArticulosPaqueteResult> articulosEnPaquete (@Body Articulos articulos);
+
+    @POST("proveedor/contratacionEvento")
+    Call<CotizacionExpandidaResult> contratatacionExpandida(@Body Articulos articulos);
 }
