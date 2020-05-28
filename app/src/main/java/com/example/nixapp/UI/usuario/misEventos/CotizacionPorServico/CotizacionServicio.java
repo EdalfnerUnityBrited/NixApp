@@ -108,6 +108,7 @@ public class CotizacionServicio extends AppCompatActivity {
     boolean agregados = false;
     List<ZonaServicio> municipiosTotales;
     String id_cot = "";
+    public String desglose = "";
     Eventos eventos;
     CatalogoServicios catalogoServicios;
     AlertDialog.Builder informacion,resumen_compra;
@@ -233,6 +234,7 @@ public class CotizacionServicio extends AppCompatActivity {
 
                                                 }
                                                 todaInfo += "Total a pagar : $"+costoTotal+ " MXN" ;
+                                                desglose = todaInfo;
                                                 resumen_compra = new AlertDialog.Builder(CotizacionServicio.this);
                                                 resumen_compra.setTitle("Resumen de la compra:");
                                                 resumen_compra.setMessage("Articulos que se cobraran:" + "\n" + todaInfo);

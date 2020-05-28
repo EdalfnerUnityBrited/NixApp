@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -146,7 +145,6 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
 
     @Override
     public void onListFragmentInteraction(Contrataciones item) {
-        Toast.makeText(this, "Apretaste el servicio", Toast.LENGTH_SHORT).show();
         Intent intent= new Intent(ServiciosProximosProveedor.this, InfoExpandidaServicio.class);
         intent.putExtra("id_servicio", item.getId_servicio());
         intent.putExtra("id_evento", item.getId_evento());
