@@ -75,7 +75,7 @@ public class Calendario extends AppCompatActivity {
             public void onResponse(Call<EventosListResult> call, Response<EventosListResult> response) {
                 if(response.isSuccessful())
                 {
-                    Toast.makeText(getApplicationContext(),"Objetos Obtenidos Correctamente",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(),"Objetos Obtenidos Correctamente",Toast.LENGTH_LONG).show();
                     eventosUsuario = response.body().eventos;
                     for (Eventos even: eventosUsuario) { //Acomodo los eventos para cambiar la fecha de String a Calendar
 

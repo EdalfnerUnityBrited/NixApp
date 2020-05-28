@@ -1,7 +1,47 @@
 package com.example.nixapp.DB;
 
 public class Contrataciones {
-    String id, estado_servicio, fecha, hora, metodo_pago, id_servicio, id_evento, nombre_evento;
+    String id;
+    String estado_servicio;
+    String fecha;
+    String hora;
+    String metodo_pago;
+    String id_servicio;
+    String id_evento;
+    String nombre_evento;
+    String nombre;
+    String lugar;
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+
+
+    public Contrataciones(String id, String estado_servicio, String fecha, String hora, String metodo_pago, String id_servicio, String id_evento, String nombre_evento,String nombre,String lugar) {
+        this.id = id;
+        this.estado_servicio = estado_servicio;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.metodo_pago = metodo_pago;
+        this.id_servicio = id_servicio;
+        this.id_evento = id_evento;
+        this.nombre_evento = nombre_evento;
+        this.nombre = nombre;
+        this.lugar = lugar;
+    }
 
     public Contrataciones(String id, String estado_servicio, String fecha, String hora, String metodo_pago, String id_servicio, String id_evento, String nombre_evento) {
         this.id = id;

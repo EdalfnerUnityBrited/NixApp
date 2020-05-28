@@ -1,19 +1,19 @@
 package com.example.nixapp.UI.proveedor.misServicios;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import com.example.nixapp.DB.Articulos;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.example.nixapp.DB.CatalogoServicios;
-import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -32,11 +32,26 @@ public class MisServiciosProveedor extends AppCompatActivity implements CrearSer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mis_servicios_proveedor);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarTitle("Mis Servicios");
+        mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         retrofitInit();
         BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_mis_servicios_proveedor);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_mis_servicios_proveedor,new CrearServiciosFragmentProveedor()).commit();
+    }
+
+    public void setToolbarTitle(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -46,10 +61,12 @@ public class MisServiciosProveedor extends AppCompatActivity implements CrearSer
                     Fragment selectedFragment = null;
                     switch (item.getItemId()){
                         case R.id.nav_crearservicios:{
+                            setToolbarTitle("Mis Servicios");
                             selectedFragment = new CrearServiciosFragmentProveedor();
                             break;
                         }
                         case R.id.nav_historial_proveedor:{
+                            setToolbarTitle("Historial");
                             selectedFragment = new HistorialFragmentProveedor();
                             break;
                         }

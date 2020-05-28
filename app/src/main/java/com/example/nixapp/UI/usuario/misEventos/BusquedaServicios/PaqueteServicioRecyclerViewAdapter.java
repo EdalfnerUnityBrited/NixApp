@@ -62,8 +62,6 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
-
-
             }
         });
         holder.btnMas.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +86,17 @@ public class PaqueteServicioRecyclerViewAdapter extends RecyclerView.Adapter<Paq
                     mListener.onClickSub(holder.mItem);
                     holder.CambioDigitoMenos();
                     digitos = String.valueOf(holder.cantidad.getText());
+                }
+            }
+        });
+
+        holder.nombre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onInfo(holder.mItem);
                 }
             }
         });

@@ -23,6 +23,7 @@ import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
+import com.example.nixapp.conn.results.ArticulosPaqueteResult;
 import com.example.nixapp.conn.results.ChatResult;
 import com.example.nixapp.conn.results.ContratacionesListResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
@@ -254,4 +255,7 @@ public interface NixService {
 
     @GET("proveedor/contrataciones")
     Call<ContratacionesListResult> contrataciones();
+
+    @POST("proveedor/articulosPaquete")
+    Call<ArticulosPaqueteResult> articulosEnPaquete (@Body Articulos articulos);
 }

@@ -84,6 +84,7 @@ public class BuscarServicios extends AppCompatActivity{
 
                 Intent intentBusqueda = new Intent(getApplicationContext(), BusquedaFiltrosServicio.class);
                 startActivity(intentBusqueda);
+                BuscarServicios.this.finish();
                 overridePendingTransition(R.anim.slide_up, R.anim.slide_down);
                 return false;
             }

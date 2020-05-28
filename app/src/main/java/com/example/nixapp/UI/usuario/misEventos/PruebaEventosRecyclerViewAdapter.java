@@ -40,7 +40,7 @@ public class PruebaEventosRecyclerViewAdapter extends RecyclerView.Adapter<Prueb
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.nombre.setText(String.valueOf(holder.mItem.getNombre_evento()));
+        holder.nombre.setText(String.valueOf(holder.mItem.getNombre_evento()) + "\n" + "Id:" + holder.mItem.getId());
         holder.statusUsuario.setText(String.valueOf(holder.mItem.getFecha()));
         holder.direccion.setText(String.valueOf(holder.mItem.getLugar()));
         holder.cupo.setText(String.valueOf(holder.mItem.getCupo())+" Personas");
