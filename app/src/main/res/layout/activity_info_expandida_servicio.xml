@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondoeventos"
+    >
+
+    <RelativeLayout
+        android:id="@+id/fragment_container_mis_eventos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Desgloce de Contratacion"
+            app:titleTextColor="#ffffffff"></androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title_action"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Informacion del evento"
+                        android:textColor="#EFE8E8"
+
+                        android:textSize="20sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#EFE8E8" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/nombre_evento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Nombre: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/nomb"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="Evento Genial"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/categoria"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Categoria: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:gravity="center_vertical"/>
+
+                        <Spinner
+                            android:id="@+id/spinnerSimple"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true" />
+                    </TableRow>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/mun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Municipio: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/muni"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="Atotonilco"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/direccion_evento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Direccion: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/direcc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="Calle: ---- 111, Col: -----"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="horizontal">
+
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/borderrow">
+
+
+                        <TextView
+                            android:id="@+id/fecha_evento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Fecha: "
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <EditText
+                            android:id="@+id/fecha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="10/02/2004"
+                            android:inputType="textPersonName"
+                            android:text="10/02/2004"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/hora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Hora: "
+                            android:textColor="@color/white"
+                            android:textSize="20dp" />
+
+                        <EditText
+                            android:id="@+id/hora_evento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="17:45"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20sp" />
+                    </TableRow>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title_serv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Informacion del servico"
+                        android:textColor="#EFE8E8"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold">
+
+                    </TextView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#EFE8E8" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/nombre_serviciop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Nombre: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/nombre_servicioText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="Tacos de Doña pelos"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal">
+                    <TextView
+                        android:id="@+id/serv_desgloce"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Paquetes y Articulos Requeridos:"
+                        android:textColor="@color/white"
+                        android:gravity="center_horizontal"
+                        android:textSize="18sp">
+
+                    </TextView>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#EFE8E8" />
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/desglozado"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:textAlignment="center"
+                                android:scrollbars="vertical|horizontal"
+                                android:singleLine="false"
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/white"
+                                android:textSize="20sp">
+
+                            </TextView>
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/info_anfitrion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Informacion del anfitrion:"
+                        android:textColor="@color/white"
+                        android:gravity="center_horizontal"
+                        android:textSize="18sp">
+
+                    </TextView>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#EFE8E8" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/nombre_anfitrion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Nombre: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/nomb_Anf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="Juan Paco Pedro de la mar"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/email_anfitrion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Correo: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/email_Anf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="az051128@gmail.com"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:orientation="vertical">
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow">
+
+                        <TextView
+                            android:id="@+id/telefono_anfitrion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Telefono: "
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/tels_Anf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:hint="3314633635"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            android:textSize="20dp" />
+                    </TableRow>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lineabotones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="30dp">
+                    <TableRow
+                        android:id="@+id/borderbotones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/borderrow"
+                        android:padding="8dp">
+
+
+                        <Button
+                            android:id="@+id/PagoDeposito"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Deposito Pagado"
+                            android:padding="5dp"
+                            android:layout_marginRight="20dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/butom_text"
+                            android:textSize="18sp"
+                            android:background="@drawable/custombutom2"/>
+
+                        <Button
+                            android:id="@+id/PagoLiquidacion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Liquidacion Pagada"
+                            android:padding="5dp"
+                            android:textAllCaps="false"
+                            android:textSize="18sp"
+                            android:textColor="@drawable/buttom_text2"
+                            android:background="@drawable/custombutom"/>
+                    </TableRow>
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</RelativeLayout>

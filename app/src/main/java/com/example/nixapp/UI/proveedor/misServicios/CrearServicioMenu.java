@@ -1,26 +1,24 @@
 package com.example.nixapp.UI.proveedor.misServicios;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import com.example.nixapp.DB.Articulos;
-import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Paquetes;
-import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.proveedor.misServicios.Articulos.ArticuloFragment;
-import com.example.nixapp.UI.proveedor.misServicios.Articulos.CrearArticulosDatos;
 import com.example.nixapp.UI.proveedor.misServicios.Articulos.EditarArticulosDatos;
 import com.example.nixapp.UI.proveedor.misServicios.Paquetes.PaquetesFragment;
-import com.example.nixapp.UI.usuario.misEventos.MisEventos;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -38,12 +36,25 @@ public class CrearServicioMenu extends AppCompatActivity implements PaquetesFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_servicio_menu);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setToolbarTitle("Informacion del servicio");
+        mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_crear_servicio);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         servicio = (int) getIntent().getSerializableExtra("id");
         retrofitInit();
         Toast.makeText(this, "Servicio"+Integer.toString(servicio), Toast.LENGTH_SHORT).show();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_crear_servicio_menu_proveedor,new InformacionFragment()).commit();
+    }
+    public void setToolbarTitle(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -53,14 +64,17 @@ public class CrearServicioMenu extends AppCompatActivity implements PaquetesFrag
                     Fragment selectedFragment = null;
                     switch (item.getItemId()){
                         case R.id.nav_infoservicio_menu:{
+                            setToolbarTitle("Informacion del servicio");
                             selectedFragment = new InformacionFragment();
                             break;
                         }
                         case R.id.nav_articulos:{
+                            setToolbarTitle("Añadir articulos");
                             selectedFragment = new ArticuloFragment();
                             break;
                         }
                         case R.id.nav_paquetes:{
+                            setToolbarTitle("Añadir paquetes");
                             selectedFragment = new PaquetesFragment();
                             break;
                         }

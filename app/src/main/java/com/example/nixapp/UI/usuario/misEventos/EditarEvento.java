@@ -741,7 +741,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
                 if(response.isSuccessful()){
                     eventos=response.body().eventos;
-                    eTextFecha.setText(eventos.getFecha());
+                    String[] fechadesgloce = eventos.getFecha().split("-");
+                    eTextFecha.setText(fechadesgloce[2]+"/"+fechadesgloce[1]+"/"+fechadesgloce[0]);
                     eTextHora.setText(eventos.getHora());
                     nombreEvento.setText(eventos.getNombre_evento());
                     descripcionEvento.setText(eventos.getDescripcion());

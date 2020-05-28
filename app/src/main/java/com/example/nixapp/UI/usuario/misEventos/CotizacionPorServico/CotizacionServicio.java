@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,6 +111,7 @@ public class CotizacionServicio extends AppCompatActivity {
     Eventos eventos;
     CatalogoServicios catalogoServicios;
     AlertDialog.Builder informacion,resumen_compra;
+    RatingBar estrellas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -499,6 +501,7 @@ public class CotizacionServicio extends AppCompatActivity {
                 if (response.isSuccessful()){
                     //Toast.makeText(CotizacionServicio.this, "Servicio obtenido correctamente", Toast.LENGTH_SHORT).show();
                     catalogoServicios= response.body().servicio;
+                    estrellas = findViewById(R.id.ratingestrellas);
                     name.setText(catalogoServicios.getNombre());
                     direccion.setText(catalogoServicios.getDireccion());
                     telefono.setText(catalogoServicios.getTelefono());
@@ -507,6 +510,7 @@ public class CotizacionServicio extends AppCompatActivity {
                     hora_inicio.setText(catalogoServicios.getHorarioApertura());
                     categorias.setSelection(catalogoServicios.getCategoriaevento());
                     categorias.setEnabled(false);
+                    estrellas.setRating(Float.valueOf(catalogoServicios.getCalificacion()));
                     if (catalogoServicios.getLunes()==1){
                         lunes.setChecked(true);
                         lunes.setEnabled(false);

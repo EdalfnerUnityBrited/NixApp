@@ -3,6 +3,7 @@ package com.example.nixapp.UI.usuario.misEventos;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -92,7 +94,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     String clickedName, municipio,id;
     Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion,checardireccion, whats;
     int cupo;
-    boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
+    boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false,imagenprincipalA = false;
     int ApiActivada = 0;
     Uri imagen_enviar;
     ImageView InvitacionSeleccionada;
@@ -102,6 +104,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
     List<ImagenEventos> eventosUsuario = new ArrayList<>();
+    AlertDialog.Builder informacion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -575,6 +578,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+
         int privacidad= privacidad();
         String nombre = nombreEvento.getText().toString();
         String lugar=lugarEvento.getText().toString();
@@ -623,6 +627,10 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
         if (igualdadDireccionMunicipio != true || picadoChecarDireccion != true) {
             Toast.makeText(this, "Falta verificar la dirección", Toast.LENGTH_SHORT).show();
         }
+        if(imagenprincipalA == false)
+        {
+            Toast.makeText(this, "Debes agregar almenos una imagen para crear el evento", Toast.LENGTH_SHORT).show();
+        }
         else{
             boolean fechacorrecta=verificarFecha(dia, mes, ano);
             if (!fechacorrecta){
@@ -664,10 +672,20 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                 });
                             }
                             mProgressDialog.dismiss();
-                            finish();
-                            Intent intent = new Intent(getApplicationContext(), MisEventos.class);
-                            startActivity(intent);
-                            CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+                            informacion = new AlertDialog.Builder(CrearEvento.this);
+                            informacion.setTitle("Importante:");
+                            informacion.setMessage("Para acciones como quitar imagenes del evento, contratar los servicios e invitar usuarios de nix se puede hacer desde la editacion del evento");
+                            informacion.setCancelable(false);
+                            informacion.setPositiveButton("Leido", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialogo1, int id) {
+                                    finish();
+                                    Intent intent = new Intent(getApplicationContext(), MisEventos.class);
+                                    startActivity(intent);
+                                    CrearEvento.this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+                                }
+                            });
+                            informacion.show();
+
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
@@ -781,6 +799,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                                     eventosUsuario.add(contador,nueva);
                                     viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
                                     viewPager.setAdapter(viewPagerAdapter);
+                                    imagenprincipalA = true;
                                     contador++;
 
                                 }
