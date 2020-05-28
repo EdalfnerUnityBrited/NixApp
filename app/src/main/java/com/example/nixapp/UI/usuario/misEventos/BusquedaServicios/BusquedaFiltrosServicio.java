@@ -55,8 +55,11 @@ public class BusquedaFiltrosServicio extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent intentBusqueda = new Intent(getApplicationContext(), BuscarServicios.class);
+                startActivity(intentBusqueda);
                 BusquedaFiltrosServicio.this.overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
+                BusquedaFiltrosServicio.this.finish();
+
             }
         });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -195,8 +198,10 @@ public class BusquedaFiltrosServicio extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             //do your stuff
-            finish();
+            Intent intentBusqueda = new Intent(getApplicationContext(), BuscarServicios.class);
+            startActivity(intentBusqueda);
             BusquedaFiltrosServicio.this.overridePendingTransition(R.anim.slide_up,R.anim.slide_down);
+            BusquedaFiltrosServicio.this.finish();
         }
         return super.onKeyDown(keyCode, event);
     }

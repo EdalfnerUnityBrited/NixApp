@@ -281,33 +281,41 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         dialogo1.setCancelable(false);
         dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
-                String imagenBorrar=viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen();
-                ImagenEventos imagenEventos= new ImagenEventos(imagenBorrar);
-                Call<ResponseBody> call = nixService.borrarImagen(imagenEventos);
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
-                            Toast.makeText(EditarEvento.this, "Imagen borrada", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                            try {
-                                Log.i("Error",response.errorBody().string().toString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                if(viewPagerAdapter.getImagenes().size() > 1)
+                {
+                    String imagenBorrar=viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen();
+                    ImagenEventos imagenEventos= new ImagenEventos(imagenBorrar);
+                    Call<ResponseBody> call = nixService.borrarImagen(imagenEventos);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(EditarEvento.this, "Imagen borrada", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                try {
+                                    Log.i("Error",response.errorBody().string().toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(EditarEvento.this, "Error en la conexion", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                viewPagerAdapter.getImagenes().remove(viewPager.getCurrentItem());
-                viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
-                viewPager.setAdapter(viewPagerAdapter);
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(EditarEvento.this, "Error en la conexion", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    viewPagerAdapter.getImagenes().remove(viewPager.getCurrentItem());
+                    viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                    viewPager.setAdapter(viewPagerAdapter);
+                }
+                else
+                {
+                    Toast.makeText(EditarEvento.this, "No lo dejes sin imagenes... porfavor", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {

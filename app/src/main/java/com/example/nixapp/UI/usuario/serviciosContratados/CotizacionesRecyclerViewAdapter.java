@@ -40,7 +40,8 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.nombre.setText(String.valueOf(holder.mItem.getTotal()));
+        holder.nombre.setText("$"+String.valueOf(holder.mItem.getTotal()) + " MXN");
+        holder.nombreEvento.setText("Id evento: " + holder.mItem.getId_evento());
         holder.nombreServicio.setText(holder.mItem.getNombre());
         holder.nombreServicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +78,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView nombre, nombreServicio;
+        public final TextView nombre, nombreServicio,nombreEvento;
         public final ImageView eventImage;
         public Cotizacion mItem;
         public final Button borrar;
@@ -89,6 +90,7 @@ public class CotizacionesRecyclerViewAdapter extends RecyclerView.Adapter<Cotiza
            nombreServicio= view.findViewById(R.id.nombreServicio);
         eventImage=view.findViewById(R.id.imageViewEvento);
         borrar=view.findViewById(R.id.buttonDelete);
+        nombreEvento = view.findViewById(R.id.nombre_evento);
 
 
         }
