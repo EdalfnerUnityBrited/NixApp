@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
@@ -106,7 +107,7 @@ public class PagoLinea extends AppCompatActivity {
 
                                 }
                             });
-                            Chat contratacion= new Chat(CotizacionServicio.idService, "linea");
+                            Contrataciones contratacion= new Contrataciones("linea",CotizacionServicio.idService, CotizacionServicio.desglose);
                             Call<ResponseBody> callContract = nixService.nuevaContratacion(contratacion);
                             callContract.enqueue(new Callback<ResponseBody>() {
                                 @Override

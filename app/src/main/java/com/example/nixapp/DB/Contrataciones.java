@@ -11,6 +11,13 @@ public class Contrataciones {
     String nombre_evento;
     String nombre;
     String lugar;
+    String desglose;
+
+    public Contrataciones(String metodo_pago, String id_servicio, String desglose) {
+        this.metodo_pago = metodo_pago;
+        this.id_servicio = id_servicio;
+        this.desglose = desglose;
+    }
 
     public String getLugar() {
         return lugar;

@@ -108,7 +108,7 @@ public class CotizacionServicio extends AppCompatActivity {
     boolean agregados = false;
     List<ZonaServicio> municipiosTotales;
     String id_cot = "";
-    public String desglose = "";
+    public static String desglose = "";
     Eventos eventos;
     CatalogoServicios catalogoServicios;
     AlertDialog.Builder informacion,resumen_compra;
