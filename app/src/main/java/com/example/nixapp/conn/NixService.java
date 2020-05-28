@@ -7,6 +7,7 @@ import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.CotizacionArticulo;
 import com.example.nixapp.DB.CotizacionPaquete;
@@ -248,7 +249,7 @@ public interface NixService {
     Call<ResponseBody> nuevoChat(@Body Chat chat);
 
     @POST("proveedor/nuevaContratacion")
-    Call<ResponseBody> nuevaContratacion(@Body Chat chat);
+    Call<ResponseBody> nuevaContratacion(@Body Contrataciones contrataciones);
 
     @POST("proveedor/borrarCotizacion")
     Call<ResponseBody> borrarCotizacion(@Body Cotizacion cotizacion);

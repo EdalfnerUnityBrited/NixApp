@@ -1,14 +1,14 @@
 package com.example.nixapp.UI.proveedor.serviciosProximos;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Chat;
@@ -17,8 +17,8 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Notificaciones;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.proveedor.InfoExpandidaServicio;
 import com.example.nixapp.UI.usuario.InfoEventoExpandida;
-import com.example.nixapp.UI.usuario.eventosProximos.EventosProximos;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
@@ -39,13 +39,25 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
         super.onCreate(savedInstanceState);
         retrofitInit();
         setContentView(R.layout.activity_servicios_proximos_proveedor);
+        Toolbar mToolbar = findViewById(R.id.toolbarServicios);
+        mToolbar.setTitle("Servicios Proximos");
+        mToolbar.setNavigationIcon(R.drawable.ic_backarrow);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         BottomNavigationView bottomNavigationView = findViewById(R.id.menu_abajo_servicios_proximos_proveedor);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_servicios_proximos_proveedor,new ServiciosPendientesFragmentProveedor()).commit();
     }
-
+    public void setToolbarTitle(String title) {
+        Toolbar toolbar = findViewById(R.id.toolbarServicios);
+        toolbar.setTitle(title);
+    }
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -53,14 +65,17 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
                     Fragment selectedFragment = null;
                     switch (item.getItemId()){
                         case R.id.nav_serviciospendientes:{
+                            setToolbarTitle("Servicios Proximos");
                             selectedFragment = new ServiciosPendientesFragmentProveedor();
                             break;
                         }
                         case R.id.nav_notificaciones_proveedor:{
+                            setToolbarTitle("Mis Notificaciones");
                             selectedFragment = new NotificacionesFragmentProveedor();
                             break;
                         }
                         case R.id.nav_chats_proveedor:{
+                            setToolbarTitle("Mis Chats");
                             selectedFragment = new ChatsFragmentProveedor();
                             break;
                         }
@@ -130,7 +145,10 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
 
     @Override
     public void onListFragmentInteraction(Contrataciones item) {
-        Toast.makeText(this, "Apretaste el servicio", Toast.LENGTH_SHORT).show();
+        Intent intent= new Intent(ServiciosProximosProveedor.this, InfoExpandidaServicio.class);
+        intent.putExtra("id_servicio", item.getId_servicio());
+        intent.putExtra("id_evento", item.getId_evento());
+        startActivity(intent);
     }
 
     @Override

@@ -38,6 +38,7 @@ import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ServicioResult;
+import com.example.nixapp.conn.results.ZonaListResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,7 +48,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -437,6 +437,7 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                        direccion.setText(catalogoServicios.getDireccion());
                        telefono.setText(catalogoServicios.getTelefono());
                        nombreProveedor.setText(catalogoServicios.getNombreProveedor());
+                       spinners.setSelection(catalogoServicios.getCategoriaevento());
                        if (catalogoServicios.getLunes()==1){
                            lunes.setChecked(true);
                        }
@@ -458,6 +459,34 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                        if (catalogoServicios.getDomingo()==1){
                            domingo.setChecked(true);
                        }
+
+                       Articulos servicio = new Articulos(CrearServicioMenu.servicio);
+                       Call<ZonaListResult> call4 = nixService.municipiosServicio(servicio);
+                       call4.enqueue(new Callback<ZonaListResult>() {
+                           @Override
+                           public void onResponse(Call<ZonaListResult> call, Response<ZonaListResult> response) {
+
+                               if(response.isSuccessful())
+                               {
+                                   List<ZonaServicio> municipiosTotales = response.body().municipios;
+                                   String municip = "";
+                                   for (ZonaServicio mun: municipiosTotales)
+                                   {
+                                       municip += mun.getMunicipio() + "\n";
+
+                                   }
+                                   municipios.setText(municip);
+                               }
+                               else
+                               {
+                                   Toast.makeText(getActivity(), "Error en los municipios", Toast.LENGTH_SHORT).show();
+                               }
+                           }
+                           @Override
+                           public void onFailure(Call<ZonaListResult> call, Throwable t) {
+                               Toast.makeText(getActivity(), "Error en los municipios desde la llamada", Toast.LENGTH_SHORT).show();
+                           }
+                       });
                    }
                    else{
                        Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
