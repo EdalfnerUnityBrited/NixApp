@@ -52,11 +52,11 @@ public class ServiciosBuscarRecyclerViewAdapter extends RecyclerView.Adapter<Ser
         }
         if(holder.mItem.getCategoriaevento() == 5)
         {
-            holder.categoria.setText("Especializados en: " + "Eventos Religiosos");
+            holder.categoria.setText("Especializados en: " + "Eventos Festejos");
         }
         if(holder.mItem.getCategoriaevento() == 6)
         {
-
+            holder.categoria.setText("Especializados en: " + "Eventos Religiosos");
         }
         holder.calificacion.setText("Calificacion: " + holder.mItem.getCalificacion());
         holder.nombre.setText(String.valueOf(holder.mItem.getNombre()));
