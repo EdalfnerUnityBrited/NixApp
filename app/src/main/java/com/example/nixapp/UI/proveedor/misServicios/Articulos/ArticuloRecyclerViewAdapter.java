@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.R;
 
@@ -69,6 +70,9 @@ public class ArticuloRecyclerViewAdapter extends RecyclerView.Adapter<ArticuloRe
                 }
             }
         });
+        Glide.with(holder.eventImage)
+                .load(String.valueOf(holder.mItem.getFotoArticulo()))
+                .into(holder.eventImage);
     }
 
     @Override

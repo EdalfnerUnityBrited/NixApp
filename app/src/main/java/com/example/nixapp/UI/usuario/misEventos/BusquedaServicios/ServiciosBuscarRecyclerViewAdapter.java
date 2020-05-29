@@ -3,15 +3,12 @@ package com.example.nixapp.UI.usuario.misEventos.BusquedaServicios;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.proveedor.misServicios.CrearServiciosFragmentProveedor;
 
 import java.util.List;
 
@@ -37,6 +34,31 @@ public class ServiciosBuscarRecyclerViewAdapter extends RecyclerView.Adapter<Ser
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+        if(holder.mItem.getCategoriaevento() == 1)
+        {
+            holder.categoria.setText("Especializados en: " + "Compromisos");
+        }
+        if(holder.mItem.getCategoriaevento() == 2)
+        {
+            holder.categoria.setText("Especializados en: " + "Mega Eventos");
+        }
+        if(holder.mItem.getCategoriaevento() == 3)
+        {
+            holder.categoria.setText("Especializados en: " + "Galas");
+        }
+        if(holder.mItem.getCategoriaevento() == 4)
+        {
+            holder.categoria.setText("Especializados en: " + "Eventos Empresariales");
+        }
+        if(holder.mItem.getCategoriaevento() == 5)
+        {
+            holder.categoria.setText("Especializados en: " + "Eventos Festejos");
+        }
+        if(holder.mItem.getCategoriaevento() == 6)
+        {
+            holder.categoria.setText("Especializados en: " + "Eventos Religiosos");
+        }
+        holder.calificacion.setText("Calificacion: " + holder.mItem.getCalificacion());
         holder.nombre.setText(String.valueOf(holder.mItem.getNombre()));
         holder.nombre.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,16 +82,15 @@ public class ServiciosBuscarRecyclerViewAdapter extends RecyclerView.Adapter<Ser
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView nombre;
-        public final ImageView eventImage;
+        public final TextView nombre,categoria,calificacion;
         public CatalogoServicios mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-           nombre = view.findViewById(R.id.textViewTitulo);
-        eventImage=view.findViewById(R.id.imageViewEvento);
-
+           nombre = view.findViewById(R.id.nombreServicio);
+            categoria = view.findViewById(R.id.textViewTitulo);
+            calificacion = view.findViewById(R.id.calificacion);
 
         }
 

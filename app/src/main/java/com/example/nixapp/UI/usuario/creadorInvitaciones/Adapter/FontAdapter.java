@@ -34,6 +34,28 @@ public class FontAdapter extends RecyclerView.Adapter<FontAdapter.FontViewHolder
         List<String> result = new ArrayList<>();
         result.add("IriskaFreeFont.otf");
         result.add("TwilightFont-Regular.otf");
+        result.add("Adolle Bright.otf");
+        result.add("ArigatouGozaimasu-Rp0LW.otf");
+        result.add("blackjack.otf");
+        result.add("ChunkFive-Regular.otf");
+        result.add("claudia script.otf");
+        result.add("DancingScript-Regular.otf");
+        result.add("DinosauceFont-Regular.otf");
+        result.add("GrandHotel-Regular.otf");
+        result.add("GreatVibes-Regular.otf");
+        result.add("KaushanScript-Regular.otf");
+        result.add("LeagueGothic-Regular.otf");
+        result.add("learning_curve_regular_ot_ps.otf");
+        result.add("Lobster_1.3.otf");
+        result.add("lovee.otf");
+        result.add("madani.otf");
+        result.add("Mofita.otf");
+        result.add("Rabbits Goody.otf");
+        result.add("Sofia-Regular.otf");
+        result.add("SourceSansPro-Regular.otf");
+        result.add("Spring is Coming - OTF.otf");
+        result.add("Taraxacum.otf");
+        result.add("TequilaSunset.otf");
         return result;
     }
 

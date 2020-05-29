@@ -1,15 +1,18 @@
 package com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +26,7 @@ import com.example.nixapp.DB.CotizacionArticulo;
 import com.example.nixapp.DB.CotizacionPaquete;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.HorarioVerificar;
+import com.example.nixapp.DB.PaqueteArticulo;
 import com.example.nixapp.DB.Paquetes;
 import com.example.nixapp.DB.ZonaServicio;
 import com.example.nixapp.R;
@@ -34,6 +38,7 @@ import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.ArticulosListResult;
+import com.example.nixapp.conn.results.ArticulosPaqueteResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
 import com.example.nixapp.conn.results.CotizacionPaqueteResult;
 import com.example.nixapp.conn.results.CotizacionResult;
@@ -42,7 +47,11 @@ import com.example.nixapp.conn.results.PaquetesListResult;
 import com.example.nixapp.conn.results.ServicioResult;
 import com.example.nixapp.conn.results.ZonaListResult;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -64,14 +73,16 @@ public class CotizacionServicio extends AppCompatActivity {
 
         int id;
         int Cantidad;
-        public ArticulosFinales(int id,int Cantidad)
+        String nombre;
+        public ArticulosFinales(int id,int Cantidad,String nombre)
         {
             this.id = id;
             this.Cantidad = Cantidad;
+            this.nombre = nombre;
         }
     }
 
-    boolean ZonaPermitida = false,horarioPermitido = false, horarioDentrodelHorario = false;
+    boolean ZonaPermitida = false,horarioPermitido = false;
     Cotizacion coti;
     List<ArticulosFinales> articulosFinales = new ArrayList<>();
     List<ArticulosFinales> paquetesFinales = new ArrayList<>();
@@ -97,7 +108,11 @@ public class CotizacionServicio extends AppCompatActivity {
     boolean agregados = false;
     List<ZonaServicio> municipiosTotales;
     String id_cot = "";
+    public static String desglose = "";
     Eventos eventos;
+    CatalogoServicios catalogoServicios;
+    AlertDialog.Builder informacion,resumen_compra;
+    RatingBar estrellas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +192,6 @@ public class CotizacionServicio extends AppCompatActivity {
                         servicio_contratado.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(CotizacionServicio.this, eventos.getHora(), Toast.LENGTH_LONG).show();
                                 for (ZonaServicio mun: municipiosTotales) {
                                     if(mun.getMunicipio().equals(eventos.getMunicipio()))
                                     {
@@ -187,24 +201,83 @@ public class CotizacionServicio extends AppCompatActivity {
                                 }
                                 if(ZonaPermitida == true)
                                 {
-                                    if(horarioPermitido == true)
+                                    String date = eventos.getFecha();
+                                    String[] dateS = date.split("-");
+                                    Calendar calendar = Calendar.getInstance();
+                                    Date fechaEvento = null;
+                                    int dia_semana = 177;
+                                    try {
+                                        fechaEvento = new SimpleDateFormat("dd/MM/yyyy").parse(dateS[2]+ "/"+dateS[1]+"/"+dateS[0]);
+                                        calendar.setTime(fechaEvento);
+                                        dia_semana = calendar.get(Calendar.DAY_OF_WEEK);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(),"Error al cambiar fecha",Toast.LENGTH_LONG).show();
+                                    }
+
+                                    if(((dia_semana == 1 && catalogoServicios.getDomingo() == 1))||(dia_semana == 2 && catalogoServicios.getLunes() == 1)||(dia_semana == 3 && catalogoServicios.getMartes() == 1)||(dia_semana == 4 && catalogoServicios.getMiercoles() == 1)||(dia_semana == 5 && catalogoServicios.getJueves() == 1)||(dia_semana == 6 && catalogoServicios.getViernes() == 1)||(dia_semana == 7 && catalogoServicios.getSabado() == 1))
                                     {
-                                        //Falta otra condicion!!! Pero aqui mero va eso;
-                                        costoTotal= precioTotal.getText().toString();
-                                        nombreServicio= name.getText().toString();
-                                        nombreProvee= nombreProveedor.getText().toString();
-                                        Intent intent= new Intent(CotizacionServicio.this,EleccionPago.class);
-                                        startActivity(intent);
+                                        if(horarioPermitido == true)
+                                        {
+                                            String todaInfo = "";
+                                            costoTotal= precioTotal.getText().toString();
+                                            if(!costoTotal.equals("00"))
+                                            {
+                                                for (ArticulosFinales artic: articulosFinales) {
+
+                                                    todaInfo += "Articulo: " + artic.Cantidad + " " + artic.nombre + "\n";
+
+                                                }
+                                                for (ArticulosFinales artic: paquetesFinales) {
+
+                                                    todaInfo += "Paquete: " + artic.Cantidad + " " + artic.nombre + "\n";
+
+                                                }
+                                                todaInfo += "Total a pagar : $"+costoTotal+ " MXN" ;
+                                                desglose = todaInfo;
+                                                resumen_compra = new AlertDialog.Builder(CotizacionServicio.this);
+                                                resumen_compra.setTitle("Resumen de la compra:");
+                                                resumen_compra.setMessage("Articulos que se cobraran:" + "\n" + todaInfo);
+                                                resumen_compra.setCancelable(false);
+                                                resumen_compra.setPositiveButton("Acepto", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialogo1, int id) {
+                                                        nombreServicio= name.getText().toString();
+                                                        nombreProvee= nombreProveedor.getText().toString();
+                                                        Intent intent= new Intent(CotizacionServicio.this,EleccionPago.class);
+                                                        startActivity(intent);
+                                                    }
+                                                });
+                                                resumen_compra.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                    }
+                                                });
+                                                resumen_compra.show();
+                                            }
+                                            else
+                                            {
+                                                Toast.makeText(CotizacionServicio.this, "Debes agregar algun producto para hacer la compra", Toast.LENGTH_SHORT).show();
+                                            }
+
+
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(CotizacionServicio.this, "Este Servicio tiene esa fecha ocupada, lo sentimos", Toast.LENGTH_LONG).show();
+                                        }
+
                                     }
                                     else
                                     {
-                                        Toast.makeText(CotizacionServicio.this, "Este Servicio tiene esa fecha ocupada", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(),"No se trabaja ese dia, lo sentimos",Toast.LENGTH_LONG).show();
                                     }
+
 
                                 }
                                 else
                                 {
-                                    Toast.makeText(CotizacionServicio.this, "Este Servicio no esta disponible en tu region", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(CotizacionServicio.this, "Este Servicio no esta disponible en tu region, lo sentimos", Toast.LENGTH_LONG).show();
                                 }
 
 
@@ -259,7 +332,7 @@ public class CotizacionServicio extends AppCompatActivity {
                                                             nombres+= vis.mItem.getNombre() + " "+articul.getCantidad()+"\n";
                                                             vis.cantidad.setText(articul.getCantidad());
                                                             precio = precio + (Integer.valueOf(vis.mItem.getPrecio()) * Integer.valueOf(articul.getCantidad()));
-                                                            ArticulosFinales nuevo = new ArticulosFinales(articul.getId_articulo(),Integer.valueOf(articul.getCantidad()));
+                                                            ArticulosFinales nuevo = new ArticulosFinales(articul.getId_articulo(),Integer.valueOf(articul.getCantidad()),vis.mItem.getNombre());
                                                             articulosFinales.add(nuevo);
                                                         }
                                                     }
@@ -272,7 +345,7 @@ public class CotizacionServicio extends AppCompatActivity {
                                                         {
                                                             vista.cantidad.setText(paq.getCantidad());
                                                             precio = precio + (Integer.valueOf(vista.mItem.getPrecio())* Integer.valueOf(paq.getCantidad()));
-                                                            ArticulosFinales nuevo = new ArticulosFinales(paq.getId_paquete(),Integer.valueOf(paq.getCantidad()));
+                                                            ArticulosFinales nuevo = new ArticulosFinales(paq.getId_paquete(),Integer.valueOf(paq.getCantidad()),vista.mItem.getNombre());
                                                             paquetesFinales.add(nuevo);
                                                         }
                                                     }
@@ -316,100 +389,106 @@ public class CotizacionServicio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String total= precioTotal.getText().toString();
-                final Cotizacion cotizacion= new Cotizacion(total, servicioid, EditarEvento.id_evento);
-                Call<CotizacionResult> callCot = nixService.guardarCotizacion(cotizacion);
-                callCot.enqueue(new Callback<CotizacionResult>() {
-                    @Override
-                    public void onResponse(Call<CotizacionResult> call, Response<CotizacionResult> response) {
-                        if (response.isSuccessful()){
-                            Toast.makeText(CotizacionServicio.this, "Guardada correctamente", Toast.LENGTH_SHORT).show();
-                            coti= response.body().cotizacion;
-                            List<CotizacionArticulo> cotizacionArticuloList= new ArrayList<>();
-                            List<CotizacionPaquete> cotizacionPaqueteList= new ArrayList<>();
-                            String Articulos = "";
-                            int contador = 0;
-                            Articulos chequear = null;
-                            Paquetes chequeo = null;
+                if(!total.equals("00"))
+                {
+                    final Cotizacion cotizacion= new Cotizacion(total, servicioid, EditarEvento.id_evento);
+                    Call<CotizacionResult> callCot = nixService.guardarCotizacion(cotizacion);
+                    callCot.enqueue(new Callback<CotizacionResult>() {
+                        @Override
+                        public void onResponse(Call<CotizacionResult> call, Response<CotizacionResult> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(CotizacionServicio.this, "Guardada correctamente", Toast.LENGTH_SHORT).show();
+                                coti= response.body().cotizacion;
+                                List<CotizacionArticulo> cotizacionArticuloList= new ArrayList<>();
+                                List<CotizacionPaquete> cotizacionPaqueteList= new ArrayList<>();
+                                String Articulos = "";
+                                int contador = 0;
+                                Articulos chequear = null;
+                                Paquetes chequeo = null;
 
-                            for (ArticulosFinales art: articulosFinales)
-                            {
-                                for (Articulos ar: articulosList)
+                                for (ArticulosFinales art: articulosFinales)
                                 {
-                                    if(ar.getId() == art.id)
+                                    for (Articulos ar: articulosList)
                                     {
-                                        chequear = articulosList.get(contador);
-                                        CotizacionArticulo cotiart= new CotizacionArticulo(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
-                                        cotizacionArticuloList.add(cotiart);
-                                        Articulos+="Articulo: "+art.id + " " + chequear.getNombre() + " " + art.Cantidad + "\n";
+                                        if(ar.getId() == art.id)
+                                        {
+                                            chequear = articulosList.get(contador);
+                                            CotizacionArticulo cotiart= new CotizacionArticulo(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
+                                            cotizacionArticuloList.add(cotiart);
+                                            Articulos+="Articulo: "+art.id + " " + chequear.getNombre() + " " + art.Cantidad + "\n";
+                                        }
+                                        contador++;
                                     }
-                                    contador++;
-                                }
-                                contador = 0;
+                                    contador = 0;
 
-                            }
-                            for (ArticulosFinales art: paquetesFinales)
-                            {
-                                for (Paquetes ar: paquetesList)
+                                }
+                                for (ArticulosFinales art: paquetesFinales)
                                 {
-                                    if(ar.getId() == art.id)
+                                    for (Paquetes ar: paquetesList)
                                     {
-                                        chequeo = paquetesList.get(contador);
-                                        CotizacionPaquete cotipaq= new CotizacionPaquete(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
-                                        cotizacionPaqueteList.add(cotipaq);
-                                        Articulos+= "Paquete: "+art.id + " " + chequeo.getNombre() + " " + art.Cantidad + "\n";
+                                        if(ar.getId() == art.id)
+                                        {
+                                            chequeo = paquetesList.get(contador);
+                                            CotizacionPaquete cotipaq= new CotizacionPaquete(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
+                                            cotizacionPaqueteList.add(cotipaq);
+                                            Articulos+= "Paquete: "+art.id + " " + chequeo.getNombre() + " " + art.Cantidad + "\n";
+                                        }
+                                        contador++;
                                     }
-                                    contador++;
+                                    contador = 0;
                                 }
-                                contador = 0;
+                                Call<ResponseBody> callArt= nixService.articulosCotización(cotizacionArticuloList);
+                                callArt.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()){
+                                            Toast.makeText(CotizacionServicio.this, "Articulos añadidoa", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                    }
+                                });
+                                Call<ResponseBody> callPaq = nixService.paquetesCotizacion(cotizacionPaqueteList);
+                                callPaq.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()){
+                                            Toast.makeText(CotizacionServicio.this, "Paqutes añadidos", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(CotizacionServicio.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                Toast.makeText(getApplicationContext(), Articulos, Toast.LENGTH_LONG).show();
                             }
-                            Call<ResponseBody> callArt= nixService.articulosCotización(cotizacionArticuloList);
-                            callArt.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.isSuccessful()){
-                                        Toast.makeText(CotizacionServicio.this, "Articulos añadidoa", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
-                                        Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                }
-                            });
-                            Call<ResponseBody> callPaq = nixService.paquetesCotizacion(cotizacionPaqueteList);
-                            callPaq.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.isSuccessful()){
-                                        Toast.makeText(CotizacionServicio.this, "Paqutes añadidos", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
-                                        Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();   
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                    Toast.makeText(CotizacionServicio.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            Toast.makeText(getApplicationContext(), Articulos, Toast.LENGTH_LONG).show();
+                            else{
+                                Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                Log.i("error", response.errorBody().toString());
+                            }
                         }
-                        else{
-                            Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                            Log.i("error", response.errorBody().toString());
+
+                        @Override
+                        public void onFailure(Call<CotizacionResult> call, Throwable t) {
+
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<CotizacionResult> call, Throwable t) {
-
-                    }
-                });
-
+                    });
+                }
+                else
+                {
+                    Toast.makeText(CotizacionServicio.this, "No puedes guardar una cotizacion vacia", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -423,7 +502,8 @@ public class CotizacionServicio extends AppCompatActivity {
             public void onResponse(Call<ServicioResult> call, Response<ServicioResult> response) {
                 if (response.isSuccessful()){
                     //Toast.makeText(CotizacionServicio.this, "Servicio obtenido correctamente", Toast.LENGTH_SHORT).show();
-                    CatalogoServicios catalogoServicios= response.body().servicio;
+                    catalogoServicios= response.body().servicio;
+                    estrellas = findViewById(R.id.ratingestrellas);
                     name.setText(catalogoServicios.getNombre());
                     direccion.setText(catalogoServicios.getDireccion());
                     telefono.setText(catalogoServicios.getTelefono());
@@ -432,6 +512,7 @@ public class CotizacionServicio extends AppCompatActivity {
                     hora_inicio.setText(catalogoServicios.getHorarioApertura());
                     categorias.setSelection(catalogoServicios.getCategoriaevento());
                     categorias.setEnabled(false);
+                    estrellas.setRating(Float.valueOf(catalogoServicios.getCalificacion()));
                     if (catalogoServicios.getLunes()==1){
                         lunes.setChecked(true);
                         lunes.setEnabled(false);
@@ -528,7 +609,7 @@ public class CotizacionServicio extends AppCompatActivity {
                             precioTotal.setText(String.valueOf(precios));
                             int contador = 0,con = 0;
                             boolean ya_esta = false;
-                            ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos);
+                            ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos,mItem.getNombre());
                             for (ArticulosFinales art: articulosFinales) {
 
                                 if(art.id == mItem.getId())
@@ -559,7 +640,7 @@ public class CotizacionServicio extends AppCompatActivity {
                                 String costo = String.valueOf(precioTotal.getText());
                                 precios = Integer.parseInt(costo) - Integer.parseInt(mItem.getPrecio());
                                 precioTotal.setText(String.valueOf(precios));
-                                ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos-1);
+                                ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos-1,mItem.getNombre());
                                 for (ArticulosFinales art: articulosFinales) {
 
                                     if(art.id == mItem.getId())
@@ -588,6 +669,11 @@ public class CotizacionServicio extends AppCompatActivity {
 
                         @Override
                         public void onClickSub(Paquetes mItem) {
+
+                        }
+
+                        @Override
+                        public void onInfo(Paquetes mItem) {
 
                         }
                     });
@@ -648,7 +734,7 @@ public class CotizacionServicio extends AppCompatActivity {
                             precioTotal.setText(String.valueOf(precios));
                             int contador = 0,con = 0;
                             boolean ya_esta = false;
-                            ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos);
+                            ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos,mItem.getNombre());
                             for (ArticulosFinales art: paquetesFinales) {
 
                                 if(art.id == mItem.getId())
@@ -678,7 +764,7 @@ public class CotizacionServicio extends AppCompatActivity {
                                 String costo = String.valueOf(precioTotal.getText());
                                 precios = Integer.parseInt(costo) - Integer.parseInt(mItem.getPrecio());
                                 precioTotal.setText(String.valueOf(precios));
-                                ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos-1);
+                                ArticulosFinales nuevo = new ArticulosFinales(mItem.getId(),digitos-1,mItem.getNombre());
                                 for (ArticulosFinales art: paquetesFinales) {
 
                                     if(art.id == mItem.getId())
@@ -698,6 +784,46 @@ public class CotizacionServicio extends AppCompatActivity {
                                 }
                             }
                         }
+
+                        @Override
+                        public void onInfo(Paquetes mItem) {
+                            Articulos contenido = new Articulos(mItem.getId());
+                            Call<ArticulosPaqueteResult> llamadaDeContenido = nixService.articulosEnPaquete(contenido);
+                            llamadaDeContenido.enqueue(new Callback<ArticulosPaqueteResult>() {
+                                @Override
+                                public void onResponse(Call<ArticulosPaqueteResult> call, Response<ArticulosPaqueteResult> response) {
+                                    if(response.isSuccessful())
+                                    {
+                                        List<PaqueteArticulo> contenidoArt = response.body().paqueteArt;
+                                        String todos = "";
+                                        for (PaqueteArticulo paq1: contenidoArt)
+                                        {
+                                            todos += paq1.getArticulo() + "\n";
+                                        }
+                                        informacion = new AlertDialog.Builder(CotizacionServicio.this);
+                                        informacion.setTitle("Informacion del paquete:");
+                                        informacion.setMessage("Articulos que incluye:" + "\n" + todos);
+                                        informacion.setCancelable(false);
+                                        informacion.setPositiveButton("Leido", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogo1, int id) {
+
+                                            }
+                                        });
+                                        informacion.show();
+                                        Toast.makeText(CotizacionServicio.this, "Articulos Obtenidos", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(CotizacionServicio.this, "Paquete no encontrado/sin contenido", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<ArticulosPaqueteResult> call, Throwable t) {
+                                    Toast.makeText(CotizacionServicio.this, "Error al obtener articulos del paquete", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
                     });
                     recyclerPaquetes.setAdapter(paqueteAdapter);
                     recyclerPaquetes.setLayoutManager(new LinearLayoutManager(CotizacionServicio.this));
@@ -741,6 +867,8 @@ public class CotizacionServicio extends AppCompatActivity {
 
         void onClickAdd(Paquetes mItem);
         void onClickSub(Paquetes mItem);
+
+        void onInfo(Paquetes mItem);
     }
 
 }

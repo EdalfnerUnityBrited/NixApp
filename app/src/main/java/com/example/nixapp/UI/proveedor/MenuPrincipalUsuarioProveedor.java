@@ -188,12 +188,12 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
         cambioDato.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nombreUsuario = nombre.getText().toString();
+                String nombreUsuario = nombreEdit.getText().toString();
                 String telefonoUsuario = telefono.getText().toString();
                 String ap = apP.getText().toString();
                 String am = apM.getText().toString();
                 if (nombreUsuario.isEmpty()){
-                    nombre.setError("Llene el nombre");
+                    nombreEdit.setError("Llene el nombre");
                 }
                 else if (telefonoUsuario.isEmpty()){
                     telefono.setError("Llene el nombre");

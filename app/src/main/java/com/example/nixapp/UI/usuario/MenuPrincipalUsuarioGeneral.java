@@ -27,6 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.DB.controllers.TokenController;
@@ -307,7 +308,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
                                             ltEvento = Double.parseDouble(ltEventoFinalJson[0]);
                                             lnEvento = Double.parseDouble(lnEventoFinalJson[0]);
                                             LatLng evento = new LatLng(ltEvento, lnEvento);
-                                            mMap.addMarker(new MarkerOptions().position(evento).title(x.getNombre_evento()));
+                                            mMap.addMarker(new MarkerOptions().position(evento).title(x.getNombre_evento()).snippet(x.getId()));
                                         }
                                     });
                                 }
@@ -359,8 +360,8 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (SystemClock.elapsedRealtime() - mLastClickTime > 1000){
-            Eventos event =new Eventos(marker.getTitle());
-            Call<EventosResult> calle = nixService.eventoBuscar(event);
+            Busqueda event =new Busqueda(marker.getSnippet());
+            Call<EventosResult> calle = nixService.buscarEventoId(event);
             calle.enqueue(new Callback<EventosResult>() {
                 @Override
                 public void onResponse(Call<EventosResult> call, final Response<EventosResult> response) {

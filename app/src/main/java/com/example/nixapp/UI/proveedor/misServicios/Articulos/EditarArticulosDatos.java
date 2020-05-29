@@ -65,12 +65,14 @@ public class EditarArticulosDatos extends AppCompatActivity {
     String[] preciopor = new String[]{ "Unidad" ,"Hora","Persona"};
     EditText nombre, costo, descripcion;
     Button terminarServicio, agregarImagen;
+    int catalogoId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_articulo);
         imagenArticulos= new ArrayList<>();
         final int idArticulo= (int) getIntent().getSerializableExtra("id");
+
         mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
         mProgressDialog= new ProgressDialog(this);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -104,7 +106,7 @@ public class EditarArticulosDatos extends AppCompatActivity {
                 mProgressDialog.setMessage("Por favor espere");
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
-                Articulos articulos = new Articulos(nombreArticulo, descripcionArticulo, precioPorArticulo, precio, imagenPrincipal, cat, idArticulo);
+                Articulos articulos = new Articulos(nombreArticulo, descripcionArticulo, precioPorArticulo, precio, imagenPrincipal, cat,catalogoId, idArticulo);
                 Call<ArticuloResult> call= nixService.actualizarArticulos(articulos);
                 call.enqueue(new Callback<ArticuloResult>() {
                     @Override
@@ -208,6 +210,8 @@ public class EditarArticulosDatos extends AppCompatActivity {
                     nombre.setText(arti.getNombre());
                     costo.setText(arti.getPrecio());
                     descripcion.setText(arti.getDescripcion());
+                    imagenPrincipal=arti.getFotoArticulo();
+                    catalogoId=arti.getId_catalogoServicio();
                 }
                 else{
                     Toast.makeText(EditarArticulosDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();

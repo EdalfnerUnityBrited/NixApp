@@ -388,11 +388,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linearCover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp"
-                    android:orientation="vertical"
-                    android:layout_gravity="center_horizontal">
+                    android:orientation="vertical">
+
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -402,26 +404,26 @@
                             android:id="@+id/cover"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="Cover: "
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
                             android:layout_marginLeft="12dp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginRight="20dp"
-                            android:textColor="@color/white"
+                            android:layout_marginBottom="8dp"
                             android:buttonTint="@color/white"
                             android:scaleX="1.4"
-                            android:scaleY="1.4"/>
+                            android:scaleY="1.4"
+                            android:text="Cover: "
+                            android:textColor="@color/white" />
 
                         <EditText
                             android:id="@+id/cover_valor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
                             android:ems="10"
                             android:inputType="numberSigned"
-                            android:visibility="gone"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
-                            android:backgroundTint="@color/white"/>
+                            android:visibility="gone" />
 
 
                     </TableRow>

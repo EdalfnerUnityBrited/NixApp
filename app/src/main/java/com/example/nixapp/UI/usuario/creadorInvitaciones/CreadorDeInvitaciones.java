@@ -2,6 +2,7 @@ package com.example.nixapp.UI.usuario.creadorInvitaciones;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -83,7 +85,9 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
     FiltersListFragment filtersListFragment;
     EditImageFragment editImageFragment;
 
-    private boolean pedirImagen = false, pedirCalidad=false;
+    private boolean pedirImagen = false, pedirCalidad=true;
+
+    private AlertDialog.Builder dialogo1;
 
     CardView btn_filters_list, btn_edit_card,btn_brush,btn_emoji,btn_add_text,btn_add_image,btn_add_frame,btn_crop,btn_shape,btn_qr;
 
@@ -276,12 +280,6 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         filteredBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         finalBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         photoEditorView.getSource().setImageBitmap(originalBitmap);
-        marcaAgua = BitmapUtils.getBitmapFromAssets(this,"marcaagua.jpeg",10,10);
-        Bitmap mutableBitmap = marcaAgua.isMutable()?marcaAgua:marcaAgua.copy(Bitmap.Config.ARGB_8888,true);
-        Canvas canvas = new Canvas(mutableBitmap);
-        int color = (25 & 0xFF) <<24;
-        canvas.drawColor(color, PorterDuff.Mode.DST_IN);
-        photoEditor.addImage(mutableBitmap);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -373,7 +371,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
             return true;
         }
         else if (id == R.id.action_save){
-            selectQuality();
+            //selectQuality();
             saveImageToGallery();
             return true;
         }
@@ -433,7 +431,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
                                     public void onBitmapReady(Bitmap saveBitmap) {
                                         try {
                                             photoEditorView.getSource().setImageBitmap(saveBitmap);
-                                            final String path = BitmapUtils.insertImage(getContentResolver(), saveBitmap, System.currentTimeMillis() + "_invitacion.jpg", null,quality);
+                                            final String path = BitmapUtils.insertImage(getContentResolver(), saveBitmap, System.currentTimeMillis() + "_invitacion.jpg", null,100);
                                             if (!TextUtils.isEmpty(path)) {
                                                 Snackbar snackbar = Snackbar.make(coordinatorLayout,
                                                         "Invitacion guardada a la galería",
@@ -444,6 +442,23 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
                                                     }
                                                 });
                                                 snackbar.show();
+                                                dialogo1 = new AlertDialog.Builder(CreadorDeInvitaciones.this);
+                                                dialogo1.setTitle("Importante");
+                                                dialogo1.setMessage("¿Quieres crear un código QR?");
+                                                dialogo1.setCancelable(false);
+                                                dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialogo1, int id) {
+                                                        Intent qr = new Intent(CreadorDeInvitaciones.this,GenerarCodigoQR.class);
+                                                        startActivity(qr);
+                                                        finish();
+                                                    }
+                                                });
+                                                dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialogo1, int id) {
+                                                        finish();
+                                                    }
+                                                });
+                                                dialogo1.show();
                                             } else {
                                                 Snackbar snackbar = Snackbar.make(coordinatorLayout,
                                                         "No se pudo guardar en galería",

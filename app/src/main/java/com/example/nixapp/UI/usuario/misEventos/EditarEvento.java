@@ -18,8 +18,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -81,7 +83,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog mProgressDialog;
     private static final int GALLERY_INTENT=1;
     DatePickerDialog picker;
-    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail, cover_val;
+    EditText eTextFecha, eTextHora, nombreEvento, lugarEvento, descripcionEvento, cupoEvento, coverEvento, descripcionEventoEmail, cover_val,users_Nix;
     private ArrayList<EventosItems> mEventsList;
     private EventosAdapter mAdapter;
     TimePickerDialog picker2;
@@ -91,7 +93,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
 
     Switch simpleSwitch1;
     CheckBox cover;
-    TextView correosAgregados;
+    TextView correosAgregados,usersAgregadosNix;
     String downloadUrl, imagenPrincipal="";
     NixService nixService;
     NixClient nixClient;
@@ -99,6 +101,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     String clickedName, municipio, id;
     public static int id_evento;
     Button terminar, insertar, enables, info, imagen, catalogo,botonEmail,buscar_imagen, fakecompartir,crear_invitacion, agregar_imagen, quitar_imagen,checardireccion,info_cotrataciones;
+    Button whats,nixusuarios,invitarUsuarioNix;
     int cupo;
     boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
@@ -113,6 +116,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     ViewPager viewPager;
     String[] Minicipios;
     int contador;
+    LinearLayout usuariosNix;
+    boolean activado = false,invitado_nix_agregado = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +140,6 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         //////////////////////
         mStorage= FirebaseStorage.getInstance().getReference().child("Fotos");
         mProgressDialog= new ProgressDialog(this);
-        eTextFecha.setInputType(InputType.TYPE_NULL);
         ////////////////////////////
         info_cotrataciones = findViewById(R.id.info);
         info_cotrataciones.setOnClickListener(new View.OnClickListener() {
@@ -277,30 +281,41 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         dialogo1.setCancelable(false);
         dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogo1, int id) {
-                String imagenBorrar=viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen();
-                ImagenEventos imagenEventos= new ImagenEventos(imagenBorrar);
-                Call<ResponseBody> call = nixService.borrarImagen(imagenEventos);
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()){
-                            Toast.makeText(EditarEvento.this, "Imagen borrada", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                            try {
-                                Log.i("Error",response.errorBody().string().toString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                if(viewPagerAdapter.getImagenes().size() > 1)
+                {
+                    String imagenBorrar=viewPagerAdapter.getImagenes().get(viewPager.getCurrentItem()).getImagen();
+                    ImagenEventos imagenEventos= new ImagenEventos(imagenBorrar);
+                    Call<ResponseBody> call = nixService.borrarImagen(imagenEventos);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()){
+                                Toast.makeText(EditarEvento.this, "Imagen borrada", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                try {
+                                    Log.i("Error",response.errorBody().string().toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(EditarEvento.this, "Error en la conexion", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(EditarEvento.this, "Error en la conexion", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    viewPagerAdapter.getImagenes().remove(viewPager.getCurrentItem());
+                    viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
+                    viewPager.setAdapter(viewPagerAdapter);
+                }
+                else
+                {
+                    Toast.makeText(EditarEvento.this, "No lo dejes sin imagenes... porfavor", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -322,8 +337,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 dialogo1.setMessage("¿Desea eliminar el elemento: " + (viewPager.getCurrentItem()+1) + "?");
                 dialogo1.show();
-                //viewPagerAdapter.getImagenes().remove(viewPager.getCurrentItem()); Asi se elimina de la vista (se hace antes que de la BD)
-                //Neri no se que pase si se borran todas las fotos :o... lo mas seguro es que de error, intentalo <3 (La de sully solo se quita de la lista)
+
             }
         });
         /////////////////////CREAR INVITACIÓN
@@ -418,7 +432,23 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+        //////////////////////////////////////////////////
+        whats = findViewById(R.id.Whatsapp);
+        whats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imagen_enviar == null)
+                {
+                    Toast.makeText(getApplicationContext(),"No has elegido la invitacion para compartir" ,Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    enviarEmail();
+                }
 
+            }
+        });
+        /////////////////////////////////////////////////
 
         spinner = findViewById(R.id.spinner1);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
@@ -437,6 +467,70 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                 municipio = spinner.getSelectedItem().toString();
             }
         });
+        ////////////////////////////////////////////////////////Invitar usuarios nix
+        nixusuarios = findViewById(R.id.nix);
+        usuariosNix = findViewById(R.id.linear_invitados);
+        usersAgregadosNix = findViewById(R.id.usuariosAgregados);
+        users_Nix = findViewById(R.id.usuariosNix);
+        invitarUsuarioNix = findViewById(R.id.buscarNix);
+
+        nixusuarios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(activado == false)
+                {
+                    usuariosNix.setVisibility(View.VISIBLE);
+                    activado = true;
+                }
+                else
+                {
+                    usuariosNix.setVisibility(View.GONE);
+                    users_Nix.setText("");
+                    activado = false;
+                }
+            }
+        });
+        invitarUsuarioNix.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (users_Nix.getText().toString().isEmpty()) {
+                    Toast.makeText(EditarEvento.this, "Agrega algun correo porfavor", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(validarEmail(users_Nix.getText().toString()))
+                    {
+                        final String email_nix=users_Nix.getText().toString();
+                        Busqueda busqueda= new Busqueda(email_nix, id);
+                        Call<ResponseBody> call = nixService.invitar(busqueda);
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(EditarEvento.this, "Usuario añadido al evento", Toast.LENGTH_SHORT).show();
+                                    users_Nix.setText("");
+                                    usersAgregadosNix.setText(usersAgregadosNix.getText()+"\n" + email_nix);
+                                }
+                                else{
+                                    Toast.makeText(EditarEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(EditarEvento.this, "No se estableció la conexión", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(EditarEvento.this, "Eso no es un correo -.-'", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+
+
     }
 
     private void checarIgualdadDireccionMunicipio(String direccion,final String municipio) {
@@ -593,7 +687,27 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                 "Zapopan",
                 "Zapotlanejo"
         };
-
+        eTextFecha.setInputType(InputType.TYPE_NULL);
+        eTextFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Locale locale = getResources().getConfiguration().locale;
+                Locale.setDefault(locale);
+                final Calendar cldr = Calendar.getInstance();
+                dia = cldr.get(Calendar.DAY_OF_MONTH);
+                mes = cldr.get(Calendar.MONTH);
+                ano = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(EditarEvento.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                eTextFecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, ano, mes, dia);
+                picker.show();
+            }
+        });
         cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -627,7 +741,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<EventosResult> call, Response<EventosResult> response) {
                 if(response.isSuccessful()){
                     eventos=response.body().eventos;
-                    eTextFecha.setText(eventos.getFecha());
+                    String[] fechadesgloce = eventos.getFecha().split("-");
+                    eTextFecha.setText(fechadesgloce[2]+"/"+fechadesgloce[1]+"/"+fechadesgloce[0]);
                     eTextHora.setText(eventos.getHora());
                     nombreEvento.setText(eventos.getNombre_evento());
                     descripcionEvento.setText(eventos.getDescripcion());
@@ -933,7 +1048,6 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     downloadUrl = task.getResult().toString();
                                     ImagenEventos image= new ImagenEventos(downloadUrl, id);
-                                    viewPagerAdapter.getImagenes().add(viewPagerAdapter.getImagenes().size()+1,image);//Se la agregas a la lista del adapter solo para que se vea....
                                     Call<ResponseBody> call = nixService.imagenUna(image);
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
@@ -1045,6 +1159,9 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                                     });
                                     fotos.add(downloadUrl);
                                     mProgressDialog.dismiss();
+                                    contador = eventosUsuario.size()-1;
+                                    ImagenEventos nueva = new ImagenEventos(downloadUrl);
+                                    eventosUsuario.add(contador,nueva);
                                     viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),eventosUsuario);
                                     viewPager.setAdapter(viewPagerAdapter);
                                     contador++;
