@@ -13,6 +13,11 @@ public class Contrataciones {
     String lugar;
     String desglose;
 
+    public Contrataciones(String id, String estado_servicio) {
+        this.id = id;
+        this.estado_servicio = estado_servicio;
+    }
+
     public Contrataciones(String metodo_pago, String id_servicio, String desglose) {
         this.metodo_pago = metodo_pago;
         this.id_servicio = id_servicio;

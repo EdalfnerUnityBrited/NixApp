@@ -517,19 +517,53 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:gravity="center_horizontal"
-                    android:layout_marginBottom="30dp">
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/borderrow"
+                    android:padding="8dp">
                     <TableRow
-                        android:id="@+id/borderbotones"
+                    android:id="@+id/borderbotones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                    android:padding="4dp">
+
+
+                    <Button
+                        android:id="@+id/PagoDeposito"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Deposito Pagado"
+                        android:padding="5dp"
+                        android:layout_marginRight="20dp"
+                        android:textAllCaps="false"
+                        android:textColor="@drawable/butom_text"
+                        android:textSize="18sp"
+                        android:background="@drawable/custombutom2"/>
+
+                    <Button
+                        android:id="@+id/PagoLiquidacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Liquidacion Pagada"
+                        android:padding="5dp"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:textColor="@drawable/buttom_text2"
+                        android:background="@drawable/custombutom"/>
+
+
+                </TableRow>
+                    <TableRow
+                        android:id="@+id/borderbotonesGeneral"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="@drawable/borderrow"
-                        android:padding="8dp">
+                        android:padding="4dp">
 
 
                         <Button
-                            android:id="@+id/PagoDeposito"
+                            android:id="@+id/LlegoProducto"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Deposito Pagado"
@@ -541,7 +575,7 @@
                             android:background="@drawable/custombutom2"/>
 
                         <Button
-                            android:id="@+id/PagoLiquidacion"
+                            android:id="@+id/IrPagar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Liquidacion Pagada"
@@ -550,6 +584,8 @@
                             android:textSize="18sp"
                             android:textColor="@drawable/buttom_text2"
                             android:background="@drawable/custombutom"/>
+
+
                     </TableRow>
 
 

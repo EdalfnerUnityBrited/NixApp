@@ -17,12 +17,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Cotizacion;
-import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Usuario;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.proveedor.InfoExpandidaServicio;
 import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.CotizacionServicio;
-import com.example.nixapp.UI.usuario.misEventos.MisEventos;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.ChatActivity;
 import com.example.nixapp.UI.usuario.serviciosContratados.chat.DashboardFragment;
 import com.example.nixapp.conn.NixClient;
@@ -34,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ServiciosProximos extends AppCompatActivity implements DashboardFragment.OnListFragmentInteractionListener, CotizacionesGuardadasFragment.OnListFragmentInteractionListener{
+public class ServiciosProximos extends AppCompatActivity implements DashboardFragment.OnListFragmentInteractionListener, CotizacionesGuardadasFragment.OnListFragmentInteractionListener,ServiciosProximosFragment.OnListFragmentInteractionListener{
     private RecyclerView chatsList;
     Usuario usuario;
     NixService nixService;
@@ -119,6 +119,14 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
         intent.putExtra("id", item.getId_servicio());
         intent.putExtra("id_cotizacion", item.getId());
         intent.putExtra("id_Evento", item.getId_evento());//int
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListFragmentInteraction(Contrataciones item) {
+        Intent intent= new Intent(ServiciosProximos.this, InfoExpandidaServicio.class);
+        intent.putExtra("id_contratacion", item.getId());
+        intent.putExtra("ingreso",1);
         startActivity(intent);
     }
 
