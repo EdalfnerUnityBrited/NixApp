@@ -10,9 +10,9 @@
 
     <ja.burhanrashid52.photoeditor.PhotoEditorView
         android:id="@+id/image_preview"
-        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="360dp"></ja.burhanrashid52.photoeditor.PhotoEditorView>
+        android:layout_height="620dp"
+        android:scaleType="centerCrop"></ja.burhanrashid52.photoeditor.PhotoEditorView>
 
    <HorizontalScrollView
        android:layout_alignParentBottom="true"

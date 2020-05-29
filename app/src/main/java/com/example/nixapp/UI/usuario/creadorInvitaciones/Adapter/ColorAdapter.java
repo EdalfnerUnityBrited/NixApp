@@ -74,6 +74,34 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ColorViewhol
         colorList.add(Color.parseColor("#ffff00"));
         colorList.add(Color.parseColor("#00fff9"));
         colorList.add(Color.parseColor("#2fff00"));
+        colorList.add(Color.parseColor("#67d868"));
+        colorList.add(Color.parseColor("#17e890"));
+        colorList.add(Color.parseColor("#002705"));
+        colorList.add(Color.parseColor("#3f1a2c"));
+        colorList.add(Color.parseColor("#ffb5cd"));
+        colorList.add(Color.parseColor("#e3ccac"));
+        colorList.add(Color.parseColor("#edeead"));
+        colorList.add(Color.parseColor("#f09797"));
+        colorList.add(Color.parseColor("#a568e5"));
+        colorList.add(Color.parseColor("#8d3b50"));
+        colorList.add(Color.parseColor("#8d6f12"));
+        colorList.add(Color.parseColor("#5fae74"));
+        colorList.add(Color.parseColor("#e3d165"));
+        colorList.add(Color.parseColor("#f4a23b"));
+        colorList.add(Color.parseColor("#0b7989"));
+        colorList.add(Color.parseColor("#1a57db"));
+        colorList.add(Color.parseColor("#ffffff"));
+        colorList.add(Color.parseColor("#7c3f6d"));
+        colorList.add(Color.parseColor("#fbbebe"));
+        colorList.add(Color.parseColor("#d6ff00"));
+        colorList.add(Color.parseColor("#ffdb00"));
+        colorList.add(Color.parseColor("#0390e5"));
+        colorList.add(Color.parseColor("#ec7ee2"));
+        colorList.add(Color.parseColor("#fb7085"));
+        colorList.add(Color.parseColor("#70fbe2"));
+        colorList.add(Color.parseColor("#32d22d"));
+        colorList.add(Color.parseColor("#57e537"));
+        colorList.add(Color.parseColor("#ff9a00"));
         return  colorList;
     }
 
