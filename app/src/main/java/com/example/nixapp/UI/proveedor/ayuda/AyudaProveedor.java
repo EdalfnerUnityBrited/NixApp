@@ -14,6 +14,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class AyudaProveedor extends AppCompatActivity {
 
+    int fragment = 0;
+    int presionado = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +46,27 @@ public class AyudaProveedor extends AppCompatActivity {
                     switch (item.getItemId()){
                         case R.id.nav_menudeayuda_proveedor:{
                             setToolbarTitle("Menu de Ayuda");
+                            fragment = 1;
                             selectedFragment = new MenuAyudaProveedorFragment();
                             break;
                         }
                         case R.id.nav_tutoriales_proveedor:{
                             setToolbarTitle("Video-Tutoriales");
+                            fragment = 2;
                             selectedFragment = new TutorialesProveedorFragment();
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_ayudaproveedor,selectedFragment).commit();
+                    if(fragment == 1 && presionado == 1)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_ayudaproveedor, selectedFragment).commit();
+                        presionado = 2;
+                    }
+                    else if(fragment == 2 && presionado == 2)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_ayudaproveedor, selectedFragment).commit();
+                        presionado = 1;
+                    }
                     return true;
                 }
             };

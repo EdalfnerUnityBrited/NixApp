@@ -89,6 +89,7 @@ public class CotizacionServicio extends AppCompatActivity {
     List<CotizacionArticulo> articulosEnCotizacion = new ArrayList<>();
     List<CotizacionPaquete> paquetesEnCotizacion = new ArrayList<>();
     int servicioid;
+    public static int idEvento;
     public static String costoTotal, nombreServicio, nombreProvee, idService;
     Button guardar_Cotizacion, servicio_contratado, agregar_articulos;
     CheckBox lunes, martes, miercoles, jueves, viernes, sabado, domingo;
@@ -161,7 +162,8 @@ public class CotizacionServicio extends AppCompatActivity {
         idService= Integer.toString(servicioid);
         try {
             id_evento =(int) getIntent().getSerializableExtra("id_Evento");
-            Busqueda busqueda = new Busqueda(String.valueOf(id_evento));
+            idEvento = id_evento;
+                    Busqueda busqueda = new Busqueda(String.valueOf(id_evento));
             Call<EventosResult> llamadaEvento  = nixService.buscarEventoId(busqueda);
             llamadaEvento.enqueue(new Callback<EventosResult>() {
                 @Override
@@ -244,6 +246,9 @@ public class CotizacionServicio extends AppCompatActivity {
                                                         nombreServicio= name.getText().toString();
                                                         nombreProvee= nombreProveedor.getText().toString();
                                                         Intent intent= new Intent(CotizacionServicio.this,EleccionPago.class);
+                                                        intent.putExtra("Pago", 1);
+                                                        intent.putExtra("total del pago", costoTotal);
+                                                        intent.putExtra("id_cotizacion", String.valueOf(catalogoServicios.getId()));
                                                         startActivity(intent);
                                                     }
                                                 });

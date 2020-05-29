@@ -101,7 +101,6 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
-
         drawer = findViewById(R.id.drawer_layout_usuario_general);
         NavigationView navigationView = findViewById(R.id.nav_view_usuario_general);
         navigationView.setNavigationItemSelectedListener(this);

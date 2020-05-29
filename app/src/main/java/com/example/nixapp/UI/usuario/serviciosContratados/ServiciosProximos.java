@@ -39,6 +39,8 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
     Usuario usuario;
     NixService nixService;
     NixClient nixClient;
+    int fragment_origen = 1;
+    int fragment_destino = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,18 +69,21 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
                     case R.id.nav_serviciosproximos_menu:
                     {
                         mToolbar.setTitle("Servicios Proximos");
+                        fragment_destino = 1;
                         setFragment(new ServiciosProximosFragment());
                         return true;
                     }
                     case R.id.nav_cotizacionesguardadas:
                     {
                         mToolbar.setTitle("Mis Cotizaciones");
+                        fragment_destino = 2;
                         setFragment(new CotizacionesGuardadasFragment());
                         return true;
                     }
                     case  R.id.nav_chats:{
 
                         mToolbar.setTitle("Mis Chats");
+                        fragment_destino = 3;
                         setFragment(new DashboardFragment());
                         return true;
                     }
@@ -96,8 +101,28 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
 
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.framLayout, fragment);
-        fragmentTransaction.commit();
+
+        if(fragment_destino == 1 && (fragment_origen == 2||fragment_origen == 3))
+        {
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.framLayout, fragment).commit();
+            fragment_origen = 1;
+        }
+        else if(fragment_destino == 2 && fragment_origen == 1)
+        {
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.framLayout, fragment).commit();
+            fragment_origen = 2;
+        }
+        else if(fragment_destino == 2 && fragment_origen == 3)
+        {
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.framLayout, fragment).commit();
+            fragment_origen = 2;
+        }
+        else if(fragment_destino == 3 && (fragment_origen == 2||fragment_origen == 1))
+        {
+            fragmentTransaction.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.framLayout, fragment).commit();
+            fragment_origen = 3;
+        }
+
     }
 
 
@@ -126,7 +151,7 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
     public void onListFragmentInteraction(Contrataciones item) {
         Intent intent= new Intent(ServiciosProximos.this, InfoExpandidaServicio.class);
         intent.putExtra("id_contratacion", item.getId());
-        intent.putExtra("ingreso",1);
+        intent.putExtra("ingreso",2);
         startActivity(intent);
     }
 

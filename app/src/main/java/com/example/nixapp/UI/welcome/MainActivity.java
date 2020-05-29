@@ -82,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.buttonLogin: {
                     q = new Intent(view.getContext(), InicioSesion.class);
                     startActivity(q);
+                    MainActivity.this.finish();
                     break;
                 }
                 case R.id.buttonSignup: {
                     q = new Intent(view.getContext(), CrearCuenta.class);
                     startActivity(q);
+                    MainActivity.this.finish();
                     break;
                 }
                 case R.id.passwordFor:{

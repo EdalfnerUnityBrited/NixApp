@@ -1,6 +1,7 @@
 package com.example.nixapp.UI.proveedor;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.ContratacionExpandida;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico.EleccionPago;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
 import com.example.nixapp.conn.NixClient;
@@ -25,6 +27,7 @@ import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.CotizacionExpandidaResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,7 +41,7 @@ public class InfoExpandidaServicio extends AppCompatActivity {
     NixService nixService;
     EditText nombre_evento,municipio,direccion,fecha,hora,nombre_servicio,estado_servicio,nombre_anf,correo_anf,telefono_anf;
     TextView desglose;
-    Button pago_dep,pago_liquidacion;
+    Button pago_dep,pago_liquidacion, ir_pago,servicio_entregado;
     ContratacionExpandida infoExpandida;
     Spinner spinners;
     private EventosAdapter mAdapter;
@@ -46,6 +49,7 @@ public class InfoExpandidaServicio extends AppCompatActivity {
     AlertDialog.Builder informacion;
     int ingreso = 0;
     TableRow botonesProveedor,botonesUsuario;
+    Calendar diaActual = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +74,33 @@ public class InfoExpandidaServicio extends AppCompatActivity {
             ingreso = 0;
         }
         initList();
+
+
+        nombre_evento = findViewById(R.id.nomb);
+        municipio = findViewById(R.id.muni);
+        direccion = findViewById(R.id.direcc);
+        fecha = findViewById(R.id.fecha);
+        hora = findViewById(R.id.hora_evento);
+        nombre_servicio = findViewById(R.id.nombre_servicioText);
+        estado_servicio = findViewById(R.id.estado_servicio);
+        desglose = findViewById(R.id.desglozado);
+        nombre_anf = findViewById(R.id.nomb_Anf);
+        correo_anf = findViewById(R.id.email_Anf);
+        telefono_anf = findViewById(R.id.tels_Anf);
+        spinners = findViewById(R.id.spinnerSimple);
+        botonesProveedor = findViewById(R.id.botonesProveedor);
+        botonesUsuario = findViewById(R.id.botonesGeneral);
+        servicio_entregado = findViewById(R.id.LlegoProducto);
+        ir_pago = findViewById(R.id.IrPagar);
+        pago_dep = findViewById(R.id.PagoDeposito);
+        pago_liquidacion = findViewById(R.id.PagoLiquidacion);
+        mAdapter = new EventosAdapter(this, mEventsList);
+        spinners.setAdapter(mAdapter);
+//////////////////////////////////// ingreso = 1 Proveedor entro
+
         if(ingreso == 1)
         {
-            pago_dep = findViewById(R.id.PagoDeposito);
-            pago_liquidacion = findViewById(R.id.PagoLiquidacion);
+            botonesUsuario.setVisibility(View.GONE);
             pago_dep.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -163,25 +190,76 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                     informacion.show();
                 }
             });
+        }//////////////////////////////////ingreso 2 Usuario General netro
+        else
+        {
+            botonesProveedor.setVisibility(View.GONE);
+            servicio_entregado.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String[] fechaSeparada = infoExpandida.getFecha().split("-");
+                    int ano = Integer.valueOf(fechaSeparada[0]);
+                    int mes = Integer.valueOf(fechaSeparada[1]);
+                    int dia = Integer.valueOf(fechaSeparada[2]);
+                    if(ano == diaActual.get(Calendar.YEAR)&& mes == (diaActual.get(Calendar.MONTH)+1)&&(diaActual.get(Calendar.DAY_OF_MONTH) == dia||diaActual.get(Calendar.DAY_OF_MONTH) == (dia-1)))
+                    {
+                        informacion = new AlertDialog.Builder(InfoExpandidaServicio.this);
+                        informacion.setTitle("Importante:");
+                        informacion.setMessage("Al dar click en 'Confirmar Llegada', se estara admitiendo que el Servicio '"+ infoExpandida.getNombre() +"' a entregado sus servicios. \n¿Esta SEGURO?");
+                        informacion.setCancelable(false);
+                        informacion.setPositiveButton("Confirmar Llegada", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogo1, int id) {
+                                Contrataciones estado = new Contrataciones(id_contratacion,"entregado");
+                                Call<ResponseBody> cambiarEstado = nixService.cambioEstado(estado);
+                                cambiarEstado.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.isSuccessful())
+                                        {
+                                            Toast.makeText(InfoExpandidaServicio.this,"Actualizacion exitosa",Toast.LENGTH_SHORT).show();
+                                            infoExpandida.setEstado_servicio("entregado");
+                                            estado_servicio.setText("entregado");
+                                            ir_pago.setEnabled(true);
+                                            servicio_entregado.setEnabled(false);
+
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(InfoExpandidaServicio.this,"No se encontro la cotizacion",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        Toast.makeText(InfoExpandidaServicio.this,"Error al cambiar el estado del evento",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                        informacion.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogo1, int id) {
+
+                            }
+                        });
+                        informacion.show();
+                    }
+                    else
+                    {
+                        Toast.makeText(InfoExpandidaServicio.this,"La fecha es muy lejana aun...",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            ir_pago.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent= new Intent(InfoExpandidaServicio.this, EleccionPago.class);
+                    intent.putExtra("Pago", 2);
+                    intent.putExtra("total del pago", infoExpandida.getDesglose());
+                    intent.putExtra("id_cotizacion", id_contratacion);
+                    startActivity(intent);
+                }
+            });
         }
-
-        nombre_evento = findViewById(R.id.nomb);
-        municipio = findViewById(R.id.muni);
-        direccion = findViewById(R.id.direcc);
-        fecha = findViewById(R.id.fecha);
-        hora = findViewById(R.id.hora_evento);
-        nombre_servicio = findViewById(R.id.nombre_servicioText);
-        estado_servicio = findViewById(R.id.estado_servicio);
-        desglose = findViewById(R.id.desglozado);
-        nombre_anf = findViewById(R.id.nomb_Anf);
-        correo_anf = findViewById(R.id.email_Anf);
-        telefono_anf = findViewById(R.id.tels_Anf);
-        spinners = findViewById(R.id.spinnerSimple);
-        mAdapter = new EventosAdapter(this, mEventsList);
-        spinners.setAdapter(mAdapter);
-
-
-
         Articulos contratacionInfo = new Articulos(Integer.valueOf(id_contratacion));
         final Call<CotizacionExpandidaResult> informacionExpandida = nixService.contratatacionExpandida(contratacionInfo);
         informacionExpandida.enqueue(new Callback<CotizacionExpandidaResult>() {
@@ -228,18 +306,24 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                     if(infoExpandida.getEstado_servicio().equals("solicitado"))
                     {
                         pago_liquidacion.setEnabled(false);
+                        ir_pago.setEnabled(false);
+                        servicio_entregado.setEnabled(false);
                     }
                     else if(infoExpandida.getEstado_servicio().equals("pendiente"))
                     {
+                        ir_pago.setEnabled(false);
                         pago_liquidacion.setEnabled(false);
                         pago_dep.setEnabled(false);
                     }
                     else if(infoExpandida.getEstado_servicio().equals("entregado"))
                     {
                         pago_dep.setEnabled(false);
+                        servicio_entregado.setEnabled(false);
                     }
                     else if(infoExpandida.getEstado_servicio().equals("pagado"))
                     {
+                        ir_pago.setEnabled(false);
+                        servicio_entregado.setEnabled(false);
                         pago_liquidacion.setEnabled(false);
                         pago_dep.setEnabled(false);
                     }

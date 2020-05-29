@@ -138,6 +138,8 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
         fecha.setText(usuario.fechaNac);
         correo=findViewById(R.id.email_user);
         correo.setText(usuario.email);
+        correo.setEnabled(false);
+        correo.setBackground(null);
         apP = findViewById(R.id.ap_pat_user);
         apM = findViewById(R.id.ap_mat_user);
         cambioDato=findViewById(R.id.buttonGuardar);
@@ -165,6 +167,8 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()){
                                 Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Actualización Exitosa", Toast.LENGTH_SHORT).show();
+                                passwordUser.setError(null);
+                                passwordConfirm.setError(null);
                             }
                             else{
                                 Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Error en los datos", Toast.LENGTH_SHORT).show();
@@ -216,6 +220,9 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.isSuccessful()){
                                     Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Actualización Exitosa", Toast.LENGTH_SHORT).show();
+                                    mDisplayDate.setError(null);
+                                    telefono.setError(null);
+                                    nombre.setError(null);
                                 }
                                 else{
                                     Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Error en los datos", Toast.LENGTH_SHORT).show();
@@ -606,7 +613,7 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
                 break;
             }
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        //drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

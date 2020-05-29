@@ -523,7 +523,7 @@
                     android:background="@drawable/borderrow"
                     android:padding="8dp">
                     <TableRow
-                    android:id="@+id/borderbotones"
+                    android:id="@+id/botonesProveedor"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -556,7 +556,7 @@
 
                 </TableRow>
                     <TableRow
-                        android:id="@+id/borderbotonesGeneral"
+                        android:id="@+id/botonesGeneral"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:padding="4dp">
@@ -566,19 +566,19 @@
                             android:id="@+id/LlegoProducto"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Deposito Pagado"
+                            android:text="Servicio Entregado"
                             android:padding="5dp"
                             android:layout_marginRight="20dp"
                             android:textAllCaps="false"
                             android:textColor="@drawable/butom_text"
                             android:textSize="18sp"
-                            android:background="@drawable/custombutom2"/>
+                            android:background="@drawable/button_yellow"/>
 
                         <Button
                             android:id="@+id/IrPagar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Liquidacion Pagada"
+                            android:text="Pagar Liquidacion"
                             android:padding="5dp"
                             android:textAllCaps="false"
                             android:textSize="18sp"

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -197,6 +198,18 @@ public class CrearCuenta extends AppCompatActivity implements CompoundButton.OnC
 
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            //do your stuff
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void retrofitInit() {

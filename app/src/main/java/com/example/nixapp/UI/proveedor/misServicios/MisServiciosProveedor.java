@@ -28,6 +28,8 @@ public class MisServiciosProveedor extends AppCompatActivity implements CrearSer
 
     NixService nixService;
     NixClient nixClient;
+    int fragment = 0;
+    int presionado = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,16 +64,27 @@ public class MisServiciosProveedor extends AppCompatActivity implements CrearSer
                     switch (item.getItemId()){
                         case R.id.nav_crearservicios:{
                             setToolbarTitle("Mis Servicios");
+                            fragment = 1;
                             selectedFragment = new CrearServiciosFragmentProveedor();
                             break;
                         }
                         case R.id.nav_historial_proveedor:{
                             setToolbarTitle("Historial");
+                            fragment = 2;
                             selectedFragment = new HistorialFragmentProveedor();
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_mis_servicios_proveedor,selectedFragment).commit();
+                    if(fragment == 1 && presionado == 1)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_mis_servicios_proveedor, selectedFragment).commit();
+                        presionado = 2;
+                    }
+                    else if(fragment == 2 && presionado == 2)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_mis_servicios_proveedor, selectedFragment).commit();
+                        presionado = 1;
+                    }
                     return true;
                 }
             };

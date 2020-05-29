@@ -27,6 +27,8 @@ import retrofit2.Response;
 public class MisEventos extends AppCompatActivity implements EventosCerradosFragment.OnListFragmentInteractionListener{
     NixService nixService;
     NixClient nixClient;
+    int fragment = 0;
+    int presionado = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +66,26 @@ public class MisEventos extends AppCompatActivity implements EventosCerradosFrag
                         case R.id.nav_eventoscerrados:{
                             setToolbarTitle("Mis eventos");
                             selectedFragment = new EventosCerradosFragment();
-
+                            fragment = 1;
                             break;
                         }
                         case R.id.nav_historial:{
                             setToolbarTitle("Historial de eventos");
                             selectedFragment = new HistorialFragment();
-
+                            fragment = 2;
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_mis_eventos, selectedFragment).commit();
+                    if(fragment == 1 && presionado == 1)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_mis_eventos, selectedFragment).commit();
+                        presionado = 2;
+                    }
+                    else if(fragment == 2 && presionado == 2)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_mis_eventos, selectedFragment).commit();
+                        presionado = 1;
+                    }
                     return true;
                 }
             };

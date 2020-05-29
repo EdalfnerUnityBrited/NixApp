@@ -14,6 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Ayuda extends AppCompatActivity {
 
+    int fragment = 0;
+    int presionado = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +52,26 @@ public class Ayuda extends AppCompatActivity {
                         case R.id.nav_menudeayuda:{
                             setToolbarTitle("Ayuda");
                             selectedFragment = new MenuAyudaFragment();
+                            fragment = 1;
                             break;
                         }
                         case R.id.nav_tutoriales:{
                             setToolbarTitle("Tutoriales");
                             selectedFragment = new TutorialesFragment();
+                            fragment = 2;
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_ayuda, selectedFragment).commit();
+                    if(fragment == 1 && presionado == 1)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_ayuda, selectedFragment).commit();
+                        presionado = 2;
+                    }
+                    else if(fragment == 2 && presionado == 2)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_ayuda, selectedFragment).commit();
+                        presionado = 1;
+                    }
                     return true;
                 }
             };

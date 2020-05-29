@@ -18,10 +18,11 @@ public class Contrataciones {
         this.estado_servicio = estado_servicio;
     }
 
-    public Contrataciones(String metodo_pago, String id_servicio, String desglose) {
+    public Contrataciones(String metodo_pago, String id_servicio, String desglose,String id_evento) {
         this.metodo_pago = metodo_pago;
         this.id_servicio = id_servicio;
         this.desglose = desglose;
+        this.id_evento = id_evento;
     }
 
     public String getLugar() {

@@ -1,15 +1,10 @@
 package com.example.nixapp.UI.welcome;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.nixapp.DB.Usuario;
@@ -24,8 +19,6 @@ import com.example.nixapp.modelotablas.UsuarioToken;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class WelcomeActivity extends FragmentActivity{
 
@@ -43,10 +36,12 @@ public class WelcomeActivity extends FragmentActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         UsuarioToken token = TokenController.getToken();
-        if (token == null)
+        if (token == null) {
             pantallaInicioSesion();
-        else
+        }
+        else {
             principal(token);
+        }
     }
     /**Llama al activity del Usuario General
      * Se instancian las variables nixClient y nixService, para obtener una conexión con la api
