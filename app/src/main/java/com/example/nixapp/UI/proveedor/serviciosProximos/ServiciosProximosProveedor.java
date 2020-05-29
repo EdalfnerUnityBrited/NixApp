@@ -147,6 +147,7 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
     public void onListFragmentInteraction(Contrataciones item) {
         Intent intent= new Intent(ServiciosProximosProveedor.this, InfoExpandidaServicio.class);
         intent.putExtra("id_contratacion", item.getId());
+        intent.putExtra("ingreso",2);
         startActivity(intent);
     }
 

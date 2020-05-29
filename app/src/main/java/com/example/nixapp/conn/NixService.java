@@ -263,4 +263,11 @@ public interface NixService {
 
     @POST("proveedor/contratacionEvento")
     Call<CotizacionExpandidaResult> contratatacionExpandida(@Body Articulos articulos);
+
+    @POST("proveedor/cambioEstado")
+    Call<ResponseBody> cambioEstado(@Body Contrataciones contrataciones);
+
+    @GET("auth/contrataciones")
+    Call<ContratacionesListResult> contratacionesGeneral();
+
 }

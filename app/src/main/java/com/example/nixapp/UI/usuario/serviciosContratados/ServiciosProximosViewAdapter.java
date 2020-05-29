@@ -1,4 +1,4 @@
-package com.example.nixapp.UI.proveedor.serviciosProximos;
+package com.example.nixapp.UI.usuario.serviciosContratados;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +14,12 @@ import com.example.nixapp.R;
 
 import java.util.List;
 
-public class ContratacionesProveedorRecyclerViewAdapter extends RecyclerView.Adapter<ContratacionesProveedorRecyclerViewAdapter.ViewHolder> {
+public class ServiciosProximosViewAdapter extends RecyclerView.Adapter<ServiciosProximosViewAdapter.ViewHolder> {
 
     private final List<Contrataciones> mValues;
-    private final ServiciosPendientesFragmentProveedor.OnListFragmentInteractionListener mListener;
+    private final ServiciosProximosFragment.OnListFragmentInteractionListener mListener;
 
-    public ContratacionesProveedorRecyclerViewAdapter(List<Contrataciones> items, ServiciosPendientesFragmentProveedor.OnListFragmentInteractionListener listener) {
+    public ServiciosProximosViewAdapter(List<Contrataciones> items, ServiciosProximosFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }

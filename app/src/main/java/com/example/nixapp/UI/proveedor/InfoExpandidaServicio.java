@@ -1,18 +1,22 @@
 package com.example.nixapp.UI.proveedor;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.nixapp.DB.Articulos;
 import com.example.nixapp.DB.ContratacionExpandida;
+import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.misEventos.EventosAdapter;
 import com.example.nixapp.UI.usuario.misEventos.EventosItems;
@@ -22,6 +26,7 @@ import com.example.nixapp.conn.results.CotizacionExpandidaResult;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +43,9 @@ public class InfoExpandidaServicio extends AppCompatActivity {
     Spinner spinners;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
+    AlertDialog.Builder informacion;
+    int ingreso = 0;
+    TableRow botonesProveedor,botonesUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +63,108 @@ public class InfoExpandidaServicio extends AppCompatActivity {
         retrofitinit();
         try {
             id_contratacion = (String) getIntent().getSerializableExtra("id_contratacion");
+            ingreso = (int) getIntent().getSerializableExtra("ingreso");
         }catch (Exception e)
         {
             id_contratacion = "";
+            ingreso = 0;
         }
         initList();
+        if(ingreso == 1)
+        {
+            pago_dep = findViewById(R.id.PagoDeposito);
+            pago_liquidacion = findViewById(R.id.PagoLiquidacion);
+            pago_dep.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    informacion = new AlertDialog.Builder(InfoExpandidaServicio.this);
+                    informacion.setTitle("Importante:");
+                    informacion.setMessage("Al dar click en 'Confirmar pago', se estara admitiendo que se recibio el pago en efectivo del deposito por parte del anfitrion del evento. ¿Esta SEGURO?");
+                    informacion.setCancelable(false);
+                    informacion.setPositiveButton("Confirmar Pago", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            Contrataciones estado = new Contrataciones(id_contratacion,"pendiente");
+                            Call<ResponseBody> cambiarEstado = nixService.cambioEstado(estado);
+                            cambiarEstado.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.isSuccessful())
+                                    {
+                                        Toast.makeText(InfoExpandidaServicio.this,"Actualizacion exitosa",Toast.LENGTH_SHORT).show();
+                                        infoExpandida.setEstado_servicio("pendiente");
+                                        pago_liquidacion.setEnabled(false);
+                                        pago_dep.setEnabled(false);
+                                        estado_servicio.setText("pendiente");
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(InfoExpandidaServicio.this,"No se encontro la cotizacion",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Toast.makeText(InfoExpandidaServicio.this,"Error al cambiar el estado del evento",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
+                    });
+                    informacion.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+
+                        }
+                    });
+                    informacion.show();
+                }
+            });
+
+            pago_liquidacion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    informacion = new AlertDialog.Builder(InfoExpandidaServicio.this);
+                    informacion.setTitle("Importante:");
+                    informacion.setMessage("Al dar click en 'Confirmar pago', se estara admitiendo que se recibio el pago en efectivo de la liquidacion por parte del anfitrion del evento. ¿Esta SEGURO?");
+                    informacion.setCancelable(false);
+                    informacion.setPositiveButton("Confirmar Pago", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            Contrataciones estado = new Contrataciones(id_contratacion,"pagado");
+                            Call<ResponseBody> cambiarEstado = nixService.cambioEstado(estado);
+                            cambiarEstado.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.isSuccessful())
+                                    {
+                                        Toast.makeText(InfoExpandidaServicio.this,"Actualizacion exitosa",Toast.LENGTH_SHORT).show();
+                                        infoExpandida.setEstado_servicio("pagado");
+                                        pago_liquidacion.setEnabled(false);
+                                        pago_dep.setEnabled(false);
+                                        estado_servicio.setText("pagado");
+
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(InfoExpandidaServicio.this,"No se encontro la cotizacion",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    Toast.makeText(InfoExpandidaServicio.this,"Error al cambiar el estado del evento",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                    informacion.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+
+                        }
+                    });
+                    informacion.show();
+                }
+            });
+        }
+
         nombre_evento = findViewById(R.id.nomb);
         municipio = findViewById(R.id.muni);
         direccion = findViewById(R.id.direcc);
@@ -71,11 +176,10 @@ public class InfoExpandidaServicio extends AppCompatActivity {
         nombre_anf = findViewById(R.id.nomb_Anf);
         correo_anf = findViewById(R.id.email_Anf);
         telefono_anf = findViewById(R.id.tels_Anf);
-        pago_dep = findViewById(R.id.PagoDeposito);
-        pago_liquidacion = findViewById(R.id.PagoLiquidacion);
         spinners = findViewById(R.id.spinnerSimple);
         mAdapter = new EventosAdapter(this, mEventsList);
         spinners.setAdapter(mAdapter);
+
 
 
         Articulos contratacionInfo = new Articulos(Integer.valueOf(id_contratacion));
@@ -130,11 +234,11 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                         pago_liquidacion.setEnabled(false);
                         pago_dep.setEnabled(false);
                     }
-                    else if(infoExpandida.getEstado_servicio().equals("Entregado"))
+                    else if(infoExpandida.getEstado_servicio().equals("entregado"))
                     {
                         pago_dep.setEnabled(false);
                     }
-                    else if(infoExpandida.getEstado_servicio().equals("Pagado"))
+                    else if(infoExpandida.getEstado_servicio().equals("pagado"))
                     {
                         pago_liquidacion.setEnabled(false);
                         pago_dep.setEnabled(false);
@@ -142,13 +246,13 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(InfoExpandidaServicio.this,"Error al obtener la contratacion",Toast.LENGTH_LONG).show();
+                    Toast.makeText(InfoExpandidaServicio.this,"Error al obtener la contratacion",Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<CotizacionExpandidaResult> call, Throwable t) {
-                Toast.makeText(InfoExpandidaServicio.this,"Error al la informacion de esa contratacion",Toast.LENGTH_LONG).show();
+                Toast.makeText(InfoExpandidaServicio.this,"Error al la informacion de esa contratacion",Toast.LENGTH_SHORT).show();
             }
         });
 
