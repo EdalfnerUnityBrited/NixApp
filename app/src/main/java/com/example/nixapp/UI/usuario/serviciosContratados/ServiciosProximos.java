@@ -161,6 +161,42 @@ public class ServiciosProximos extends AppCompatActivity implements DashboardFra
     }
 
     @Override
+    public void onClickDelete(final Contrataciones mItem) {
+        final AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+        dialogo1.setTitle("Importante");
+        dialogo1.setMessage("¿Quiere borrar la contratacion del servicio: "+mItem.getNombre()+"?");
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                Call<ResponseBody> call = nixService.cancelarContratacion(mItem);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            Toast.makeText(ServiciosProximos.this, "Contratacion borrada satisfactoriamente", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(ServiciosProximos.this, "Debe de haber sido borrada con mas de una semana de anticipacion", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(ServiciosProximos.this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        dialogo1.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                //cancelar();
+            }
+        });
+        dialogo1.show();
+    }
+
+    @Override
     public void onClickDelete(final Cotizacion mItem) {
         final AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
         dialogo1.setTitle("Importante");

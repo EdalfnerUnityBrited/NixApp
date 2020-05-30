@@ -90,6 +90,7 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Button buscar;
     Eventos eventos;
     AlertDialog.Builder dialogo1;
+    Double latitudUsuario, longitudUsuario;
 
     private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
@@ -263,7 +264,9 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         if (location != null)
         {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
-
+            ///Wacha aqui
+            latitudUsuario= location.getLatitude();
+            longitudUsuario= location.getLongitude();
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))
                     .zoom(15)
