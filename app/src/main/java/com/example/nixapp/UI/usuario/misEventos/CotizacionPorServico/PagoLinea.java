@@ -1,6 +1,5 @@
 package com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.example.nixapp.DB.Chat;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Pagos;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.stripe.android.ApiResultCallback;
@@ -109,7 +107,7 @@ public class PagoLinea extends AppCompatActivity {
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if(response.isSuccessful())
                                     {
-                                        Toast.makeText(PagoLinea.this,"Actualizacion exitosa,recarga la ventada",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(PagoLinea.this,"Liquidacion exitosa,recarga la ventana",Toast.LENGTH_LONG).show();
 
                                     }
                                     else
@@ -191,9 +189,7 @@ public class PagoLinea extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if (response.isSuccessful()){
-                                        Toast.makeText(PagoLinea.this, "Contratación exitosa", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(PagoLinea.this, ServiciosProximos.class);
-                                        startActivity(intent);
+                                        Toast.makeText(PagoLinea.this, "Contratación exitosa,Detalles disponibles en tus Servicios Proximos", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                     else{

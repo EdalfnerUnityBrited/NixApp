@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.nixapp.DB.Citas;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.R;
-import com.example.nixapp.UI.usuario.serviciosContratados.ServiciosProximos;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 
@@ -151,9 +150,7 @@ public class EleccionPago extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if (response.isSuccessful()){
-                                            Toast.makeText(EleccionPago.this, "Contratacion exitosa", Toast.LENGTH_SHORT).show();
-                                            Intent intent= new Intent(EleccionPago.this, ServiciosProximos.class);
-                                            startActivity(intent);
+                                            Toast.makeText(EleccionPago.this, "Contratacion exitosa, Detalles disponibles en tus Servicios Proximos", Toast.LENGTH_LONG).show();
                                             finish();
                                         }
                                         else{
@@ -261,7 +258,7 @@ public class EleccionPago extends AppCompatActivity {
 
                     }
                 });
-                resumen_compra.setNegativeButton("No, es incorrecto", new DialogInterface.OnClickListener() {
+                resumen_compra.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -270,33 +267,6 @@ public class EleccionPago extends AppCompatActivity {
                 resumen_compra.show();
             }
         });
-    }
-
-    private boolean verificarFecha(int day, int month, int year) {
-        int diff=0;
-        if (diaActual.get(Calendar.YEAR)>year){
-            fecha.setError("Esa fecha se encuentra en el pasado");
-            return true;
-        }
-        else{
-            if ((diaActual.get(Calendar.MONTH) +1)> month ||
-                    ((diaActual.get(Calendar.MONTH) +1) == month && diaActual.get(Calendar.DAY_OF_MONTH) > day)) {
-                fecha.setError("Esa fecha se encuentra en el pasado");
-                return true;
-            }
-            else{
-                if((diaActual.get(Calendar.MONTH) +1) == month)
-                {
-                    diff=day-diaActual.get(Calendar.DAY_OF_MONTH);
-                    if (diff<3){
-                        fecha.setError("Tienes que tener 3 dias de anticipación");
-                        return true;
-                    }
-                }
-
-            }
-            return false;
-        }
     }
     private void retrofitInit() {
         nixClient= NixClient.getInstance();

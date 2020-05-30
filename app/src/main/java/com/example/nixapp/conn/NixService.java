@@ -278,6 +278,9 @@ public interface NixService {
     @GET("auth/citas")
     Call<CitasResult> citasUsuario();
 
+    @GET("proveedor/citas")
+    Call<CitasResult> citasProveedor();
+
     @POST("proveedor/borrarContratacion")
     Call<ResponseBody> cancelarContratacion(@Body Contrataciones contrataciones);
 }

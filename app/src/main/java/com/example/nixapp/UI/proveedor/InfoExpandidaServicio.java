@@ -2,10 +2,12 @@ package com.example.nixapp.UI.proveedor;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -41,15 +43,16 @@ public class InfoExpandidaServicio extends AppCompatActivity {
     NixService nixService;
     EditText nombre_evento,municipio,direccion,fecha,hora,nombre_servicio,estado_servicio,nombre_anf,correo_anf,telefono_anf;
     TextView desglose;
-    Button pago_dep,pago_liquidacion, ir_pago,servicio_entregado;
+    Button pago_dep,pago_liquidacion, ir_pago,servicio_entregado,calificar_Servicio;
     ContratacionExpandida infoExpandida;
     Spinner spinners;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     AlertDialog.Builder informacion;
     int ingreso = 0;
-    TableRow botonesProveedor,botonesUsuario;
+    TableRow botonesProveedor,botonesUsuario,botonCalificar;
     Calendar diaActual = Calendar.getInstance();
+    AlertDialog.Builder dialogo1,dialog,dial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,16 +93,19 @@ public class InfoExpandidaServicio extends AppCompatActivity {
         spinners = findViewById(R.id.spinnerSimple);
         botonesProveedor = findViewById(R.id.botonesProveedor);
         botonesUsuario = findViewById(R.id.botonesGeneral);
+        botonCalificar = findViewById(R.id.botonesCalificacion);
         servicio_entregado = findViewById(R.id.LlegoProducto);
         ir_pago = findViewById(R.id.IrPagar);
         pago_dep = findViewById(R.id.PagoDeposito);
         pago_liquidacion = findViewById(R.id.PagoLiquidacion);
+        calificar_Servicio = findViewById(R.id.CalificacionServicio);
         mAdapter = new EventosAdapter(this, mEventsList);
         spinners.setAdapter(mAdapter);
 //////////////////////////////////// ingreso = 1 Proveedor entro
 
         if(ingreso == 1)
         {
+            botonCalificar.setVisibility(View.GONE);
             botonesUsuario.setVisibility(View.GONE);
             pago_dep.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -257,6 +263,75 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                     intent.putExtra("total del pago", infoExpandida.getDesglose());
                     intent.putExtra("id_cotizacion", id_contratacion);
                     startActivity(intent);
+                }
+            });
+            calificar_Servicio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(infoExpandida.getEstado_servicio().equals("solicitado"))
+                    {
+                        Toast.makeText(InfoExpandidaServicio.this,"No puedes calificar un evento del que aun no pagas el deposito",Toast.LENGTH_SHORT).show();
+                    }
+                    else if(infoExpandida.getEstado_servicio().equals("pendiente"))
+                    {
+                        Toast.makeText(InfoExpandidaServicio.this,"No puedes calificar un evento que aun no a sido entregado",Toast.LENGTH_SHORT).show();
+                    }
+                    else if(infoExpandida.getEstado_servicio().equals("entregado"))
+                    {
+                        Toast.makeText(InfoExpandidaServicio.this,"Debes liquidarlo para poder calificarlo <3",Toast.LENGTH_SHORT).show();
+                    }
+                    else if(infoExpandida.getEstado_servicio().equals("pagado"))
+                    {
+                        dialogo1 = new AlertDialog.Builder(InfoExpandidaServicio.this);
+                        dialogo1.setTitle("Encuesta del Servicio:");
+                        dialogo1.setMessage("¿ Llego el servicio ?");
+                        dialogo1.setCancelable(false);
+                        dialogo1.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogo1, int id) {
+                                final String[] listItems = {"1", "2", "3", "4", "5"};
+                                AlertDialog.Builder builder = new AlertDialog.Builder(InfoExpandidaServicio.this);
+                                builder.setTitle("Del 1 al 5, ¿Que calificacion le pondrias?");
+                                int checkedItem = 0; //this will checked the item when user open the dialog
+                                builder.setSingleChoiceItems(listItems, checkedItem, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(InfoExpandidaServicio.this, "Position: " + which + " Value: " + listItems[which], Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                builder.setPositiveButton("Siguiente", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dial = new AlertDialog.Builder(InfoExpandidaServicio.this);
+                                        dial.setTitle("Comentario");
+                                        dial.setMessage("Ingrese algun comentario acerca el servicio que recibio:");
+                                        LinearLayout layout = new LinearLayout(InfoExpandidaServicio.this);
+                                        layout.setOrientation(LinearLayout.VERTICAL);
+                                        final EditText titleBox = new EditText(InfoExpandidaServicio.this);
+                                        titleBox.setHint("Comentario...");
+                                        titleBox.setTypeface(Typeface.DEFAULT);
+                                        layout.addView(titleBox);
+                                        dial.setView(layout);
+                                        dial.setCancelable(false);
+                                        dial.setPositiveButton("Finalizar", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                        dial.show();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                        dialogo1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogo1, int id) {
+                                Toast.makeText(InfoExpandidaServicio.this,"¿Encerio?... Pero si ya está pagado",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        dialogo1.show();
+                    }
                 }
             });
         }

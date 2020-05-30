@@ -587,7 +587,26 @@
 
 
                     </TableRow>
+                    <TableRow
+                        android:id="@+id/botonesCalificacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="4dp">
 
+
+                        <Button
+                            android:id="@+id/CalificacionServicio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Calificar Servicio"
+                            android:padding="5dp"
+                            android:layout_marginRight="20dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/buttom_text2"
+                            android:textSize="18sp"
+                            android:background="@drawable/button_blue"/>
+
+                    </TableRow>
 
                 </LinearLayout>
 
