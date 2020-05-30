@@ -7,6 +7,7 @@ import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Citas;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.CotizacionArticulo;
@@ -269,5 +270,8 @@ public interface NixService {
 
     @GET("auth/contrataciones")
     Call<ContratacionesListResult> contratacionesGeneral();
+
+    @POST("proveedor/cita")
+    Call<ResponseBody> nuevaCita(@Body Citas citas);
 
 }
