@@ -127,6 +127,7 @@ public class CalendarioProveedor extends AppCompatActivity {
                         events.add(new EventDay(sc.fecha, R.drawable.serviciospendientes));
 
                     }
+
                     calendario.setEvents(events);
                     calendario.setOnDayClickListener(new OnDayClickListener() {
                         @Override

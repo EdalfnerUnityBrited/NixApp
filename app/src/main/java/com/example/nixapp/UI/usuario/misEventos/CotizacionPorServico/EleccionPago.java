@@ -35,7 +35,7 @@ public class EleccionPago extends AppCompatActivity {
 
     Button efectivo, linea, hacer_cita;
     int tipo_bono;
-    String total_pago;
+    String total_pago,texto_efectivo = "";
     double cargo_total;
     AlertDialog.Builder resumen_compra;
     String tipo = "",id_cotizacion;
@@ -192,16 +192,17 @@ public class EleccionPago extends AppCompatActivity {
         id_cotizacion = (String) getIntent().getSerializableExtra("id_cotizacion");
         if(tipo_bono == 1)
         {
-            cargo_total = (Float.valueOf(total_pago) * 0.1);
+            cargo_total = (Float.valueOf(total_pago) * 0.2);
             tipo = "el Deposito";
+            texto_efectivo = "Se pasara a elegir una fecha en la cual se hara la cita para dar el deposito en efectivo.\n¿Esta deacuerdo?";
         }
         else
         {
             String[] separado1 = total_pago.split("\\$");
             String[] separado2 = separado1[1].split("MXN");
-            cargo_total = (Float.valueOf(separado2[0])*0.9);
+            cargo_total = (Float.valueOf(separado2[0])*0.8);
             tipo = "la Liquidacion";
-
+            texto_efectivo = "Para finalizar este proceso, solo debe entregarle resto del pago al proveedor del servicio y solicitar que confirme el pago desde la App\n¿De Acuerdo?";
         }
 
         linea.setOnClickListener(new View.OnClickListener() {
@@ -221,7 +222,7 @@ public class EleccionPago extends AppCompatActivity {
                         EleccionPago.this.finish();
                     }
                 });
-                resumen_compra.setNegativeButton("No, es incorrecto", new DialogInterface.OnClickListener() {
+                resumen_compra.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -236,20 +237,28 @@ public class EleccionPago extends AppCompatActivity {
             public void onClick(View v) {
                 resumen_compra = new AlertDialog.Builder(EleccionPago.this);
                 resumen_compra.setTitle("Importe total:");
-                resumen_compra.setMessage("Se debera pagar el importe de: $" + cargo_total + "  MXN Simbolizando " + tipo + " del Servicio.\nSe pasara a elegir una fecha en la cual se hara la cita para dar el deposito en efectivo.\n¿Esta deacuerdo?");
+                resumen_compra.setMessage("Se debera pagar el importe de: $" + cargo_total + "  MXN Simbolizando " + tipo + " del Servicio.\n" + texto_efectivo);
                 resumen_compra.setCancelable(false);
                 resumen_compra.setPositiveButton("Acepto", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        efectivo.setEnabled(false);
-                        linea.setEnabled(false);
-                        /////////////////////////////////////////////////
-                        hacer_cita.setVisibility(View.VISIBLE);
-                        fecha_text.setVisibility(View.VISIBLE);
-                        hora_text.setVisibility(View.VISIBLE);
-                        titulo.setVisibility(View.VISIBLE);
-                        ////////////////////////////////////////////////
-                        fecha.setVisibility(View.VISIBLE);
-                        hora.setVisibility(View.VISIBLE);
+                        if(tipo.equals("el Deposito"))
+                        {
+                            efectivo.setEnabled(false);
+                            linea.setEnabled(false);
+                            /////////////////////////////////////////////////
+                            hacer_cita.setVisibility(View.VISIBLE);
+                            fecha_text.setVisibility(View.VISIBLE);
+                            hora_text.setVisibility(View.VISIBLE);
+                            titulo.setVisibility(View.VISIBLE);
+                            ////////////////////////////////////////////////
+                            fecha.setVisibility(View.VISIBLE);
+                            hora.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            EleccionPago.this.finish();
+                        }
+
                     }
                 });
                 resumen_compra.setNegativeButton("No, es incorrecto", new DialogInterface.OnClickListener() {

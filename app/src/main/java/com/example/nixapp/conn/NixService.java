@@ -27,6 +27,7 @@ import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ArticulosPaqueteResult;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.CitasResult;
 import com.example.nixapp.conn.results.ContratacionesListResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
 import com.example.nixapp.conn.results.CotizacionExpandidaResult;
@@ -274,4 +275,6 @@ public interface NixService {
     @POST("proveedor/cita")
     Call<ResponseBody> nuevaCita(@Body Citas citas);
 
+    @GET("auth/citas")
+    Call<CitasResult> citasUsuario();
 }
