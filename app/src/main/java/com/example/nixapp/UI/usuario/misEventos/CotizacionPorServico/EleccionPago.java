@@ -1,25 +1,38 @@
 package com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.R;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 public class EleccionPago extends AppCompatActivity {
 
-    Button efectivo, linea;
+    Button efectivo, linea, hacer_cita;
     int tipo_bono;
     String total_pago;
     double cargo_total;
     AlertDialog.Builder resumen_compra;
     String tipo = "",id_cotizacion;
+    TextView fecha,fecha_text,hora,hora_text,titulo;
+    TimePickerDialog picker2;
+    DatePickerDialog picker;
+    int  dia, ano, mes;
+    Calendar diaActual = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +40,95 @@ public class EleccionPago extends AppCompatActivity {
         setContentView(R.layout.activity_eleccion_pago);
         efectivo= findViewById(R.id.botonEfectivo);
         linea= findViewById(R.id.botonLinea);
+        ////////////////////////////////////////////////
+        hacer_cita = findViewById(R.id.botonhacercita);
+        fecha_text = findViewById(R.id.text_fecha);
+        hora_text = findViewById(R.id.text_hora);
+        titulo = findViewById(R.id.textView4);
+        ////////////////////////////////////////////////
+        fecha = findViewById(R.id.fecha_cita);
+        fecha.setInputType(InputType.TYPE_NULL);
+        fecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Locale locale = getResources().getConfiguration().locale;
+                Locale.setDefault(locale);
+                final Calendar cldr = Calendar.getInstance();
+                dia = cldr.get(Calendar.DAY_OF_MONTH);
+                mes = cldr.get(Calendar.MONTH);
+                ano = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(EleccionPago.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                fecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            }
+                        }, ano, mes, dia);
+                picker.show();
+            }
+        });
+        hora = findViewById(R.id.hora_cita);
+        hora.setInputType(InputType.TYPE_NULL);
+        hora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Locale locale2 = getResources().getConfiguration().locale;
+                Locale.setDefault(locale2);
+                final Calendar cldr2 = Calendar.getInstance();
+                int hour = cldr2.get(Calendar.HOUR_OF_DAY);
+                int minutes = cldr2.get(Calendar.MINUTE);
+                // time picker dialog
+                picker2 = new TimePickerDialog(EleccionPago.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                                String minutos;
+                                String horas;
+                                if(sMinute < 10) {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    hora.setText(sHour + ":" + minutos);
+
+                                }
+                                else if(sHour < 10)
+                                {
+                                    horas = "0" + String.valueOf(sHour);
+                                    hora.setText(horas + ":" + sMinute);
+                                }
+                                else if(sHour <0 && sMinute< 0)
+                                {
+                                    minutos = "0" + String.valueOf(sMinute);
+                                    horas = "0" + String.valueOf(sHour);
+                                    hora.setText(horas + ":" + minutos);
+                                }
+                                else
+                                {
+                                    hora.setText(sHour + ":" + sMinute);
+                                }
+                            }
+                        }, hour, minutes, true);
+                picker2.show();
+            }
+        });
+
+        ///////////////////////////////////////////////
+        hacer_cita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!verificarFecha(dia,mes,ano))
+                {
+                    /*Verificar que no sea antes del dia actual, ni despues de una semana antes del evento, Tienes el
+                    * de la cotizacion creo que se debera hacer una llamada para verificar eso, despues se debe verificar
+                    * que la fecha no la tenga ocupada... y ya se crea la cita...*/
+                }
+                else
+                {
+
+                }
+            }
+        });
+        //////////////////////////////////////////////
+
         tipo_bono=(int) getIntent().getSerializableExtra("Pago");
         total_pago=(String) getIntent().getSerializableExtra("total del pago");
         id_cotizacion = (String) getIntent().getSerializableExtra("id_cotizacion");
@@ -76,11 +178,20 @@ public class EleccionPago extends AppCompatActivity {
             public void onClick(View v) {
                 resumen_compra = new AlertDialog.Builder(EleccionPago.this);
                 resumen_compra.setTitle("Importe total:");
-                resumen_compra.setMessage("Se cobrara el importe de: $" + cargo_total + "  MXN \nSimbolizando " + tipo + " del Servicio");
+                resumen_compra.setMessage("Se debera pagar el importe de: $" + cargo_total + "  MXN Simbolizando " + tipo + " del Servicio.\nSe pasara a elegir una fecha en la cual se hara la cita para dar el deposito en efectivo.\n¿Esta deacuerdo?");
                 resumen_compra.setCancelable(false);
                 resumen_compra.setPositiveButton("Acepto", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        Toast.makeText(EleccionPago.this, "Pago Realizado", Toast.LENGTH_SHORT).show();
+                        efectivo.setEnabled(false);
+                        linea.setEnabled(false);
+                        /////////////////////////////////////////////////
+                        hacer_cita.setVisibility(View.VISIBLE);
+                        fecha_text.setVisibility(View.VISIBLE);
+                        hora_text.setVisibility(View.VISIBLE);
+                        titulo.setVisibility(View.VISIBLE);
+                        ////////////////////////////////////////////////
+                        fecha.setVisibility(View.VISIBLE);
+                        hora.setVisibility(View.VISIBLE);
                     }
                 });
                 resumen_compra.setNegativeButton("No, es incorrecto", new DialogInterface.OnClickListener() {
@@ -92,5 +203,32 @@ public class EleccionPago extends AppCompatActivity {
                 resumen_compra.show();
             }
         });
+    }
+
+    private boolean verificarFecha(int day, int month, int year) {
+        int diff=0;
+        if (diaActual.get(Calendar.YEAR)>year){
+            fecha.setError("Esa fecha se encuentra en el pasado");
+            return true;
+        }
+        else{
+            if ((diaActual.get(Calendar.MONTH) +1)> month ||
+                    ((diaActual.get(Calendar.MONTH) +1) == month && diaActual.get(Calendar.DAY_OF_MONTH) > day)) {
+                fecha.setError("Esa fecha se encuentra en el pasado");
+                return true;
+            }
+            else{
+                if((diaActual.get(Calendar.MONTH) +1) == month)
+                {
+                    diff=day-diaActual.get(Calendar.DAY_OF_MONTH);
+                    if (diff<3){
+                        fecha.setError("Tienes que tener 3 dias de anticipación");
+                        return true;
+                    }
+                }
+
+            }
+            return false;
+        }
     }
 }
