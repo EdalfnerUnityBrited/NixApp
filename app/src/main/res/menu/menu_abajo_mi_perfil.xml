@@ -3,7 +3,4 @@
     <item android:id="@+id/nav_informacionpersonal"
         android:icon="@drawable/ic_perfil"
         android:title="Personal"></item>
-    <item android:id="@+id/nav_metodospago"
-        android:icon="@drawable/ic_pago"
-        android:title="Métodos Pago"></item>
 </menu>

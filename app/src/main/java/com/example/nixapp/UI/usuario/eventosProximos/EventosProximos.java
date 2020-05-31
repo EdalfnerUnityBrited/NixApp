@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.DB.Notificaciones;
 import com.example.nixapp.R;
 import com.example.nixapp.UI.usuario.InfoEventoExpandida;
-import com.example.nixapp.UI.usuario.MenuPrincipalUsuarioGeneral;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.example.nixapp.conn.results.EventosResult;
@@ -31,6 +29,8 @@ public class EventosProximos extends AppCompatActivity implements EventosProximo
     NixService nixService;
     NixClient nixClient;
     Eventos eventos;
+    int fragment_origen = 1;
+    int fragment_destino = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,20 +67,42 @@ public class EventosProximos extends AppCompatActivity implements EventosProximo
                         case R.id.nav_eventosproximos_menu:{
                             setToolbarTitle("Eventos Próximos");
                             selectedFragment = new EventosProximosFragment();
+                            fragment_destino = 1;
                             break;
                         }
                         case R.id.nav_misnotificaciones:{
                             setToolbarTitle("Mis Notificaciones");
                             selectedFragment = new MisNotificacionesFragment();
+                            fragment_destino = 3;
                             break;
                         }
                         case R.id.nav_misintereses:{
                             setToolbarTitle("Mis Intereses");
                             selectedFragment = new MisInteresesFragment();
+                            fragment_destino = 2;
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_eventos_proximos, selectedFragment).commit();
+                    if(fragment_destino == 1 && (fragment_origen == 2||fragment_origen == 3))
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_eventos_proximos, selectedFragment).commit();
+                        fragment_origen = 1;
+                    }
+                    else if(fragment_destino == 2 && fragment_origen == 1)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_eventos_proximos, selectedFragment).commit();
+                        fragment_origen = 2;
+                    }
+                    else if(fragment_destino == 2 && fragment_origen == 3)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_eventos_proximos, selectedFragment).commit();
+                        fragment_origen = 2;
+                    }
+                    else if(fragment_destino == 3 && (fragment_origen == 2||fragment_origen == 1))
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_eventos_proximos, selectedFragment).commit();
+                        fragment_origen = 3;
+                    }
                     return true;
                 }
             };

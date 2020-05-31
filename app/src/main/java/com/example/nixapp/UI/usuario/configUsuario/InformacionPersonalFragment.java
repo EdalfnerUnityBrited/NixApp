@@ -120,6 +120,8 @@ public class InformacionPersonalFragment extends Fragment {
         fecha.setText(usuario.fechaNac);
         correo=view.findViewById(R.id.email_user);
         correo.setText(usuario.email);
+        correo.setEnabled(false);
+        correo.setBackground(null);
         apP = view.findViewById(R.id.ap_pat_user);
         apM = view.findViewById(R.id.ap_mat_user);
         cambioDato=view.findViewById(R.id.buttonGuardar);
@@ -143,6 +145,8 @@ public class InformacionPersonalFragment extends Fragment {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()){
                                 Toast.makeText(getActivity(), "Actualización Exitosa", Toast.LENGTH_SHORT).show();
+                                passwordUser.setError(null);
+                                passwordConfirm.setError(null);
                             }
                             else{
                                 Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();
@@ -174,7 +178,7 @@ public class InformacionPersonalFragment extends Fragment {
                 nombre.setError("Llene el nombre");
             }
             else if (telefonoUsuario.isEmpty()){
-                telefono.setError("Llene el nombre");
+                telefono.setError("Llene el Telefono");
             }
             else{
                 date=fecha.getText().toString();
@@ -194,6 +198,9 @@ public class InformacionPersonalFragment extends Fragment {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()){
                                 Toast.makeText(getActivity(), "Actualización Exitosa", Toast.LENGTH_SHORT).show();
+                                mDisplayDate.setError(null);
+                                telefono.setError(null);
+                                nombre.setError(null);
                             }
                             else{
                                 Toast.makeText(getActivity(), "Error en los datos", Toast.LENGTH_SHORT).show();

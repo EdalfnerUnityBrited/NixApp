@@ -69,7 +69,7 @@ public class EventosProximosFragment extends Fragment {
                                 int ano=Integer.parseInt(fechanueva[0]);
                                 if(ano >= currentTime.get(Calendar.YEAR))
                                 {
-                                    if((currentTime.get(Calendar.MONTH)+1)< mes|| ((currentTime.get(Calendar.MONTH)+1) == mes && currentTime.get(Calendar.DAY_OF_MONTH) < dia))
+                                    if((currentTime.get(Calendar.MONTH)+1)<= mes|| ((currentTime.get(Calendar.MONTH)+1) == mes && currentTime.get(Calendar.DAY_OF_MONTH) <= dia))
                                     {
                                         eventosProximos.add(event);
                                     }

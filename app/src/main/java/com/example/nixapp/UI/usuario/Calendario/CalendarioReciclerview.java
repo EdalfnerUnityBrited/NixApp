@@ -68,14 +68,26 @@ public class CalendarioReciclerview extends RecyclerView.Adapter<CalendarioRecic
         // - replace the contents of the view with that element
         String nombre = EventosC.get(position).titulo;
         String direcc = EventosC.get(position).direccion;
+        String hora = EventosC.get(position).estado_asistencia;
         Calendar fecha = EventosC.get(position).fecha;
+        int categoria = EventosC.get(position).categoria;
         int cupo = EventosC.get(position).cupo;
         int year = fecha.get(Calendar.YEAR);
         int mes = fecha.get(Calendar.MONTH);
         int dia = fecha.get(Calendar.DAY_OF_MONTH);
-        holder.titulo.setText(nombre);
-        holder.direccion.setText(direcc);
-        holder.cupo.setText(String.valueOf(cupo)+ " personas");
+
+        if(categoria != 0)
+        {
+            holder.cupo.setText(String.valueOf(cupo)+ " personas");
+            holder.titulo.setText(nombre);
+            holder.direccion.setText(direcc);
+        }
+        else
+        {
+            holder.cupo.setText(hora+" Hrs.");
+            holder.titulo.setText("Para: " + nombre);
+            holder.direccion.setText("Servicio: "+direcc);
+        }
         holder.fecha.setText(dia+"/"+(mes+1)+"/"+year);
         if(EventosC.get(position).estado_asistencia.equals("creador"))
         {
@@ -87,10 +99,15 @@ public class CalendarioReciclerview extends RecyclerView.Adapter<CalendarioRecic
             holder.asistencia.setText("Te interesa");
             holder.asistencia.setTextColor(Color.parseColor("#F59710"));
         }
-        else
+        else if(EventosC.get(position).estado_asistencia.equals("confirmado"))
         {
             holder.asistencia.setText("Asistiras");
             holder.asistencia.setTextColor(Color.parseColor("#3CDA3C"));
+        }
+        else
+        {
+            holder.asistencia.setText("Recuerda la cita");
+            holder.asistencia.setTextColor(Color.parseColor("#900C3F"));
         }
 
         Glide.with(holder.tipo_evento)

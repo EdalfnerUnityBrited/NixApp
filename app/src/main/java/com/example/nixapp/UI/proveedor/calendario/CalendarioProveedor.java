@@ -14,10 +14,12 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.nixapp.DB.Citas;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.CitasResult;
 import com.example.nixapp.conn.results.ContratacionesListResult;
 
 import java.text.ParseException;
@@ -122,43 +124,94 @@ public class CalendarioProveedor extends AppCompatActivity {
 
 
                     }
-                    for (ServicioCorregido sc: paraCalendario) { //LLeno el calendario con los eventos
-
-                        events.add(new EventDay(sc.fecha, R.drawable.serviciospendientes));
-
-                    }
-                    calendario.setEvents(events);
-                    calendario.setOnDayClickListener(new OnDayClickListener() {
+                    Call<CitasResult> citas = nixService.citasProveedor();
+                    citas.enqueue(new Callback<CitasResult>() {
                         @Override
-                        public void onDayClick(EventDay eventDay) {
-                            Calendar clickedDayCalendar = eventDay.getCalendar();
-                            int year = clickedDayCalendar.get(Calendar.YEAR);
-                            int mes = clickedDayCalendar.get(Calendar.MONTH);
-                            int dia = clickedDayCalendar.get(Calendar.DAY_OF_MONTH);
-                            fechaelegida = clickedDayCalendar;
-                            try {
-                                calendario.setDate(clickedDayCalendar);
-                                fecha_presionada.setText("Fecha seleccionada: "+dia +"/"+(mes+1)+"/"+year);
-                                paraRecycler.clear();
-                                for (ServicioCorregido serv: paraCalendario)
-                                {
-                                    if(serv.fecha.equals(clickedDayCalendar))
-                                    {
-                                        paraRecycler.add(serv);
+                        public void onResponse(Call<CitasResult> call, Response<CitasResult> response) {
+
+                            if(response.isSuccessful())
+                            {
+                                List<Citas> citasUsuario = response.body().citas;
+                                for (Citas cit: citasUsuario) { //Acomodo los eventos para cambiar la fecha de String a Calendar
+
+                                    String date = cit.getFecha();
+                                    String[] dateS = date.split("-");
+                                    Calendar calendar = Calendar.getInstance();
+                                    Date fechaEvento = null;
+                                    try {
+                                        fechaEvento = new SimpleDateFormat("dd/MM/yyyy").parse(dateS[2]+ "/"+dateS[1]+"/"+dateS[0]);
+                                        calendar.setTime(fechaEvento);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(),"Error al poner fechas",Toast.LENGTH_LONG).show();
                                     }
+                                    if(calendar.get(Calendar.YEAR) >= currentTime.get(Calendar.YEAR))
+                                    {
+                                        if(currentTime.get(Calendar.MONTH) < calendar.get(Calendar.MONTH)|| (currentTime.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && currentTime.get(Calendar.DAY_OF_MONTH) <= calendar.get(Calendar.DAY_OF_MONTH)))
+                                        {
+                                            ServicioCorregido corregido = new ServicioCorregido(calendar,cit.getNombre(),cit.getNombre_evento(),cit.getFecha(),cit.getHora(),"Cita", "");
+                                            paraCalendario.add(corregido);
+                                        }
+                                    }
+
+
                                 }
-                                serviciospordia = findViewById(R.id.serviciospordia);
-                                serviciospordia.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                mAdapter = new CalendarioProveedorReciclerview(paraRecycler);
-                                serviciospordia.setAdapter(mAdapter);
-                            } catch (OutOfDateRangeException e) {
-                                e.printStackTrace();
-                                Toast.makeText(getApplicationContext(),"Error al hacer click",Toast.LENGTH_LONG).show();
+                                for (ServicioCorregido sc: paraCalendario) { //LLeno el calendario con los eventos
+
+                                    if(sc.estado.equals("Cita"))
+                                    {
+                                        events.add(new EventDay(sc.fecha, R.drawable.citas));
+                                    }
+                                    else {
+                                        events.add(new EventDay(sc.fecha, R.drawable.serviciospendientes));
+                                    }
+
+                                }
+
+                                calendario.setEvents(events);
+                                calendario.setOnDayClickListener(new OnDayClickListener() {
+                                    @Override
+                                    public void onDayClick(EventDay eventDay) {
+                                        Calendar clickedDayCalendar = eventDay.getCalendar();
+                                        int year = clickedDayCalendar.get(Calendar.YEAR);
+                                        int mes = clickedDayCalendar.get(Calendar.MONTH);
+                                        int dia = clickedDayCalendar.get(Calendar.DAY_OF_MONTH);
+                                        fechaelegida = clickedDayCalendar;
+                                        try {
+                                            calendario.setDate(clickedDayCalendar);
+                                            fecha_presionada.setText("Fecha seleccionada: "+dia +"/"+(mes+1)+"/"+year);
+                                            paraRecycler.clear();
+                                            for (ServicioCorregido serv: paraCalendario)
+                                            {
+                                                if(serv.fecha.equals(clickedDayCalendar))
+                                                {
+                                                    paraRecycler.add(serv);
+                                                }
+                                            }
+                                            serviciospordia = findViewById(R.id.serviciospordia);
+                                            serviciospordia.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                            mAdapter = new CalendarioProveedorReciclerview(paraRecycler);
+                                            serviciospordia.setAdapter(mAdapter);
+                                        } catch (OutOfDateRangeException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(getApplicationContext(),"Error al hacer click",Toast.LENGTH_LONG).show();
+                                        }
+
+
+                                    }
+                                });
                             }
-
-
+                            else
+                            {
+                                Toast.makeText(CalendarioProveedor.this,"No se encontraron citas",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<CitasResult> call, Throwable t) {
+                            Toast.makeText(CalendarioProveedor.this,"Error al buscar citas",Toast.LENGTH_LONG).show();
                         }
                     });
+
                 }
                 else
                 {

@@ -5,8 +5,10 @@ import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.BusquedaArticulos;
 import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
+import com.example.nixapp.DB.Calificacion;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Chat;
+import com.example.nixapp.DB.Citas;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.DB.Cotizacion;
 import com.example.nixapp.DB.CotizacionArticulo;
@@ -26,6 +28,7 @@ import com.example.nixapp.conn.results.ArticuloResult;
 import com.example.nixapp.conn.results.ArticulosListResult;
 import com.example.nixapp.conn.results.ArticulosPaqueteResult;
 import com.example.nixapp.conn.results.ChatResult;
+import com.example.nixapp.conn.results.CitasResult;
 import com.example.nixapp.conn.results.ContratacionesListResult;
 import com.example.nixapp.conn.results.CotizacionArticuloResult;
 import com.example.nixapp.conn.results.CotizacionExpandidaResult;
@@ -270,4 +273,18 @@ public interface NixService {
     @GET("auth/contrataciones")
     Call<ContratacionesListResult> contratacionesGeneral();
 
+    @POST("proveedor/cita")
+    Call<ResponseBody> nuevaCita(@Body Citas citas);
+
+    @GET("auth/citas")
+    Call<CitasResult> citasUsuario();
+
+    @GET("proveedor/citas")
+    Call<CitasResult> citasProveedor();
+
+    @POST("proveedor/borrarContratacion")
+    Call<ResponseBody> cancelarContratacion(@Body Contrataciones contrataciones);
+
+    @POST("proveedor/calificar")
+    Call<ResponseBody> calificar(@Body Calificacion calificacion);
 }

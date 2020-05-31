@@ -63,7 +63,13 @@ public class CalendarioProveedorReciclerview extends RecyclerView.Adapter<Calend
         holder.nombser.setText("Servicio: " + ServiciosC.get(position).nombre_servicio);
         holder.nombevento.setText("Al evento: "+ ServiciosC.get(position).nombre_evento);
         holder.fecha.setText("El dia: " + ServiciosC.get(position).fecha_servicio + " a las: " + ServiciosC.get(position).hora_servicio);
-        holder.hora.setText("Lugar: " + ServiciosC.get(position).direccion);
+        if(ServiciosC.get(position).direccion.equals(""))
+        {
+            holder.hora.setVisibility(View.GONE);
+        }else
+        {
+            holder.hora.setText("Lugar: " + ServiciosC.get(position).direccion);
+        }
         holder.estado_servicio.setText("Estado del servicio: "+ServiciosC.get(position).estado);
 
     }

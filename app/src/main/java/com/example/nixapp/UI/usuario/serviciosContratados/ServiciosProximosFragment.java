@@ -78,6 +78,7 @@ public class ServiciosProximosFragment extends Fragment {
         void onListFragmentInteraction(Contrataciones item);
         void onClick(View v);
 
+        void onClickDelete(Contrataciones mItem);
     }
     @Override
     public void onAttach(Context context) {

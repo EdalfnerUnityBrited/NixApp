@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -378,6 +379,17 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            //do your stuff
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            this.overridePendingTransition(R.anim.enter_from_left,R.anim.exit_to_right);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**Se inicia el servicio

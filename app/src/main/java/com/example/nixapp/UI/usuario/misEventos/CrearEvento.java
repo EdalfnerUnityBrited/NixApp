@@ -734,8 +734,6 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
             }
             return false;
         }
-
-
     }
 
     private int privacidad() {

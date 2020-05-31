@@ -34,6 +34,8 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
     Eventos eventos;
     NixService nixService;
     NixClient nixClient;
+    int fragment_origen = 1;
+    int fragment_destino = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,21 +68,43 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
                     switch (item.getItemId()){
                         case R.id.nav_serviciospendientes:{
                             setToolbarTitle("Servicios Proximos");
+                            fragment_destino = 1;
                             selectedFragment = new ServiciosPendientesFragmentProveedor();
                             break;
                         }
                         case R.id.nav_notificaciones_proveedor:{
                             setToolbarTitle("Mis Notificaciones");
+                            fragment_destino = 2;
                             selectedFragment = new NotificacionesFragmentProveedor();
                             break;
                         }
                         case R.id.nav_chats_proveedor:{
                             setToolbarTitle("Mis Chats");
+                            fragment_destino = 3;
                             selectedFragment = new ChatsFragmentProveedor();
                             break;
                         }
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_servicios_proximos_proveedor,selectedFragment).commit();
+                    if(fragment_destino == 1 && (fragment_origen == 2||fragment_origen == 3))
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_servicios_proximos_proveedor, selectedFragment).commit();
+                        fragment_origen = 1;
+                    }
+                    else if(fragment_destino == 2 && fragment_origen == 1)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_servicios_proximos_proveedor, selectedFragment).commit();
+                        fragment_origen = 2;
+                    }
+                    else if(fragment_destino == 2 && fragment_origen == 3)
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_servicios_proximos_proveedor, selectedFragment).commit();
+                        fragment_origen = 2;
+                    }
+                    else if(fragment_destino == 3 && (fragment_origen == 2||fragment_origen == 1))
+                    {
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_servicios_proximos_proveedor, selectedFragment).commit();
+                        fragment_origen = 3;
+                    }
                     return true;
                 }
             };
@@ -147,7 +171,7 @@ public class ServiciosProximosProveedor extends AppCompatActivity implements Cha
     public void onListFragmentInteraction(Contrataciones item) {
         Intent intent= new Intent(ServiciosProximosProveedor.this, InfoExpandidaServicio.class);
         intent.putExtra("id_contratacion", item.getId());
-        intent.putExtra("ingreso",2);
+        intent.putExtra("ingreso",1);
         startActivity(intent);
     }
 

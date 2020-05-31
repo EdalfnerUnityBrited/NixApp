@@ -14,10 +14,12 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.nixapp.DB.Citas;
 import com.example.nixapp.DB.Eventos;
 import com.example.nixapp.R;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
+import com.example.nixapp.conn.results.CitasResult;
 import com.example.nixapp.conn.results.EventosListResult;
 
 import java.text.ParseException;
@@ -42,10 +44,10 @@ public class Calendario extends AppCompatActivity {
         String estado_asistencia;
         String imagen;
         EventosCorregidos(String titulo,String direccion,Calendar fecha,int categoria,int cupo,String estado_asistencia,String imagen){
-            this.fecha = fecha;
-            this.categoria = categoria;
-            this.titulo = titulo;
-            this.direccion = direccion;
+            this.fecha = fecha; //Fecha
+            this.categoria = categoria;//nombreServicio
+            this.titulo = titulo;//NombreEvento
+            this.direccion = direccion;//Hora
             this.cupo = cupo;
             this.estado_asistencia = estado_asistencia;
             this.imagen = imagen;
@@ -101,75 +103,120 @@ public class Calendario extends AppCompatActivity {
 
 
                     }
-                    for (EventosCorregidos eventos: EventosC) { //LLeno el calendario con los eventos
-                        switch (eventos.categoria)
-                        {
-                            case 1:
-                            {
-                                events.add(new EventDay(eventos.fecha, R.drawable.compromisos));
-                            }
-                            break;
-                            case 2:
-                            {
-                                events.add(new EventDay(eventos.fecha, R.drawable.mega));
-                            }
-                            break;
-                            case 3:
-                            {
-                                events.add(new EventDay(eventos.fecha, R.drawable.galas));
-                            }
-                            break;
-                            case 4:
-                            {
-                                events.add(new EventDay(eventos.fecha, R.drawable.empresariales));
-                            }
-                            break;
-                            case 5:
-                            {
-                                events.add(new EventDay(eventos.fecha, R.drawable.festejos));
-                            }
-                            break;
-                            case 6:
-                            {
-                                events.add(new EventDay(eventos.fecha, R.drawable.religiosos));
-                            }
-                            break;
-
-                        }
-                    }
-                    calendario.setEvents(events);
-                    calendario.setOnDayClickListener(new OnDayClickListener() {
+                    Call<CitasResult> citas = nixService.citasUsuario();
+                    citas.enqueue(new Callback<CitasResult>() {
                         @Override
-                        public void onDayClick(EventDay eventDay) {
-                            Calendar clickedDayCalendar = eventDay.getCalendar();
-                            int year = clickedDayCalendar.get(Calendar.YEAR);
-                            int mes = clickedDayCalendar.get(Calendar.MONTH);
-                            int dia = clickedDayCalendar.get(Calendar.DAY_OF_MONTH);
-                            fechaelegida = clickedDayCalendar;
-                            try {
-                                calendario.setDate(clickedDayCalendar);
-                                fecha_presionada.setText("Fecha seleccionada: "+dia +"/"+(mes+1)+"/"+year);
-                                EventosSeleccionados.clear();
-                                for (EventosCorregidos eventos: EventosC)
-                                {
-                                    if(eventos.fecha.equals(clickedDayCalendar))
+                        public void onResponse(Call<CitasResult> call, Response<CitasResult> response) {
+                            if(response.isSuccessful())
+                            {
+                                List<Citas> citasUsuario = response.body().citas;
+                                for (Citas cit: citasUsuario) { //Acomodo los eventos para cambiar la fecha de String a Calendar
+
+                                    String date = cit.getFecha();
+                                    String[] dateS = date.split("-");
+                                    Calendar calendar = Calendar.getInstance();
+                                    Date fechaEvento = null;
+                                    try {
+                                        fechaEvento = new SimpleDateFormat("dd/MM/yyyy").parse(dateS[2]+ "/"+dateS[1]+"/"+dateS[0]);
+                                        calendar.setTime(fechaEvento);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getApplicationContext(),"Error al poner fechas",Toast.LENGTH_LONG).show();
+                                    }
+                                    if(calendar.get(Calendar.YEAR) >= currentTime.get(Calendar.YEAR))
                                     {
-                                        EventosSeleccionados.add(eventos);
+                                        if(currentTime.get(Calendar.MONTH) < calendar.get(Calendar.MONTH)|| (currentTime.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && currentTime.get(Calendar.DAY_OF_MONTH) <= calendar.get(Calendar.DAY_OF_MONTH)))
+                                        {
+                                            EventosCorregidos exem = new EventosCorregidos(cit.getNombre_evento(),cit.getNombre(),calendar,0,0,cit.getHora(),"https://www.quepasasalta.com.ar/files/image/36/36016/5a955b203fef5.jpg");
+                                            EventosC.add(exem);
+                                        }
+                                    }
+
+
+                                }
+                                for (EventosCorregidos eventos: EventosC) { //LLeno el calendario con los eventos
+                                    switch (eventos.categoria)
+                                    {
+                                        case 0:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.citas));
+                                        }
+                                        case 1:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.compromisos));
+                                        }
+                                        break;
+                                        case 2:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.mega));
+                                        }
+                                        break;
+                                        case 3:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.galas));
+                                        }
+                                        break;
+                                        case 4:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.empresariales));
+                                        }
+                                        break;
+                                        case 5:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.festejos));
+                                        }
+                                        break;
+                                        case 6:
+                                        {
+                                            events.add(new EventDay(eventos.fecha, R.drawable.religiosos));
+                                        }
+                                        break;
+
                                     }
                                 }
-                                eventospordia = findViewById(R.id.eventosperdia);
-                                eventospordia.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                                mAdapter = new CalendarioReciclerview(EventosSeleccionados);
-                                eventospordia.setAdapter(mAdapter);
-                            } catch (OutOfDateRangeException e) {
-                                e.printStackTrace();
-                                Toast.makeText(getApplicationContext(),"Error al hacer click",Toast.LENGTH_LONG).show();
+                                calendario.setEvents(events);
+                                calendario.setOnDayClickListener(new OnDayClickListener() {
+                                    @Override
+                                    public void onDayClick(EventDay eventDay) {
+                                        Calendar clickedDayCalendar = eventDay.getCalendar();
+                                        int year = clickedDayCalendar.get(Calendar.YEAR);
+                                        int mes = clickedDayCalendar.get(Calendar.MONTH);
+                                        int dia = clickedDayCalendar.get(Calendar.DAY_OF_MONTH);
+                                        fechaelegida = clickedDayCalendar;
+                                        try {
+                                            calendario.setDate(clickedDayCalendar);
+                                            fecha_presionada.setText("Fecha seleccionada: "+dia +"/"+(mes+1)+"/"+year);
+                                            EventosSeleccionados.clear();
+                                            for (EventosCorregidos eventos: EventosC)
+                                            {
+                                                if(eventos.fecha.equals(clickedDayCalendar))
+                                                {
+                                                    EventosSeleccionados.add(eventos);
+                                                }
+                                            }
+                                            eventospordia = findViewById(R.id.eventosperdia);
+                                            eventospordia.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                                            mAdapter = new CalendarioReciclerview(EventosSeleccionados);
+                                            eventospordia.setAdapter(mAdapter);
+                                        } catch (OutOfDateRangeException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(getApplicationContext(),"Error al hacer click",Toast.LENGTH_LONG).show();
+                                        }
+
+
+                                    }
+                                });
                             }
-
-
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),"No se encontraron citas",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<CitasResult> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(),"Error al recibir las citas",Toast.LENGTH_LONG).show();
                         }
                     });
-
                 }
                 else
                 {

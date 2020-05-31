@@ -1,6 +1,7 @@
 package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,10 +32,18 @@ import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,7 +59,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
     RadioButton publico,privado;
     ImageView principal;
     Spinner spinners;
-    Button asistire,interes,imagenes;
+    Button asistire,interes,imagenes,confirmarAsistencia;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     NixClient nixClient;
@@ -64,6 +73,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_evento_expandida);
+
 
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -141,7 +151,17 @@ public class InfoEventoExpandida extends AppCompatActivity {
         nombre_Anfitrion = findViewById(R.id.nomb_Anf);
         telefono_Anfitrion = findViewById(R.id.tels_Anf);
         invitadosConfirmados = findViewById(R.id.invitados_confirmados);
+        confirmarAsistencia = findViewById(R.id.confirmarAsistencia);
         ///////////////////////////////////////////////////
+        if (verificarFechayHora()){
+            interes.setEnabled(false);
+            asistire.setEnabled(false);
+            interes.setVisibility(View.INVISIBLE);
+            asistire.setVisibility(View.INVISIBLE);
+            confirmarAsistencia.setEnabled(true);
+            confirmarAsistencia.setVisibility(View.VISIBLE);
+        }
+        ///////////////////////
         Eventos nuevo = new Eventos(id);
         Call<UsuarioListResult> confirmados = nixService.confirmados(nuevo);
         confirmados.enqueue(new Callback<UsuarioListResult>() {
@@ -476,8 +496,82 @@ public class InfoEventoExpandida extends AppCompatActivity {
                 }
             }
         });
+
+        confirmarAsistencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String[][] direccionFinal = {new String[1]};
+                final String[][] distanciaFinal = {new String[1]};
+                String lat = String.valueOf(MenuPrincipalUsuarioGeneral.getLatitudUsuario());
+                String lng = String.valueOf(MenuPrincipalUsuarioGeneral.getLongitudUsuario());
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?&latlng=%1$s+,+%2$s&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw",lat,lng);
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+                client.newCall(request).enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(okhttp3.Call call, IOException e) {
+                        Toast.makeText(InfoEventoExpandida.this, "ERROR API GEOCODING", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            final String myResponse = response.body().string();
+                            InfoEventoExpandida.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String[] direccion1 = myResponse.split("\"formatted_address\"+ +:+ \"");
+                                    direccionFinal[0] = direccion1[0].split("\"");
+                                }
+                            });
+                        }
+                    }
+                });
+                String url2 = String.format("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=%1$s+Jalisco+Mexico&destinations=%2$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw", direccionFinal[0][0],lugar);
+                OkHttpClient cliente2 = new OkHttpClient();
+                request.newBuilder().url(url2).build();
+                cliente2.newCall(request).enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(okhttp3.Call call, IOException e) {
+
+                    }
+                    @Override
+                    public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                        if (response.isSuccessful()){
+                            final String myResponse2 = response.body().toString();
+                            InfoEventoExpandida.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String[] distancia1 = myResponse2.split("\"text\":+ +\"");
+                                    distanciaFinal[0] = distancia1[0].split("\"");
+                                }
+                            });
+                        }
+                    }
+                });
+                if (distanciaFinal[0][0].compareTo("0,5 mi")<0){
+                    Toast.makeText(InfoEventoExpandida.this, "Estas ahi!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
+    private boolean verificarFechayHora(){
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(currentTime);
+        SimpleDateFormat dt = new SimpleDateFormat("HH:mm:ss");
+        String formattedTime = dt.format(currentTime);
+        if (fecha.equals(formattedDate) && hora.compareTo(formattedTime)<0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     public void setToolbarTitle(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

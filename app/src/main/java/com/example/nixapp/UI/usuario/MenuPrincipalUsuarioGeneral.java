@@ -90,6 +90,15 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Button buscar;
     Eventos eventos;
     AlertDialog.Builder dialogo1;
+    static Double latitudUsuario, longitudUsuario;
+
+    public static Double getLatitudUsuario() {
+        return latitudUsuario;
+    }
+
+    public static Double getLongitudUsuario() {
+        return longitudUsuario;
+    }
 
     private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
@@ -101,7 +110,6 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         usuario = (Usuario) getIntent().getSerializableExtra("usuario");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
-
         drawer = findViewById(R.id.drawer_layout_usuario_general);
         NavigationView navigationView = findViewById(R.id.nav_view_usuario_general);
         navigationView.setNavigationItemSelectedListener(this);
@@ -264,7 +272,9 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
         if (location != null)
         {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
-
+            ///Wacha aqui
+            latitudUsuario= location.getLatitude();
+            longitudUsuario= location.getLongitude();
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))
                     .zoom(15)

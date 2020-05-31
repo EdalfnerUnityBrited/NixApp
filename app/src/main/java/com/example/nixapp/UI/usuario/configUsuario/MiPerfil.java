@@ -57,22 +57,11 @@ public class MiPerfil extends AppCompatActivity {
                             seleccion = 0;
                             break;
                         }
-                        case R.id.nav_metodospago:{
-                            setToolbarTitle("Métodos de Pago");
-                            selectedFragment = new MetodosPagoFragment();
-                            seleccion = 1;
-                            break;
-                        }
                     }
                     if(seleccion == 0 && estado != true)
                     {
                         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_left,R.anim.exit_to_right).replace(R.id.fragment_container_mi_perfil, selectedFragment).commit();
                         estado = true;
-                    }
-                    else if (seleccion == 1 && estado != false)
-                    {
-                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left).replace(R.id.fragment_container_mi_perfil, selectedFragment).commit();
-                        estado = false;
                     }
 
                     return true;
