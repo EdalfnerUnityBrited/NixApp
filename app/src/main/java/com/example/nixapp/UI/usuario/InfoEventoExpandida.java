@@ -591,7 +591,7 @@ public class InfoEventoExpandida extends AppCompatActivity {
                         public void run() {
                             String[] distancia1 = myResponse2.split("\"text\"+ :+ \"");
                             distanciaFinal[0] = distancia1[1].split("\"");
-                            if (distanciaFinal[0][0].compareTo("900 ft")<0){
+                            if (distanciaFinal[0][0].contains("ft")){
                                 Toast.makeText(InfoEventoExpandida.this, "Estas ahi!", Toast.LENGTH_SHORT).show();
                                 Prospectos prospectos= new Prospectos(id);
                                 Call<ResponseBody> callAsist= nixService.confirmarAsistencia(prospectos);
