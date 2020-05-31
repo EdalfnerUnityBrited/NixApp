@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MisEventos extends AppCompatActivity implements EventosCerradosFragment.OnListFragmentInteractionListener{
+public class MisEventos extends AppCompatActivity implements EventosCerradosFragment.OnListFragmentInteractionListener, HistorialFragment.OnListFragmentInteractionListener{
     NixService nixService;
     NixClient nixClient;
     int fragment = 0;
@@ -158,4 +158,8 @@ public class MisEventos extends AppCompatActivity implements EventosCerradosFrag
         nixService= nixClient.getNixService();
     }
 
+    @Override
+    public void onFragmentInteraction(Eventos mItem) {
+
+    }
 }

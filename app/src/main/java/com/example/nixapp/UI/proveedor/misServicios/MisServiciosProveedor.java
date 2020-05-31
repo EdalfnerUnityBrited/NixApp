@@ -14,7 +14,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.nixapp.DB.CatalogoServicios;
+import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.R;
+import com.example.nixapp.UI.proveedor.InfoExpandidaServicio;
+import com.example.nixapp.UI.proveedor.serviciosProximos.ServiciosProximosProveedor;
 import com.example.nixapp.conn.NixClient;
 import com.example.nixapp.conn.NixService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MisServiciosProveedor extends AppCompatActivity implements CrearServiciosFragmentProveedor.OnListFragmentInteractionListener {
+public class MisServiciosProveedor extends AppCompatActivity implements CrearServiciosFragmentProveedor.OnListFragmentInteractionListener, HistorialFragmentProveedor.OnListFragmentInteractionListener {
 
     NixService nixService;
     NixClient nixClient;
@@ -139,5 +142,18 @@ public class MisServiciosProveedor extends AppCompatActivity implements CrearSer
     private void retrofitInit() {
         nixClient= NixClient.getInstance();
         nixService= nixClient.getNixService();
+    }
+
+    @Override
+    public void onListFragmentInteraction(Contrataciones item) {
+        Intent intent= new Intent(MisServiciosProveedor.this, InfoExpandidaServicio.class);
+        intent.putExtra("id_contratacion", item.getId());
+        intent.putExtra("ingreso",1);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

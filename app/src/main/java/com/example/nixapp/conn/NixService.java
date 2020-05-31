@@ -290,4 +290,13 @@ public interface NixService {
 
     @POST("eventos/confirmarAsistencia")
     Call<ResponseBody> confirmarAsistencia(@Body Prospectos prospectos);
+
+    @GET("auth/historialServicios")
+    Call<ContratacionesListResult> usuarioHistorialContrataciones();
+
+    @GET("proveedor/historialServicios")
+    Call<ContratacionesListResult> proveedorHistorialcontrataciones();
+
+    @GET("eventos/historial")
+    Call<EventosListResult> eventosHistorialUsuario();
 }
