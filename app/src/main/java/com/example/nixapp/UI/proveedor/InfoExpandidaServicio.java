@@ -312,7 +312,7 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                                                     Toast.makeText(InfoExpandidaServicio.this, "Calificado", Toast.LENGTH_SHORT).show();
                                                 }
                                                 else{
-                                                    Toast.makeText(InfoExpandidaServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(InfoExpandidaServicio.this, "Ya lo calificaste", Toast.LENGTH_SHORT).show();
                                                 }
                                             }
 
