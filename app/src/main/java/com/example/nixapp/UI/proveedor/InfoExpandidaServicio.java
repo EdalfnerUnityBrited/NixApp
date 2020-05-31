@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.nixapp.DB.Articulos;
+import com.example.nixapp.DB.Calificacion;
 import com.example.nixapp.DB.ContratacionExpandida;
 import com.example.nixapp.DB.Contrataciones;
 import com.example.nixapp.R;
@@ -38,7 +39,7 @@ import retrofit2.Response;
 
 public class InfoExpandidaServicio extends AppCompatActivity {
 
-    String id_contratacion;
+    String id_contratacion, estrellas;
     NixClient nixClient;
     NixService nixService;
     EditText nombre_evento,municipio,direccion,fecha,hora,nombre_servicio,estado_servicio,nombre_anf,correo_anf,telefono_anf;
@@ -296,11 +297,30 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Toast.makeText(InfoExpandidaServicio.this, "Position: " + which + " Value: " + listItems[which], Toast.LENGTH_LONG).show();
+                                        estrellas= listItems[which];
                                     }
                                 });
                                 builder.setPositiveButton("Siguiente", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        Calificacion calificacion= new Calificacion(id_contratacion, estrellas);
+                                        Call<ResponseBody> call= nixService.calificar(calificacion);
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.isSuccessful()){
+                                                    Toast.makeText(InfoExpandidaServicio.this, "Calificado", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else{
+                                                    Toast.makeText(InfoExpandidaServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                            }
+                                        });
                                         dial = new AlertDialog.Builder(InfoExpandidaServicio.this);
                                         dial.setTitle("Comentario");
                                         dial.setMessage("Ingrese algun comentario acerca el servicio que recibio:");

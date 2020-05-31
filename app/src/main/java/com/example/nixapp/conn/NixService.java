@@ -5,6 +5,7 @@ import com.example.nixapp.DB.Busqueda;
 import com.example.nixapp.DB.BusquedaArticulos;
 import com.example.nixapp.DB.BusquedaPaquetes;
 import com.example.nixapp.DB.BusquedaServicios;
+import com.example.nixapp.DB.Calificacion;
 import com.example.nixapp.DB.CatalogoServicios;
 import com.example.nixapp.DB.Chat;
 import com.example.nixapp.DB.Citas;
@@ -283,4 +284,7 @@ public interface NixService {
 
     @POST("proveedor/borrarContratacion")
     Call<ResponseBody> cancelarContratacion(@Body Contrataciones contrataciones);
+
+    @POST("proveedor/calificar")
+    Call<ResponseBody> calificar(@Body Calificacion calificacion);
 }
