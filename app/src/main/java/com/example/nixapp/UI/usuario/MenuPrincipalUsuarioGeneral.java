@@ -90,7 +90,15 @@ public class MenuPrincipalUsuarioGeneral extends FragmentActivity implements OnM
     Button buscar;
     Eventos eventos;
     AlertDialog.Builder dialogo1;
-    Double latitudUsuario, longitudUsuario;
+    static Double latitudUsuario, longitudUsuario;
+
+    public static Double getLatitudUsuario() {
+        return latitudUsuario;
+    }
+
+    public static Double getLongitudUsuario() {
+        return longitudUsuario;
+    }
 
     private List <String> infoCompletaEventoEspecifico = new ArrayList<>();
 
