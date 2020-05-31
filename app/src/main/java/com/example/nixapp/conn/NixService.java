@@ -287,4 +287,7 @@ public interface NixService {
 
     @POST("proveedor/calificar")
     Call<ResponseBody> calificar(@Body Calificacion calificacion);
+
+    @POST("eventos/confirmarAsistencia")
+    Call<ResponseBody> confirmarAsistencia(@Body Prospectos prospectos);
 }
