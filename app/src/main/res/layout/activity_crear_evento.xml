@@ -575,7 +575,15 @@
                         android:layout_height="250dp"
                         android:contentDescription="Intento"
                         app:srcCompat="@drawable/compromisos"
-                        tools:visibility="gone" />
+                        android:visibility="gone"/>
+                    <ImageView
+                        android:id="@+id/verInvitacion2"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_marginTop="12dp"
+                        android:contentDescription="Intento"
+                        app:srcCompat="@drawable/compromisos"
+                        android:visibility="gone"/>
                 </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -677,19 +685,10 @@
                                 android:layout_marginBottom="10dp"
                                 />
                             <Button
-                                android:id="@+id/nix"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:background="@drawable/guest_nix"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                />
-                            <Button
                                 android:id="@+id/EnviarCorreo"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
                                 android:background="@drawable/enviar_correo"
-                                android:layout_marginLeft="20dp"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"

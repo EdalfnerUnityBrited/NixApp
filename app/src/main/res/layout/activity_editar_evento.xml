@@ -634,6 +634,15 @@
                         android:contentDescription="Intento"
                         app:srcCompat="@drawable/compromisos"
                         tools:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/verInvitacion2"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:contentDescription="Intento"
+                        app:srcCompat="@drawable/compromisos"
+                        tools:visibility="gone" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

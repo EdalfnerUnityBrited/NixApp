@@ -192,7 +192,7 @@ public class EleccionPago extends AppCompatActivity {
         {
             cargo_total = (Float.valueOf(total_pago) * 0.2);
             tipo = "el Deposito";
-            texto_titulo.setText("¿Qué m'etodo de pago deseas utilizar para el Depósito?");
+            texto_titulo.setText("¿Qué método de pago deseas utilizar para el Depósito?");
             texto_efectivo = "Se pasara a elegir una fecha en la cual se hara la cita para dar el deposito en efectivo.\n¿Esta deacuerdo?";
         }
         else

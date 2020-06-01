@@ -44,14 +44,14 @@ public class InfoExpandidaServicio extends AppCompatActivity {
     NixService nixService;
     EditText nombre_evento,municipio,direccion,fecha,hora,nombre_servicio,estado_servicio,nombre_anf,correo_anf,telefono_anf;
     TextView desglose;
-    Button pago_dep,pago_liquidacion, ir_pago,servicio_entregado,calificar_Servicio;
+    Button pago_dep,pago_liquidacion, ir_pago,servicio_entregado,calificar_Servicio,compartir_proveedor;
     ContratacionExpandida infoExpandida;
     Spinner spinners;
     private EventosAdapter mAdapter;
     private ArrayList<EventosItems> mEventsList;
     AlertDialog.Builder informacion;
     int ingreso = 0;
-    TableRow botonesProveedor,botonesUsuario,botonCalificar;
+    TableRow botonesProveedor,botonesUsuario,botonCalificar,botonCompartir;
     Calendar diaActual = Calendar.getInstance();
     AlertDialog.Builder dialogo1,dialog,dial;
 
@@ -95,10 +95,12 @@ public class InfoExpandidaServicio extends AppCompatActivity {
         botonesProveedor = findViewById(R.id.botonesProveedor);
         botonesUsuario = findViewById(R.id.botonesGeneral);
         botonCalificar = findViewById(R.id.botonesCalificacion);
+        botonCompartir = findViewById(R.id.botonCompartir);//Table
         servicio_entregado = findViewById(R.id.LlegoProducto);
         ir_pago = findViewById(R.id.IrPagar);
         pago_dep = findViewById(R.id.PagoDeposito);
         pago_liquidacion = findViewById(R.id.PagoLiquidacion);
+        compartir_proveedor = findViewById(R.id.compartir_imagen);//Boton
         calificar_Servicio = findViewById(R.id.CalificacionServicio);
         mAdapter = new EventosAdapter(this, mEventsList);
         spinners.setAdapter(mAdapter);
@@ -197,10 +199,18 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                     informacion.show();
                 }
             });
+
+            compartir_proveedor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Aqui lo pones nerox
+                }
+            });
         }//////////////////////////////////ingreso 2 Usuario General netro
         else
         {
             botonesProveedor.setVisibility(View.GONE);
+            botonCompartir.setVisibility(View.GONE);
             servicio_entregado.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -556,6 +556,26 @@
 
                 </TableRow>
                     <TableRow
+                        android:id="@+id/botonCompartir"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="4dp">
+
+
+                        <Button
+                            android:id="@+id/compartir_imagen"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Promocionar Servicio"
+                            android:padding="5dp"
+                            android:layout_marginRight="20dp"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/buttom_text2"
+                            android:textSize="18sp"
+                            android:background="@drawable/button_blue"/>
+
+                    </TableRow>
+                    <TableRow
                         android:id="@+id/botonesGeneral"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

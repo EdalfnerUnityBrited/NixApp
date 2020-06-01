@@ -1,5 +1,6 @@
 package com.example.nixapp.UI.usuario.misEventos.CotizacionPorServico;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nixapp.DB.Chat;
@@ -41,6 +43,7 @@ public class PagoLinea extends AppCompatActivity {
     double pago_total;
     String tipo_bono;
     String id_contratacion;
+    AlertDialog.Builder informacion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,14 +62,43 @@ public class PagoLinea extends AppCompatActivity {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PagoLinea.this, "Comenzando Transaccion", Toast.LENGTH_SHORT).show();
                 if(tipo_bono.equals("el Deposito"))
                 {
-                    payDeposito();
+                    informacion = new AlertDialog.Builder(PagoLinea.this);
+                    informacion.setTitle("Confirmacion de Pago:");
+                    informacion.setMessage("Se procedera a hacer el cobro en la tarjeta que se agrego... ¿Desea continuar?");
+                    informacion.setCancelable(false);
+                    informacion.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            payDeposito();
+                        }
+                    });
+                    informacion.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+
+                        }
+                    });
+                    informacion.show();
+
                 }
                 else
                 {
-                    payLiquidacion();
+                    informacion = new AlertDialog.Builder(PagoLinea.this);
+                    informacion.setTitle("Confirmacion de Pago:");
+                    informacion.setMessage("Se procedera a hacer el cobro en la tarjeta que se agrego... ¿Desea continuar?");
+                    informacion.setCancelable(false);
+                    informacion.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            payLiquidacion();
+                        }
+                    });
+                    informacion.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+
+                        }
+                    });
+                    informacion.show();
+
                 }
 
             }
@@ -206,13 +238,13 @@ public class PagoLinea extends AppCompatActivity {
                             });
                         }
                         else{
-                            Toast.makeText(PagoLinea.this, "Error al añadir la tarjeta", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PagoLinea.this, "Error al validar la tarjeta", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(PagoLinea.this, "Error al añadir la tarjeta", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PagoLinea.this, "Error al validar la tarjeta", Toast.LENGTH_SHORT).show();
                     }
                 });
                 // Send paymentMethodId to your server for the next steps
