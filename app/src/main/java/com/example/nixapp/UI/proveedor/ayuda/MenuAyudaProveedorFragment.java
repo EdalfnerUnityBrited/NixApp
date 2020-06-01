@@ -38,7 +38,7 @@ public class MenuAyudaProveedorFragment extends Fragment {
             public void onClick(View v) {
                 informacion = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
                 informacion.setTitle("Respuesta:");
-                informacion.setMessage("");
+                informacion.setMessage("Dentro de los tutoriales esta explicado paso a paso el proceso para crear un servicio, te recomendamos ir a verlo para que no haya dudas.");
                 informacion.setCancelable(false);
                 informacion.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
@@ -53,7 +53,7 @@ public class MenuAyudaProveedorFragment extends Fragment {
             public void onClick(View v) {
                 informacion = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
                 informacion.setTitle("Respuesta:");
-                informacion.setMessage("");
+                informacion.setMessage("Dentro de los tutoriales esta explicado paso a paso el proceso para agregar articulos a un servicio, te recomendamos ir a verlo para que no haya dudas.");
                 informacion.setCancelable(false);
                 informacion.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
@@ -68,7 +68,7 @@ public class MenuAyudaProveedorFragment extends Fragment {
             public void onClick(View v) {
                 informacion = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
                 informacion.setTitle("Respuesta:");
-                informacion.setMessage("");
+                informacion.setMessage("Dentro de los tutoriales esta explicado paso a paso el proceso para agregar paquetes a un servicio, te recomendamos ir a verlo para que no haya dudas.");
                 informacion.setCancelable(false);
                 informacion.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
@@ -128,7 +128,7 @@ public class MenuAyudaProveedorFragment extends Fragment {
             public void onClick(View v) {
                 informacion = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
                 informacion.setTitle("Respuesta:");
-                informacion.setMessage("");
+                informacion.setMessage("Los chats no se pueden eliminar, el motivo es en dado caso que se quiera volver a tocar algun tema con el proveedor, se podrá volver a retomar el chat");
                 informacion.setCancelable(false);
                 informacion.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
@@ -173,7 +173,7 @@ public class MenuAyudaProveedorFragment extends Fragment {
             public void onClick(View v) {
                 informacion = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
                 informacion.setTitle("Respuesta:");
-                informacion.setMessage("No se podra, hasta que se lleven a cabo las contrataciones solicitadas");
+                informacion.setMessage("En dado caso que se quiera borrar un servicio y tenga contrataciones, se realizará una comprobación en la base de datos y en dado caso que se encuentren contrataciones pendientes en el futuro. No se podrá realizar la eliminación del servicio hasta que haya pasado la contratación");
                 informacion.setCancelable(false);
                 informacion.setPositiveButton("Entendido", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
