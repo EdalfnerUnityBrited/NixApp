@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
@@ -55,12 +56,16 @@ public class PhotoEditor implements BrushViewChangeListener {
     private View deleteView;
     private BrushDrawingView brushDrawingView;
     private List<View> addedViews;
+    private List<View> addedCopyViews;
     private List<View> redoViews;
     private OnPhotoEditorListener mOnPhotoEditorListener;
     private boolean isTextPinchZoomable;
     private Typeface mDefaultTextTypeface;
     private Typeface mDefaultEmojiTypeface;
 
+    public List<View> getAddedCopyViews() {
+        return addedCopyViews;
+    }
 
     private PhotoEditor(Builder builder) {
         this.context = builder.context;
@@ -74,6 +79,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         brushDrawingView.setBrushViewChangeListener(this);
         addedViews = new ArrayList<>();
+        addedCopyViews = new ArrayList<>();
         redoViews = new ArrayList<>();
     }
 
@@ -88,6 +94,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         final ImageView imageView = imageRootView.findViewById(R.id.imgPhotoEditorImage);
         final FrameLayout frmBorder = imageRootView.findViewById(R.id.frmBorder);
         final ImageView imgClose = imageRootView.findViewById(R.id.imgPhotoEditorClose);
+        final ImageView imgCopy = imageRootView.findViewById(R.id.imgPhotoEditorCopy);
 
         imageView.setImageBitmap(desiredImage);
 
@@ -98,6 +105,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
                 frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
                 imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
+                imgCopy.setVisibility(isBackgroundVisible? View.GONE:View.VISIBLE);
                 frmBorder.setTag(!isBackgroundVisible);
             }
 
@@ -139,6 +147,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         final View textRootView = getLayout(ViewType.TEXT);
         final TextView textInputTv = textRootView.findViewById(R.id.tvPhotoEditorText);
         final ImageView imgClose = textRootView.findViewById(R.id.imgPhotoEditorClose);
+        final ImageView imgCopy = textRootView.findViewById(R.id.imgPhotoEditorCopy);
         final FrameLayout frmBorder = textRootView.findViewById(R.id.frmBorder);
 
         textInputTv.setText(text);
@@ -153,6 +162,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
                 frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
                 imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
+                imgCopy.setVisibility(isBackgroundVisible? View.GONE : View.VISIBLE);
                 frmBorder.setTag(!isBackgroundVisible);
             }
 
@@ -227,6 +237,7 @@ public class PhotoEditor implements BrushViewChangeListener {
         final TextView emojiTextView = emojiRootView.findViewById(R.id.tvPhotoEditorText);
         final FrameLayout frmBorder = emojiRootView.findViewById(R.id.frmBorder);
         final ImageView imgClose = emojiRootView.findViewById(R.id.imgPhotoEditorClose);
+        final ImageView imgCopy = emojiRootView.findViewById(R.id.imgPhotoEditorCopy);
 
         if (emojiTypeface != null) {
             emojiTextView.setTypeface(emojiTypeface);
@@ -240,6 +251,7 @@ public class PhotoEditor implements BrushViewChangeListener {
                 boolean isBackgroundVisible = frmBorder.getTag() != null && (boolean) frmBorder.getTag();
                 frmBorder.setBackgroundResource(isBackgroundVisible ? 0 : R.drawable.rounded_border_tv);
                 imgClose.setVisibility(isBackgroundVisible ? View.GONE : View.VISIBLE);
+                imgCopy.setVisibility(isBackgroundVisible? View.GONE : View.VISIBLE);
                 frmBorder.setTag(!isBackgroundVisible);
             }
 
@@ -323,6 +335,7 @@ public class PhotoEditor implements BrushViewChangeListener {
 
         if (rootView != null) {
             final ImageView imgClose = rootView.findViewById(R.id.imgPhotoEditorClose);
+            final ImageView imgCopy = rootView.findViewById(R.id.imgPhotoEditorCopy);
             final View finalRootView = rootView;
             if (imgClose != null) {
                 imgClose.setOnClickListener(new View.OnClickListener() {
@@ -332,8 +345,25 @@ public class PhotoEditor implements BrushViewChangeListener {
                     }
                 });
             }
+            if (imgCopy != null){
+                imgCopy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewCopy(finalRootView);
+                        Toast.makeText(context, "Copiado!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
         return rootView;
+    }
+
+    private void viewCopy(View finalRootView) {
+        if (addedViews.size() > 0) {
+            if (addedViews.contains(finalRootView)) {
+                addedCopyViews.add(finalRootView);
+            }
+        }
     }
 
     /**

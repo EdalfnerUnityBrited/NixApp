@@ -29,7 +29,7 @@ import java.util.List;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import androidmads.library.qrgenearator.QRGSaver;
-import ja.burhanrashid52.photoeditor.OnSaveBitmap;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.OnSaveBitmap;
 
 public class GenerarCodigoQR extends AppCompatActivity {
 
