@@ -5,30 +5,197 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/fondoclaro">
 
-    <RelativeLayout
-        android:id="@+id/fragment_container_ayuda"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
+            android:id="@+id/fragment_container_ayuda_proveedor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            app:title="Ayuda"
+            android:layout_height="match_parent">
 
-            app:titleTextColor="#ffffffff"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:elevation="4dp"
+                app:title="Tutoriales"
 
-        <VideoView
-            android:id="@+id/videoCrear"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:layout_marginTop="0dp" />
+                app:titleTextColor="#ffffffff"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/titulo_texto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toolbar"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="12dp"
+                android:text="Tutoriales Disponibles"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="28dp"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/titulo_texto"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/cuadro_ayuda"
+                    android:layout_marginTop="6dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <Button
+                            android:id="@+id/video1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:background="@drawable/custombutom3"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:textColor="@drawable/butom_text"
+                            android:text="Tutorial: Creacion de Evento"
+                            android:textAllCaps="false"
+                            android:textSize="16sp">
+                        </Button>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/video2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custombutommedio"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingBottom="16dp"
+                            android:text="Tutorial: Uso del Calendario"
+                            android:textAllCaps="false"
+                            android:textColor="@drawable/butom_text"
+                            android:textSize="16sp"></Button>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/video3"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custombutommedio"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:textColor="@drawable/butom_text"
+                            android:text="Tutorial: Confirmar asistencia"
+                            android:textAllCaps="false"
+                            android:textSize="16sp">
+                        </Button>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/video4"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custombutommedio"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:textColor="@drawable/butom_text"
+                            android:text="Tutorial: Uso del Creador de Invitaciones Parte 1"
+                            android:textAllCaps="false"
+                            android:textSize="16sp">
+                        </Button>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/video5"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custombutommedio"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:textColor="@drawable/butom_text"
+                            android:text="Tutorial: Uso del Creador de Invitaciones Parte 2"
+                            android:textAllCaps="false"
+                            android:textSize="16sp">
+                        </Button>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/video7"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custombutommedio"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:textColor="@drawable/butom_text"
+                            android:text="Tutorial: Contratacion de Servicios"
+                            android:textAllCaps="false"
+                            android:textSize="16sp">
+                        </Button>
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/video8"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:paddingRight="5dp"
+                            android:paddingLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custombutom4"
+                            android:drawableRight="@drawable/ic_flecha_derecha"
+                            android:textColor="@drawable/butom_text"
+                            android:text="Tutorial: ABC de las Cotizaciones"
+                            android:textAllCaps="false"
+                            android:textSize="16sp">
+                        </Button>
+                    </TableRow>
+                </LinearLayout>
+            </ScrollView>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
 </RelativeLayout>

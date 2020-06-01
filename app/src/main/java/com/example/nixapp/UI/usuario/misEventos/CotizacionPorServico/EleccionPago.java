@@ -192,7 +192,7 @@ public class EleccionPago extends AppCompatActivity {
         {
             cargo_total = (Float.valueOf(total_pago) * 0.2);
             tipo = "el Deposito";
-            texto_titulo.setText("¿Que metodo de pago deseas utilizar para el Deposito?");
+            texto_titulo.setText("¿Qué m'etodo de pago deseas utilizar para el Depósito?");
             texto_efectivo = "Se pasara a elegir una fecha en la cual se hara la cita para dar el deposito en efectivo.\n¿Esta deacuerdo?";
         }
         else
@@ -200,7 +200,7 @@ public class EleccionPago extends AppCompatActivity {
             String[] separado1 = total_pago.split("\\$");
             String[] separado2 = separado1[1].split("MXN");
             cargo_total = (Float.valueOf(separado2[0])*0.8);
-            texto_titulo.setText("¿Que metodo de pago deseas utilizar para la liquidacion?");
+            texto_titulo.setText("¿Qué método de pago deseas utilizar para la liquidacion?");
             tipo = "la Liquidacion";
             texto_efectivo = "Para finalizar este proceso, solo debe entregarle resto del pago al proveedor del servicio y solicitar que confirme el pago desde la App\n¿De Acuerdo?";
         }

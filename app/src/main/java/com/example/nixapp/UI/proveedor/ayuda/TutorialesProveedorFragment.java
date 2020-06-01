@@ -29,7 +29,7 @@ public class TutorialesProveedorFragment extends Fragment {
         video1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.crearevento;
+                String path = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.crearservicio;
                 Intent intent= new Intent(getActivity(), Video_Individual.class);
                 intent.putExtra("VideoLiga", path);
                 intent.putExtra("Titulo", "Creacion de Servicio");
