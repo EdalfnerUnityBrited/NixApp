@@ -22,13 +22,32 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
 
+
+        <TextView
+            android:id="@+id/titulo_texto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            android:text="Preguntas Frecuentes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_below="@+id/titulo_texto"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -36,15 +55,224 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/cuadro_ayuda"
+                android:layout_marginTop="6dp">
 
-                <TextView
-                    android:id="@+id/textView"
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ScrollView Start" />
+                    android:orientation="vertical">
+                    <Button
+                        android:id="@+id/pregunta1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:background="@drawable/custombutom3"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Como se crea un servicio?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/pregunta2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="16dp"
+                        android:text="¿Como agregar articulos a mi servicio?"
+                        android:textAllCaps="false"
+                        android:textColor="@drawable/butom_text"
+                        android:textSize="16sp"></Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta3"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Como agrego paquetes a mi servicio?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta4"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Como llegara el pago de 'Depositos' y 'Liquidaciones' a mi cuenta?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta5"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Que pasa si no asisto a una cita con un cliente?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta6"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Como cambio mi foto de perfil y/o informacion personal?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta7"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Como puedo borrar un chat?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta8"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Como confirmo que entregue mi servicio?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta9"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Que pasa si no entrego el servicio que se me contrato?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta10"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutommedio"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="Si elimino mi servicio y aun tenia contrataciones pendientes, ¿Qué pasa?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/pregunta11"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:paddingRight="5dp"
+                        android:paddingLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custombutom4"
+                        android:drawableRight="@drawable/ic_flecha_derecha"
+                        android:textColor="@drawable/butom_text"
+                        android:text="¿Cuales son los correos de contacto directo con 'Soporte'?"
+                        android:textAllCaps="false"
+                        android:textSize="16sp">
+                    </Button>
+                </TableRow>
             </LinearLayout>
         </ScrollView>
+
+
 
 
     </RelativeLayout>

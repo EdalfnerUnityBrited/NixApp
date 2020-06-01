@@ -1,7 +1,6 @@
 package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,8 +31,6 @@ import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -354,11 +351,21 @@ public class InfoEventoExpandida extends AppCompatActivity {
                             asistire.setTextColor(R.drawable.butom_text);
                             asistire.setText("Confirmar asistencia");
                         }
-                        else
+                        else if(prospecto1.getEstado().equals("creador"))
                         {
                             interes.setVisibility(View.GONE);
                             asistire.setVisibility(View.GONE);
                             botones.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            Toast.makeText(InfoEventoExpandida.this,"Fuiste invitado", Toast.LENGTH_LONG).show();
+                            asistire.setBackgroundResource(R.drawable.custombutom2);
+                            asistire.setTextColor(R.drawable.butom_text);
+                            asistire.setText("Confirmar asistencia");
+                            interes.setBackgroundResource(R.drawable.custombutom2);
+                            interes.setTextColor(R.drawable.butom_text);
+                            interes.setText("Me interesa");
                         }
 
                     }

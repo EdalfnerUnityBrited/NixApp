@@ -595,7 +595,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center_vertical"
-                                android:text="Invitados:"
+                                android:text="Correos:"
                                 android:textColor="@color/white"
                                 android:textSize="20dp" />
 
