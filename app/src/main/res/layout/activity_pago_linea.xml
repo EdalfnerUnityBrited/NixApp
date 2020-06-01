@@ -8,49 +8,59 @@
     android:background="@drawable/backgroundnormal"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!--  ...  -->
 
-    <com.stripe.android.view.CardInputWidget
-        android:id="@+id/cardInputWidget"
+    <com.stripe.android.view.CardMultilineWidget
+        android:id="@+id/cardMultilineWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:padding="8dp"
+        android:layout_marginTop="36dp"
+        android:theme="@style/CardWidgetStyle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/precio">
+
+    </com.stripe.android.view.CardMultilineWidget>
 
     <Button
         android:id="@+id/payButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:text="ADD"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/custombutom2"
+        android:padding="10dp"
+        android:text="Realizar el pago"
+        android:textColor="@drawable/butom_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
+        app:layout_constraintTop_toBottomOf="@+id/cardMultilineWidget" />
 
     <TextView
         android:id="@+id/servicio"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginRight="25dp"
         android:text="TextView"
+        android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/precio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/servicio"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/servicio"
         app:layout_constraintTop_toBottomOf="@+id/servicio" />
 

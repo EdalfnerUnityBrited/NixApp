@@ -38,7 +38,7 @@ public class EleccionPago extends AppCompatActivity {
     double cargo_total;
     AlertDialog.Builder resumen_compra;
     String tipo = "",id_cotizacion;
-    TextView fecha,fecha_text,hora,hora_text,titulo;
+    TextView fecha,fecha_text,hora,hora_text,titulo,texto_titulo;
     TimePickerDialog picker2;
     DatePickerDialog picker;
     int  dia, ano, mes;
@@ -58,6 +58,7 @@ public class EleccionPago extends AppCompatActivity {
         fecha_text = findViewById(R.id.text_fecha);
         hora_text = findViewById(R.id.text_hora);
         titulo = findViewById(R.id.textView4);
+        texto_titulo = findViewById(R.id.texto_titular);
         ////////////////////////////////////////////////
         fecha = findViewById(R.id.fecha_cita);
         fecha.setInputType(InputType.TYPE_NULL);
@@ -191,6 +192,7 @@ public class EleccionPago extends AppCompatActivity {
         {
             cargo_total = (Float.valueOf(total_pago) * 0.2);
             tipo = "el Deposito";
+            texto_titulo.setText("¿Qué m'etodo de pago deseas utilizar para el Depósito?");
             texto_efectivo = "Se pasara a elegir una fecha en la cual se hara la cita para dar el deposito en efectivo.\n¿Esta deacuerdo?";
         }
         else
@@ -198,6 +200,7 @@ public class EleccionPago extends AppCompatActivity {
             String[] separado1 = total_pago.split("\\$");
             String[] separado2 = separado1[1].split("MXN");
             cargo_total = (Float.valueOf(separado2[0])*0.8);
+            texto_titulo.setText("¿Qué método de pago deseas utilizar para la liquidacion?");
             tipo = "la Liquidacion";
             texto_efectivo = "Para finalizar este proceso, solo debe entregarle resto del pago al proveedor del servicio y solicitar que confirme el pago desde la App\n¿De Acuerdo?";
         }

@@ -101,7 +101,7 @@ public class BuscarServicios extends AppCompatActivity{
         catch (Exception e){
             categoria=5;
         }
-        Toast.makeText(this, "Tipo de busqueda"+Integer.toString(tipoBusqueda), Toast.LENGTH_SHORT).show();
+
         BusquedaServicios busquedaServicios= new BusquedaServicios("",categoria);
         Call<ServiciosListResult> call = nixService.buscarServicio(busquedaServicios);
         call.enqueue(new Callback<ServiciosListResult>() {
@@ -335,7 +335,7 @@ public class BuscarServicios extends AppCompatActivity{
                         }
                     });
                 }
-                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+
                 searchView.setQuery("", false);
                 searchView.setIconified(true);
                 return true;

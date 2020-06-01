@@ -689,6 +689,7 @@ public class CrearEvento extends AppCompatActivity implements View.OnClickListen
                         }
                         else{
                             Toast.makeText(CrearEvento.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                            mProgressDialog.dismiss();
                             try {
                                 Log.i("Error",response.errorBody().string().toString());
                             } catch (IOException e) {
