@@ -489,6 +489,7 @@ public class InicioSesion extends AppCompatActivity implements View.OnClickListe
                         ex.printStackTrace();
                     }
                     Toast.makeText(InicioSesion.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
                 }
             }
 

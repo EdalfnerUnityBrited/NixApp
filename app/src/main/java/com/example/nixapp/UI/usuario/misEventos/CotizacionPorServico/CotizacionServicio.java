@@ -815,7 +815,7 @@ public class CotizacionServicio extends AppCompatActivity {
                                             }
                                         });
                                         informacion.show();
-                                        Toast.makeText(CotizacionServicio.this, "Articulos Obtenidos", Toast.LENGTH_SHORT).show();
+
                                     }
                                     else
                                     {

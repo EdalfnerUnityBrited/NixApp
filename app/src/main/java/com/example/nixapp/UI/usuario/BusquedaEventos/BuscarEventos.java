@@ -93,7 +93,7 @@ public class BuscarEventos extends AppCompatActivity{
             municipio="";
             categoria=0;
         }
-        Toast.makeText(this, cupo, Toast.LENGTH_SHORT).show();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,7 +175,7 @@ public class BuscarEventos extends AppCompatActivity{
                         Toast.makeText(BuscarEventos.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
                     }
                 });
-                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+
                 searchView.setQuery("", false);
                 searchView.setIconified(true);
                 return true;

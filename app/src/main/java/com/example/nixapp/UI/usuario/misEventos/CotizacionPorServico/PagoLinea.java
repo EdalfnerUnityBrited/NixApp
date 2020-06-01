@@ -100,7 +100,7 @@ public class PagoLinea extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful())
                         {
-                            Toast.makeText(PagoLinea.this, "Pago Realizado", Toast.LENGTH_SHORT).show();
+
                             Contrataciones estado = new Contrataciones(id_contratacion,"pagado");
                             Call<ResponseBody> cambiarEstado = nixService.cambioEstado(estado);
                             cambiarEstado.enqueue(new Callback<ResponseBody>() {
@@ -108,7 +108,7 @@ public class PagoLinea extends AppCompatActivity {
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if(response.isSuccessful())
                                     {
-                                        Toast.makeText(PagoLinea.this,"Liquidacion exitosa,recarga la ventana",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(PagoLinea.this,"Liquidacion exitosa, recarga la ventana",Toast.LENGTH_LONG).show();
 
                                     }
                                     else
@@ -171,7 +171,7 @@ public class PagoLinea extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if (response.isSuccessful()){
-                                        Toast.makeText(PagoLinea.this, "Chat creado", Toast.LENGTH_SHORT).show();
+
                                     }
                                     else{
                                         Toast.makeText(PagoLinea.this, "Error en chats", Toast.LENGTH_SHORT).show();
@@ -190,7 +190,7 @@ public class PagoLinea extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     if (response.isSuccessful()){
-                                        Toast.makeText(PagoLinea.this, "Contratación exitosa,Detalles disponibles en tus Servicios Proximos", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PagoLinea.this, "Contratación exitosa, Detalles disponibles en tus Servicios Proximos", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                     else{
