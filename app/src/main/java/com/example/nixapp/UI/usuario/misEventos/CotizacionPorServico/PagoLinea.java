@@ -21,7 +21,7 @@ import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.PaymentMethodCreateParams;
-import com.stripe.android.view.CardInputWidget;
+import com.stripe.android.view.CardMultilineWidget;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -34,7 +34,7 @@ public class PagoLinea extends AppCompatActivity {
     private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
-    private CardInputWidget cardInputWidget;
+    private CardMultilineWidget cardMultilineWidget;
     NixService nixService;
     NixClient nixClient;
     TextView proveedor, cantidad;
@@ -46,11 +46,12 @@ public class PagoLinea extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pago_linea);
         Button payButton = findViewById(R.id.payButton);
-        cardInputWidget= findViewById(R.id.cardInputWidget);
+        cardMultilineWidget= findViewById(R.id.cardMultilineWidget);
+        cardMultilineWidget.setCardHint("Numero de la tarjeta");
         proveedor= findViewById(R.id.servicio);
         cantidad= findViewById(R.id.precio);
-        proveedor.setText(CotizacionServicio.nombreServicio);
-        cantidad.setText(CotizacionServicio.costoTotal);
+        proveedor.setText("Para el servicio: \n'"+CotizacionServicio.nombreServicio+"'");
+        cantidad.setText("Cargo total: $"+ CotizacionServicio.costoTotal+" MXN");
         pago_total=(double) getIntent().getSerializableExtra("Cargo");
         tipo_bono=(String) getIntent().getSerializableExtra("tipo_bono");
         id_contratacion=(String) getIntent().getSerializableExtra("id_cotizacion");
@@ -78,7 +79,7 @@ public class PagoLinea extends AppCompatActivity {
     }
 
     private void payLiquidacion() {
-        PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
+        PaymentMethodCreateParams params = cardMultilineWidget.getPaymentMethodCreateParams();
 
         if (params == null) {
             return;
@@ -143,7 +144,7 @@ public class PagoLinea extends AppCompatActivity {
     }
 
     private void payDeposito() {
-        PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
+        PaymentMethodCreateParams params = cardMultilineWidget.getPaymentMethodCreateParams();
 
         if (params == null) {
             return;
