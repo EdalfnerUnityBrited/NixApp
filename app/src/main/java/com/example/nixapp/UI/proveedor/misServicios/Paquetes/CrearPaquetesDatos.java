@@ -183,7 +183,7 @@ public class CrearPaquetesDatos extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if (response.isSuccessful()){
-                                            Toast.makeText(CrearPaquetesDatos.this, "Imagenes añadidas correctamente", Toast.LENGTH_SHORT).show();
+                                           // Toast.makeText(CrearPaquetesDatos.this, "Imagenes añadidas correctamente", Toast.LENGTH_SHORT).show();
                                         }
                                         else{
                                             Toast.makeText(CrearPaquetesDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();
@@ -207,7 +207,7 @@ public class CrearPaquetesDatos extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if (response.isSuccessful()){
-                                            Toast.makeText(CrearPaquetesDatos.this, "Añadidos correctamente los articulos", Toast.LENGTH_SHORT).show();
+
                                         }
                                         else{
                                             Toast.makeText(CrearPaquetesDatos.this, "Error en los datos", Toast.LENGTH_SHORT).show();

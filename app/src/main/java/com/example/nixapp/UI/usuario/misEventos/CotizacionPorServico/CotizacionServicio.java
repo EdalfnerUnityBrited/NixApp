@@ -520,32 +520,35 @@ public class CotizacionServicio extends AppCompatActivity {
                     estrellas.setRating(Float.valueOf(catalogoServicios.getCalificacion()));
                     if (catalogoServicios.getLunes()==1){
                         lunes.setChecked(true);
-                        lunes.setEnabled(false);
+
                     }
                     if (catalogoServicios.getMartes()==1){
                         martes.setChecked(true);
-                        martes.setEnabled(false);
+
                     }
                     if (catalogoServicios.getMiercoles()==1){
                         miercoles.setChecked(true);
-                        miercoles.setEnabled(false);
+
                     }
                     if (catalogoServicios.getJueves()==1){
                         jueves.setChecked(true);
-                        jueves.setEnabled(false);
+
                     }
                     if (catalogoServicios.getViernes()==1){
                         viernes.setChecked(true);
-                        viernes.setEnabled(false);
+
                     }
                     if (catalogoServicios.getSabado()==1){
                         sabado.setChecked(true);
-                        sabado.setEnabled(false);
+
                     }
                     if (catalogoServicios.getDomingo()==1){
                         domingo.setChecked(true);
-                        domingo.setEnabled(false);
+
                     }
+                    lunes.setEnabled(false);domingo.setEnabled(false);sabado.setEnabled(false);viernes.setEnabled(false);
+                    jueves.setEnabled(false);miercoles.setEnabled(false);martes.setEnabled(false);
+
                 }
                 else{
                     Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();

@@ -169,7 +169,7 @@ public class InformacionFragment extends Fragment implements OnMapReadyCallback,
                     String horaInicio=hora_inicio.getText().toString()+":00";
                     String horaFin=hora_fin.getText().toString()+":00";
                     if (horaInicio.compareTo(horaFin)>0){
-                        Toast.makeText(getActivity(), "Si jala", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "La hora de apertura debe ser mayor a la de cierrese", Toast.LENGTH_SHORT).show();
                     }else{
                         mProgressDialog.setTitle("Creando servicio...");
                         mProgressDialog.setMessage("Por favor espere");
