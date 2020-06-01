@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,6 +41,16 @@ public class BitmapUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap getBitmapFromView(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.layout(0, 0, view.getWidth(), view.getHeight());
+        view.draw(canvas);
+        return bitmap;
     }
 
     public static Bitmap getBitmapFromGallery(Context context, Uri uri, int width, int height){
@@ -154,19 +165,19 @@ public class BitmapUtils {
             if (source !=null){
                 OutputStream outputStream = cr.openOutputStream(uri);
                 try{
-                    source.compress(Bitmap.CompressFormat.JPEG,50,outputStream);
+                    source.compress(Bitmap.CompressFormat.JPEG,quality,outputStream);
                 }
                 finally {
-                        outputStream.close();
-                    }
+                    outputStream.close();
+                }
                 long id = ContentUris.parseId(uri);
                 Bitmap miniThumb = MediaStore.Images.Thumbnails.getThumbnail(cr,id,MediaStore.Images.Thumbnails.MINI_KIND,null);
                 storeThumbnail(cr,miniThumb,id,50f,50f,MediaStore.Images.Thumbnails.MICRO_KIND,quality);
-                }
+            }
             else{
                 cr.delete(uri,null,null);
                 uri = null;
-                }
+            }
 
         } catch (Exception e) {
             if (uri != null){

@@ -6,6 +6,16 @@
     >
 
     <item
+        android:id="@+id/pegar_elemento"
+        android:orderInCategory="98"
+        android:icon="@drawable/ic_assignment"
+        app:showAsAction="always"
+        android:visible="true"
+        android:enabled="true"
+        android:title="Pegar Elemento"
+        ></item>
+
+    <item
         android:id="@+id/action_camera"
         android:orderInCategory="99"
         android:icon="@drawable/ic_camera_black"

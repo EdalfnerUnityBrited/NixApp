@@ -35,6 +35,7 @@ public class Ayuda extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     public void setToolbarTitle(String title) {

@@ -14,7 +14,7 @@ import com.example.nixapp.UI.usuario.creadorInvitaciones.Adapter.EmojiAdapter;
 import com.example.nixapp.UI.usuario.creadorInvitaciones.Interface.EmojiFragmentListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import ja.burhanrashid52.photoeditor.PhotoEditor;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.PhotoEditor;
 
 
 /**

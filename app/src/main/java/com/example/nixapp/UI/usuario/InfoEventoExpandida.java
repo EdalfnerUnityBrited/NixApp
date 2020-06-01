@@ -1,7 +1,6 @@
 package com.example.nixapp.UI.usuario;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,8 +31,6 @@ import com.example.nixapp.conn.results.ImagenResult;
 import com.example.nixapp.conn.results.ProspectosResult;
 import com.example.nixapp.conn.results.UsuarioListResult;
 import com.example.nixapp.conn.results.UsuarioResult;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -354,11 +351,21 @@ public class InfoEventoExpandida extends AppCompatActivity {
                             asistire.setTextColor(R.drawable.butom_text);
                             asistire.setText("Confirmar asistencia");
                         }
-                        else
+                        else if(prospecto1.getEstado().equals("creador"))
                         {
                             interes.setVisibility(View.GONE);
                             asistire.setVisibility(View.GONE);
                             botones.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            Toast.makeText(InfoEventoExpandida.this,"Fuiste invitado", Toast.LENGTH_LONG).show();
+                            asistire.setBackgroundResource(R.drawable.custombutom2);
+                            asistire.setTextColor(R.drawable.butom_text);
+                            asistire.setText("Confirmar asistencia");
+                            interes.setBackgroundResource(R.drawable.custombutom2);
+                            interes.setTextColor(R.drawable.butom_text);
+                            interes.setText("Me interesa");
                         }
 
                     }
@@ -523,38 +530,17 @@ public class InfoEventoExpandida extends AppCompatActivity {
                             InfoEventoExpandida.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    String[] direccion1 = myResponse.split("\"formatted_address\"+ +:+ \"");
-                                    direccionFinal[0] = direccion1[0].split("\"");
+                                    String[] direccion1 = myResponse.split("\"formatted_address\"+ +:+ +\"");
+                                    direccionFinal[0] = direccion1[1].split("\"");
+                                    String url2 = String.format("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=%1$s+Jalisco+Mexico&destinations=%2$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw", direccionFinal[0][0],lugar);
+                                    segundaLlamada(url2);
                                 }
                             });
                         }
                     }
                 });
-                String url2 = String.format("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=%1$s+Jalisco+Mexico&destinations=%2$s+Jalisco+Mexico&key=AIzaSyAPGGYxsJfpi3DY0o11lAR4-Gccfpf3juw", direccionFinal[0][0],lugar);
-                OkHttpClient cliente2 = new OkHttpClient();
-                request.newBuilder().url(url2).build();
-                cliente2.newCall(request).enqueue(new okhttp3.Callback() {
-                    @Override
-                    public void onFailure(okhttp3.Call call, IOException e) {
 
-                    }
-                    @Override
-                    public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                        if (response.isSuccessful()){
-                            final String myResponse2 = response.body().toString();
-                            InfoEventoExpandida.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String[] distancia1 = myResponse2.split("\"text\":+ +\"");
-                                    distanciaFinal[0] = distancia1[0].split("\"");
-                                }
-                            });
-                        }
-                    }
-                });
-                if (distanciaFinal[0][0].compareTo("0,5 mi")<0){
-                    Toast.makeText(InfoEventoExpandida.this, "Estas ahi!", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
     }
@@ -591,5 +577,56 @@ public class InfoEventoExpandida extends AppCompatActivity {
     private void retrofitinit() {
         nixClient= NixClient.getInstance();
         nixService= nixClient.getNixService();
+    }
+    private void segundaLlamada(String url){
+        final String[][] distanciaFinal = {new String[1]};
+        OkHttpClient cliente2 = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        cliente2.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+
+            }
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.isSuccessful()){
+                    final String myResponse2 = response.body().string();
+                    InfoEventoExpandida.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] distancia1 = myResponse2.split("\"text\"+ :+ \"");
+                            distanciaFinal[0] = distancia1[1].split("\"");
+                            if (distanciaFinal[0][0].contains("ft")){
+                                Toast.makeText(InfoEventoExpandida.this, "Estas ahi!", Toast.LENGTH_SHORT).show();
+                                Prospectos prospectos= new Prospectos(id);
+                                Call<ResponseBody> callAsist= nixService.confirmarAsistencia(prospectos);
+                                callAsist.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()){
+                                            Toast.makeText(InfoEventoExpandida.this, "Asistencia confirmada", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(InfoEventoExpandida.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                    }
+                                });
+                            }
+                            else {
+                                Toast.makeText(InfoEventoExpandida.this, "Estas muy lejos", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
     }
 }

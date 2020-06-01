@@ -8,11 +8,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_height="match_parent">
 
-    <ja.burhanrashid52.photoeditor.PhotoEditorView
+    <com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.PhotoEditorView
         android:id="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="620dp"
-        android:scaleType="centerCrop"></ja.burhanrashid52.photoeditor.PhotoEditorView>
+        android:scaleType="centerCrop"></com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.PhotoEditorView>
 
    <HorizontalScrollView
        android:layout_alignParentBottom="true"

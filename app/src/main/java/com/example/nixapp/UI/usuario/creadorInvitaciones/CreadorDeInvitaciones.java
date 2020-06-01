@@ -56,15 +56,16 @@ import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import ja.burhanrashid52.photoeditor.OnSaveBitmap;
-import ja.burhanrashid52.photoeditor.PhotoEditor;
-import ja.burhanrashid52.photoeditor.PhotoEditorView;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.OnSaveBitmap;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.PhotoEditor;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Tools.PhotoEditorView;
 
 public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersListFragmentListener, EditImageFragmentListener, BrushFragmentListener, EmojiFragmentListener, AddTextFragmentListener, AddFrameListener, AddShapeListener, SetImageSizeListener, SetInvitationQualityListener, GenerateQRListener {
 
@@ -102,6 +103,15 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
 
     }
 
+    static CreadorDeInvitaciones instance;
+
+    public static CreadorDeInvitaciones getInstance() {
+        if (instance == null){
+            instance = new CreadorDeInvitaciones();
+        }
+        return instance;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +122,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         Toolbar toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_backarrow2);
-        getSupportActionBar().setTitle("Creador de Invitaciones");
+        getSupportActionBar().setTitle("");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +131,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         });
 
         //View
-        photoEditorView = (PhotoEditorView) findViewById(R.id.image_preview);
+        photoEditorView = findViewById(R.id.image_preview);
         photoEditor = new PhotoEditor.Builder(this,photoEditorView)
                 .setPinchTextScalable(true)
                 .setDefaultEmojiTypeface(Typeface.createFromAsset(getAssets(),"emojione-android.ttf"))
@@ -235,7 +245,6 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         });
 
         loadImage();
-
     }
 
     private void askForImageSize() {
@@ -280,6 +289,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         filteredBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         finalBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         photoEditorView.getSource().setImageBitmap(originalBitmap);
+        image_selected_uri=Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),originalBitmap,"Titulo",null));
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -379,7 +389,24 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
             openCamera();
             return true;
         }
+        else if (id == R.id.pegar_elemento){
+            pasteElement();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void pasteElement() {
+        List<View> listOfElements = photoEditor.getAddedCopyViews();
+        if (listOfElements.size()>0) {
+            View viewToPaste = listOfElements.get(listOfElements.size() - 1);
+            Bitmap bitmapToPaste = BitmapUtils.getBitmapFromView(viewToPaste);
+            photoEditor.addImage(bitmapToPaste);
+            Toast.makeText(this, "Elemento pegado", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(CreadorDeInvitaciones.this, "No hay un elemento copiado", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void selectQuality(){

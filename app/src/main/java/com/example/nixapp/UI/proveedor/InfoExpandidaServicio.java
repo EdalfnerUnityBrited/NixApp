@@ -296,7 +296,7 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                                 builder.setSingleChoiceItems(listItems, checkedItem, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(InfoExpandidaServicio.this, "Position: " + which + " Value: " + listItems[which], Toast.LENGTH_LONG).show();
+                                        //Toast.makeText(InfoExpandidaServicio.this, "Position: " + which + " Value: " + listItems[which], Toast.LENGTH_LONG).show();
                                         estrellas= listItems[which];
                                     }
                                 });
@@ -309,7 +309,32 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 if (response.isSuccessful()){
-                                                    Toast.makeText(InfoExpandidaServicio.this, "Calificado", Toast.LENGTH_SHORT).show();
+                                                    Contrataciones estado = new Contrataciones(id_contratacion,"calificado");
+                                                    Call<ResponseBody> cambiarEstado = nixService.cambioEstado(estado);
+                                                    cambiarEstado.enqueue(new Callback<ResponseBody>() {
+                                                        @Override
+                                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                            if(response.isSuccessful())
+                                                            {
+                                                                Toast.makeText(InfoExpandidaServicio.this,"Calificacion agregada",Toast.LENGTH_SHORT).show();
+                                                                infoExpandida.setEstado_servicio("calificado");
+                                                                estado_servicio.setText("calificado");
+                                                                ir_pago.setEnabled(false);
+                                                                servicio_entregado.setEnabled(false);
+                                                                calificar_Servicio.setEnabled(false);
+
+                                                            }
+                                                            else
+                                                            {
+                                                                Toast.makeText(InfoExpandidaServicio.this,"No se encontro la cotizacion",Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                            Toast.makeText(InfoExpandidaServicio.this,"Error al cambiar el estado del evento",Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
                                                 }
                                                 else{
                                                     Toast.makeText(InfoExpandidaServicio.this, "Ya lo calificaste", Toast.LENGTH_SHORT).show();
@@ -421,6 +446,15 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                         servicio_entregado.setEnabled(false);
                         pago_liquidacion.setEnabled(false);
                         pago_dep.setEnabled(false);
+                    }
+                    else if(infoExpandida.getEstado_servicio().equals("calificado"))
+                    {
+                        ir_pago.setEnabled(false);
+                        servicio_entregado.setEnabled(false);
+                        pago_liquidacion.setEnabled(false);
+                        pago_dep.setEnabled(false);
+                        calificar_Servicio.setEnabled(false);
+
                     }
                 }
                 else
