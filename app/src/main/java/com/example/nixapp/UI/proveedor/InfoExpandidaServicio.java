@@ -203,7 +203,11 @@ public class InfoExpandidaServicio extends AppCompatActivity {
             compartir_proveedor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Aqui lo pones nerox
+                    Intent i = new Intent(InfoExpandidaServicio.this, CompartirServicioImagen.class);
+                    i.putExtra("servicio", nombre_servicio.getText().toString());
+                    i.putExtra("evento", nombre_evento.getText().toString());
+                    startActivity(i);
+                    finish();
                 }
             });
         }//////////////////////////////////ingreso 2 Usuario General netro
