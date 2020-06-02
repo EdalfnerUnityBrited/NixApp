@@ -61,11 +61,6 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         mAuth= FirebaseAuth.getInstance();
-
-
-
-
-
         RootRef= FirebaseDatabase.getInstance().getReference();
         imSendMessage= findViewById(R.id.sendMessage);
         etMessage= findViewById(R.id.input_message);
