@@ -289,7 +289,7 @@ public class CreadorDeInvitaciones extends AppCompatActivity implements FiltersL
         filteredBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         finalBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888,true);
         photoEditorView.getSource().setImageBitmap(originalBitmap);
-        image_selected_uri=Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),originalBitmap,"Titulo",null));
+        //image_selected_uri=Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),originalBitmap,"Titulo",null));
     }
 
     private void setupViewPager(ViewPager viewPager) {

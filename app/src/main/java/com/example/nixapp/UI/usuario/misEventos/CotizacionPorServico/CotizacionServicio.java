@@ -223,7 +223,7 @@ public class CotizacionServicio extends AppCompatActivity {
                                         {
                                             String todaInfo = "";
                                             costoTotal= precioTotal.getText().toString();
-                                            if(!costoTotal.equals("00"))
+                                            if(!costoTotal.equals("00")&&!costoTotal.equals("0"))
                                             {
                                                 for (ArticulosFinales artic: articulosFinales) {
 
@@ -393,102 +393,117 @@ public class CotizacionServicio extends AppCompatActivity {
         guardar_Cotizacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String total= precioTotal.getText().toString();
-                if(!total.equals("00"))
+                final String total= precioTotal.getText().toString();
+                if(!total.equals("00")&&total.equals("0"))
                 {
-                    final Cotizacion cotizacion= new Cotizacion(total, servicioid, EditarEvento.id_evento);
-                    Call<CotizacionResult> callCot = nixService.guardarCotizacion(cotizacion);
-                    callCot.enqueue(new Callback<CotizacionResult>() {
-                        @Override
-                        public void onResponse(Call<CotizacionResult> call, Response<CotizacionResult> response) {
-                            if (response.isSuccessful()){
-                                Toast.makeText(CotizacionServicio.this, "Guardada correctamente", Toast.LENGTH_SHORT).show();
-                                coti= response.body().cotizacion;
-                                List<CotizacionArticulo> cotizacionArticuloList= new ArrayList<>();
-                                List<CotizacionPaquete> cotizacionPaqueteList= new ArrayList<>();
-                                String Articulos = "";
-                                int contador = 0;
-                                Articulos chequear = null;
-                                Paquetes chequeo = null;
+                    informacion = new AlertDialog.Builder(CotizacionServicio.this);
+                    informacion.setTitle("Confirmacion de Pago:");
+                    informacion.setMessage("Se procedera a hacer el cobro en la tarjeta que se agrego... ¿Desea continuar?");
+                    informacion.setCancelable(false);
+                    informacion.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
+                            final Cotizacion cotizacion= new Cotizacion(total, servicioid, EditarEvento.id_evento);
+                            Call<CotizacionResult> callCot = nixService.guardarCotizacion(cotizacion);
+                            callCot.enqueue(new Callback<CotizacionResult>() {
+                                @Override
+                                public void onResponse(Call<CotizacionResult> call, Response<CotizacionResult> response) {
+                                    if (response.isSuccessful()){
+                                        Toast.makeText(CotizacionServicio.this, "Guardada correctamente", Toast.LENGTH_SHORT).show();
+                                        coti= response.body().cotizacion;
+                                        List<CotizacionArticulo> cotizacionArticuloList= new ArrayList<>();
+                                        List<CotizacionPaquete> cotizacionPaqueteList= new ArrayList<>();
+                                        String Articulos = "";
+                                        int contador = 0;
+                                        Articulos chequear = null;
+                                        Paquetes chequeo = null;
 
-                                for (ArticulosFinales art: articulosFinales)
-                                {
-                                    for (Articulos ar: articulosList)
-                                    {
-                                        if(ar.getId() == art.id)
+                                        for (ArticulosFinales art: articulosFinales)
                                         {
-                                            chequear = articulosList.get(contador);
-                                            CotizacionArticulo cotiart= new CotizacionArticulo(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
-                                            cotizacionArticuloList.add(cotiart);
-                                            Articulos+="Articulo: "+art.id + " " + chequear.getNombre() + " " + art.Cantidad + "\n";
+                                            for (Articulos ar: articulosList)
+                                            {
+                                                if(ar.getId() == art.id)
+                                                {
+                                                    chequear = articulosList.get(contador);
+                                                    CotizacionArticulo cotiart= new CotizacionArticulo(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
+                                                    cotizacionArticuloList.add(cotiart);
+                                                    Articulos+="Articulo: "+art.id + " " + chequear.getNombre() + " " + art.Cantidad + "\n";
+                                                }
+                                                contador++;
+                                            }
+                                            contador = 0;
+
                                         }
-                                        contador++;
+                                        for (ArticulosFinales art: paquetesFinales)
+                                        {
+                                            for (Paquetes ar: paquetesList)
+                                            {
+                                                if(ar.getId() == art.id)
+                                                {
+                                                    chequeo = paquetesList.get(contador);
+                                                    CotizacionPaquete cotipaq= new CotizacionPaquete(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
+                                                    cotizacionPaqueteList.add(cotipaq);
+                                                    Articulos+= "Paquete: "+art.id + " " + chequeo.getNombre() + " " + art.Cantidad + "\n";
+                                                }
+                                                contador++;
+                                            }
+                                            contador = 0;
+                                        }
+                                        Call<ResponseBody> callArt= nixService.articulosCotización(cotizacionArticuloList);
+                                        callArt.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.isSuccessful()){
+                                                    Toast.makeText(CotizacionServicio.this, "Articulos añadidoa", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else{
+                                                    Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                            }
+                                        });
+                                        Call<ResponseBody> callPaq = nixService.paquetesCotizacion(cotizacionPaqueteList);
+                                        callPaq.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.isSuccessful()){
+                                                    Toast.makeText(CotizacionServicio.this, "Paqutes añadidos", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else{
+                                                    Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CotizacionServicio.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        Toast.makeText(getApplicationContext(), Articulos, Toast.LENGTH_LONG).show();
                                     }
-                                    contador = 0;
+                                    else{
+                                        Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
+                                        Log.i("error", response.errorBody().toString());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<CotizacionResult> call, Throwable t) {
 
                                 }
-                                for (ArticulosFinales art: paquetesFinales)
-                                {
-                                    for (Paquetes ar: paquetesList)
-                                    {
-                                        if(ar.getId() == art.id)
-                                        {
-                                            chequeo = paquetesList.get(contador);
-                                            CotizacionPaquete cotipaq= new CotizacionPaquete(Integer.toString(art.Cantidad), Integer.parseInt(coti.getId()), art.id);
-                                            cotizacionPaqueteList.add(cotipaq);
-                                            Articulos+= "Paquete: "+art.id + " " + chequeo.getNombre() + " " + art.Cantidad + "\n";
-                                        }
-                                        contador++;
-                                    }
-                                    contador = 0;
-                                }
-                                Call<ResponseBody> callArt= nixService.articulosCotización(cotizacionArticuloList);
-                                callArt.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if (response.isSuccessful()){
-                                            Toast.makeText(CotizacionServicio.this, "Articulos añadidoa", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
-                                            Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                                    }
-                                });
-                                Call<ResponseBody> callPaq = nixService.paquetesCotizacion(cotizacionPaqueteList);
-                                callPaq.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if (response.isSuccessful()){
-                                            Toast.makeText(CotizacionServicio.this, "Paqutes añadidos", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
-                                            Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(CotizacionServicio.this, "Error en la llamada", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                Toast.makeText(getApplicationContext(), Articulos, Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();
-                                Log.i("error", response.errorBody().toString());
-                            }
+                            });
                         }
-
-                        @Override
-                        public void onFailure(Call<CotizacionResult> call, Throwable t) {
+                    });
+                    informacion.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogo1, int id) {
 
                         }
                     });
+                    informacion.show();
+
                 }
                 else
                 {
@@ -520,32 +535,35 @@ public class CotizacionServicio extends AppCompatActivity {
                     estrellas.setRating(Float.valueOf(catalogoServicios.getCalificacion()));
                     if (catalogoServicios.getLunes()==1){
                         lunes.setChecked(true);
-                        lunes.setEnabled(false);
+
                     }
                     if (catalogoServicios.getMartes()==1){
                         martes.setChecked(true);
-                        martes.setEnabled(false);
+
                     }
                     if (catalogoServicios.getMiercoles()==1){
                         miercoles.setChecked(true);
-                        miercoles.setEnabled(false);
+
                     }
                     if (catalogoServicios.getJueves()==1){
                         jueves.setChecked(true);
-                        jueves.setEnabled(false);
+
                     }
                     if (catalogoServicios.getViernes()==1){
                         viernes.setChecked(true);
-                        viernes.setEnabled(false);
+
                     }
                     if (catalogoServicios.getSabado()==1){
                         sabado.setChecked(true);
-                        sabado.setEnabled(false);
+
                     }
                     if (catalogoServicios.getDomingo()==1){
                         domingo.setChecked(true);
-                        domingo.setEnabled(false);
+
                     }
+                    lunes.setEnabled(false);domingo.setEnabled(false);sabado.setEnabled(false);viernes.setEnabled(false);
+                    jueves.setEnabled(false);miercoles.setEnabled(false);martes.setEnabled(false);
+
                 }
                 else{
                     Toast.makeText(CotizacionServicio.this, "Error en los datos", Toast.LENGTH_SHORT).show();

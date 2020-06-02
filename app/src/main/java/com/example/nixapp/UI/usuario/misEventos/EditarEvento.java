@@ -3,6 +3,7 @@ package com.example.nixapp.UI.usuario.misEventos;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -106,7 +107,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
     boolean correoagregado = false, imagen_lista = false,picadoChecarDireccion=false, igualdadDireccionMunicipio = false;
     int ApiActivada = 0;
     Uri imagen_enviar;
-    ImageView InvitacionSeleccionada;
+    List<Uri> lista = new ArrayList<>();
+    ImageView InvitacionSeleccionada,InvitacionSeleccionada2;
     ShareButton shareButton;
     RadioButton r1,r2;
     Spinner spinner,spinners;
@@ -352,6 +354,8 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         buscar_imagen = (Button) findViewById(R.id.buttonBuscarInvitacion);
         InvitacionSeleccionada = findViewById(R.id.verInvitacion);
         InvitacionSeleccionada.setVisibility(View.GONE);
+        InvitacionSeleccionada2 = findViewById(R.id.verInvitacion2);
+        InvitacionSeleccionada2.setVisibility(View.GONE);
         buscar_imagen.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -415,17 +419,22 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(getApplicationContext(),"No tienes tu cuenta vinculada para compartir con facebook, ntp puedes compartirla despues" ,Toast.LENGTH_LONG).show();
 
                 }
-                else if(imagen_enviar == null)
+                else if(imagen_lista == false)
                 {
                     Toast.makeText(getApplicationContext(),"No has elegido la invitacion para compartir" ,Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    SharePhoto photo = new SharePhoto.Builder()
-                            .setImageUrl(Uri.parse(imagen_enviar.toString()))
-                            .build();
+                    List<SharePhoto> fotos = new ArrayList<>();
+                    for (Uri uri: lista) {
+                        SharePhoto photo = new SharePhoto.Builder()
+                                .setImageUrl(uri)
+                                .build();
+                        fotos.add(photo);
+                    }
+
                     SharePhotoContent contents = new SharePhotoContent.Builder()
-                            .addPhoto(photo)
+                            .addPhotos(fotos)
                             .build();
                     shareButton.setShareContent(contents);
                 }
@@ -437,13 +446,13 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         whats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imagen_enviar == null)
+                if(imagen_lista == false)
                 {
                     Toast.makeText(getApplicationContext(),"No has elegido la invitacion para compartir" ,Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    enviarEmail();
+                    enviarWhats();
                 }
 
             }
@@ -583,9 +592,30 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(title);
     }
+
+    private void enviarWhats(){
+        Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        //Aqui definimos la tipologia de datos del contenido dle Email en este caso text/html
+        emailIntent.setType("text/html");
+        emailIntent.setPackage("com.whatsapp");
+        ArrayList<Uri> imageUriArray = new ArrayList<>();
+
+        for (Uri uris: lista)
+        {
+            imageUriArray.add(uris);
+        }
+        emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUriArray);
+        try {
+            //Enviamos el Correo iniciando una nueva Activity con el emailIntent.
+            startActivity(Intent.createChooser(emailIntent, "Enviar Mensaje..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "No tienes instalado Whatsapp.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void enviarEmail(){
         //Instanciamos un Intent del tipo ACTION_SEND
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         //Aqui definimos la tipologia de datos del contenido dle Email en este caso text/html
         emailIntent.setType("text/html");
         // Indicamos con un Array de tipo String las direcciones de correo a las cuales enviar
@@ -593,18 +623,24 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         String[] correos = direcciones.split("\n");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, correos);
         // Aqui definimos un titulo para el Email
-        emailIntent.putExtra(Intent.EXTRA_TITLE, "Invitacion del evento: " + nombreEvento.getText());
+        emailIntent.putExtra(android.content.Intent.EXTRA_TITLE, "Invitacion del evento: " + nombreEvento.getText());
         // Aqui definimos un Asunto para el Email
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Invitacion al evento: '"+nombreEvento.getText()+"' Te esperamos...");
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Invitacion al evento: '"+nombreEvento.getText()+"' Te esperamos...");
         // Aqui obtenemos la referencia al texto y lo pasamos al Email Intent
-        emailIntent.putExtra(Intent.EXTRA_TEXT, descripcionEventoEmail.getText());
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, descripcionEventoEmail.getText());
         //Agregar una imagen
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imagen_enviar.toString()));
+        ArrayList<Uri> imageUriArray = new ArrayList<>();
+
+        for (Uri uris: lista)
+        {
+            imageUriArray.add(uris);
+        }
+        emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUriArray);
         try {
             //Enviamos el Correo iniciando una nueva Activity con el emailIntent.
             startActivity(Intent.createChooser(emailIntent, "Enviar Correo..."));
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "No hay ningun cliente de correo instalado.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No tienes instalado ninguna aplicaciones de correos electronicos.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -616,6 +652,7 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(
                 Intent.createChooser(intent, "Seleccione una imagen"),
                 1);
@@ -877,36 +914,38 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
             fecha = eventos.getFecha();
         }
-
-        int cover;
-        int numCupo = 0;
-        String descripcion = descripcionEvento.getText().toString();
-        if (nombre.isEmpty()) {
-            nombre = eventos.getNombre_evento();
+        int cover = 0;
+        if(!precio.isEmpty())
+        {
+            cover=Integer.parseInt(precio);
         }
-        if (lugar.isEmpty()) {
-            lugar = eventos.getLugar();
+        else
+        {
+            cover=0;
         }
-        if (cupo.isEmpty()) {
-            numCupo = eventos.getCupo();
-        } else {
-            numCupo = Integer.parseInt(cupo);
+        int numCupo=0;
+        String descripcion=descripcionEvento.getText().toString();
+        numCupo= Integer.parseInt(cupo);
+        if (nombre.isEmpty()){
+            nombreEvento.setError("Ingrese Nombre para el evento");
         }
-        if (precio.isEmpty()) {
-            cover = eventos.getCover();
-        } else {
-            cover = Integer.parseInt(precio);
+        else if (lugar.isEmpty()){
+            lugarEvento.setError("Ingrese lugar");
         }
-        if (descripcion.isEmpty()) {
-            descripcion = eventos.getDescripcion();
+        else if (cupo.isEmpty()){
+            cupoEvento.setError("Ingrese cupo");
         }
-        if (categoria_evento == 0) {
-            categoria_evento = eventos.getCategoria_evento();
+        else if (descripcion.isEmpty()){
+            descripcionEvento.setError("Ingrese descripción");
         }
-        if (spinner.getSelectedItem().toString().equals("Elige un municipio:")) {
-            municipio = eventos.getMunicipio();
+        else if (categoria_evento==0){
+            Toast.makeText(EditarEvento.this, "Elija una categoria", Toast.LENGTH_SHORT).show();
         }
-        if (igualdadDireccionMunicipio != true || picadoChecarDireccion != true) {
+        else if(spinner.getSelectedItem().toString().equals("Elige un municipio"))
+        {
+            Toast.makeText(EditarEvento.this, "Elige un municipio", Toast.LENGTH_SHORT).show();
+        }
+        else if (igualdadDireccionMunicipio != true || picadoChecarDireccion != true) {
             Toast.makeText(this, "Falta verificar la dirección", Toast.LENGTH_SHORT).show();
         }
         else{
@@ -1083,12 +1122,61 @@ public class EditarEvento extends AppCompatActivity implements View.OnClickListe
         else if(ApiActivada == 4)
         {
             super.onActivityResult(requestCode, resultCode, data);
-            final Uri imageUri = data.getData();
+            if (requestCode == 1 && resultCode == RESULT_OK && data != null ) {
 
-            imagen_enviar = imageUri;
-            imagen_lista = true;
-            Glide.with(this).load(imagen_enviar).into(InvitacionSeleccionada);
-            InvitacionSeleccionada.setVisibility(View.VISIBLE);
+                ClipData clipData = data.getClipData();
+                if(clipData != null)
+                {
+                    lista.clear();
+                    imagen_lista = true;
+                    for(int i = 0;i<clipData.getItemCount();i++)
+                    {
+                        Uri imagen = clipData.getItemAt(i).getUri();
+                        try {
+                            final InputStream imageStream = getContentResolver().openInputStream(imagen);
+                            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                            imagen_lista = true;
+                            if(i == 0 && clipData.getItemCount()>0)
+                            {
+                                lista.add(imagen);
+                                Glide.with(this).load(imagen).into(InvitacionSeleccionada);
+                                InvitacionSeleccionada.setVisibility(View.VISIBLE);
+                            }
+                            else if(i == 1 && clipData.getItemCount()>1)
+                            {
+                                lista.add(imagen);
+                                Glide.with(this).load(imagen).into(InvitacionSeleccionada2);
+                                InvitacionSeleccionada2.setVisibility(View.VISIBLE);
+                            }
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+                else
+                {
+                    lista.clear();
+                    InvitacionSeleccionada2.setVisibility(View.GONE);
+                    try {
+                        final Uri imageUri = data.getData();
+                        lista.add(imageUri);
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        imagen_enviar = imageUri;
+                        imagen_lista = true;
+                        Glide.with(this).load(imageUri).into(InvitacionSeleccionada);
+                        InvitacionSeleccionada.setVisibility(View.VISIBLE);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
             ApiActivada = 0;
         }
         else

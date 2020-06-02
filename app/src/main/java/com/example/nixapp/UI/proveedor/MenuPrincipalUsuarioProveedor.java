@@ -56,6 +56,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.internal.SignInButtonImpl;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -618,72 +619,107 @@ public class MenuPrincipalUsuarioProveedor extends AppCompatActivity implements 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_INTENT && resultCode == -1) {
-            mProgressDialog.setTitle("Subiendo...");
-            mProgressDialog.setMessage("Subiendo foto a firebase");
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-            Uri uri = data.getData();
-            final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
-            final UploadTask uploadTask = filePath.putFile(uri);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    String message = e.toString();
-                    Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw task.getException();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(ApiActivada == 0){ // Facebook API
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == GALLERY_INTENT && resultCode == -1) {
+                mProgressDialog.setTitle("Subiendo...");
+                mProgressDialog.setMessage("Subiendo foto a firebase");
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+                Uri uri = data.getData();
+                final StorageReference filePath = mStorage.child(uri.getLastPathSegment());
+                final UploadTask uploadTask = filePath.putFile(uri);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String message = e.toString();
+                        Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Subida Exitosa", Toast.LENGTH_SHORT).show();
+                        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                    throw task.getException();
+                                }
+                                downloadUrl = filePath.getDownloadUrl().toString();
+                                return filePath.getDownloadUrl();
                             }
-                            downloadUrl = filePath.getDownloadUrl().toString();
-                            return filePath.getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            downloadUrl = task.getResult().toString();
-                            mProgressDialog.dismiss();
-                            Glide.with(fotoPerfil)
-                                    .load(downloadUrl)
-                                    .into(fotoPerfil);
-                            final Usuario requestSample = new Usuario(downloadUrl);
-                            Call<ResponseBody> call = nixService.foto(requestSample);
-                            call.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (response.isSuccessful()) {
-                                        Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Cambio de foto correcto",
-                                                Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Error en los datos",
-                                                Toast.LENGTH_SHORT).show();
+                        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                downloadUrl = task.getResult().toString();
+                                mProgressDialog.dismiss();
+                                Glide.with(fotoPerfil)
+                                        .load(downloadUrl)
+                                        .into(fotoPerfil);
+                                final Usuario requestSample = new Usuario(downloadUrl);
+                                Call<ResponseBody> call = nixService.foto(requestSample);
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Cambio de foto correcto",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(MenuPrincipalUsuarioProveedor.this, "Error en los datos",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                                }
-                            });
+                                    }
+                                });
 
-                        }
-                    });
+                            }
+                        });
 
 
-                }
-            });
+                    }
+                });
+            }
+
         }
+        else if (ApiActivada == 2) // Google API
+        {
+            //Mensaje
+            super.onActivityResult(requestCode, resultCode, data);
 
+            // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+            if (requestCode == RC_SIGN_IN) {
+                // The Task returned from this call is always completed, no need to attach
+                // a listener.
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+                ApiActivada = 0;
+            }
+            ApiActivada = 0;
+        }
     }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            Toast.makeText(MenuPrincipalUsuarioProveedor.this,"Vinculacion exitosa",Toast.LENGTH_LONG).show();
+            VGoo.setBackgroundResource(R.drawable.custombutom);
+
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(MenuPrincipalUsuarioProveedor.this,"Inicio Interrumpido",Toast.LENGTH_LONG).show();
+        }
+    }
+
     private boolean verificarContraseña(String password, String passwordConfirmacion) {
         boolean verificarPassword=false;
         if (password.length()>=8||password.length()>18){

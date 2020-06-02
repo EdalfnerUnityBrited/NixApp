@@ -34,8 +34,8 @@ public class PruebaChatsRecyclerViewAdapter extends RecyclerView.Adapter<PruebaC
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.id_usuario.setText(String.valueOf(holder.mItem.getName()));
-        holder.statusUsuario.setText(String.valueOf(holder.mItem.email));
+        holder.id_usuario.setText(String.valueOf("Proveedor: "+holder.mItem.getName()));
+        holder.statusUsuario.setText(String.valueOf("Email: " +holder.mItem.email));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
