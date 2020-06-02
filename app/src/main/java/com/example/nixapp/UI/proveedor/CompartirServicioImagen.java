@@ -1,10 +1,11 @@
 package com.example.nixapp.UI.proveedor;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,13 +13,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.nixapp.R;
+import com.example.nixapp.UI.usuario.creadorInvitaciones.Utils.BitmapUtils;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 public class CompartirServicioImagen extends AppCompatActivity {
 
@@ -40,8 +50,7 @@ public class CompartirServicioImagen extends AppCompatActivity {
         nombreServicio.setText("Proveeré el servicio: " + nomServicio);
         nombreEvento= findViewById(R.id.evento);
         nombreEvento.setText("Para el evento: " + nomEvento);
-        descripcion= findViewById(R.id.descripcion);
-        descripcion.setVisibility(View.INVISIBLE);
+
         btn = (Button) findViewById(R.id.screenshot);
         btnCompartir= findViewById(R.id.compartir);
         editText= findViewById(R.id.editText);
@@ -51,18 +60,24 @@ public class CompartirServicioImagen extends AppCompatActivity {
             public void onClick(View view) {
                 editText.setBackground(null);
                 editText.setEnabled(false);
-                editText.setVisibility(View.INVISIBLE);
                 btnCompartir.setVisibility(View.GONE);
                 String desc= editText.getText().toString();
-                descripcion.setText(desc);
-                descripcion.setVisibility(View.VISIBLE);
                 btn.setVisibility(View.INVISIBLE);
                 Bitmap b = Screenshot.takescreenshotOfRootView(main);
-                storeScreenshot(b,"Imagen"+nomEvento+nomServicio);
+                guardarEnGaleria(b);
                 btn.setVisibility(View.VISIBLE);
-                editText.setVisibility(View.VISIBLE);
+                btnCompartir.setVisibility(View.VISIBLE);
                 editText.setEnabled(true);
                 contador++;
+            }
+        });
+
+        btnCompartir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), Compartir_Proveedor.class);
+                startActivity(intent);
             }
         });
     }
@@ -90,6 +105,41 @@ public class CompartirServicioImagen extends AppCompatActivity {
             } catch (Exception exc) {
             }
 
+        }
+    }
+    private void guardarEnGaleria(Bitmap bitmap){
+        try {
+            final Bitmap comparticion = bitmap;
+            Dexter.withActivity(this)
+                    .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new MultiplePermissionsListener() {
+                        @Override
+                        public void onPermissionsChecked(MultiplePermissionsReport report) {
+                            if (report.areAllPermissionsGranted()) {
+                                try {
+                                    final String path = BitmapUtils.insertImage(getContentResolver(), comparticion, System.currentTimeMillis() + ".jpg", null,100);
+                                    if (!TextUtils.isEmpty(path)) {
+                                        Toast.makeText(CompartirServicioImagen.this, "Guardado en Galería", Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        Toast.makeText(CompartirServicioImagen.this, "No se puedo guardar en galería", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(CompartirServicioImagen.this, "Permiso denegado de guardado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                    }).check();
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

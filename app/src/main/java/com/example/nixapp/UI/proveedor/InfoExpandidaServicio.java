@@ -207,7 +207,6 @@ public class InfoExpandidaServicio extends AppCompatActivity {
                     i.putExtra("servicio", nombre_servicio.getText().toString());
                     i.putExtra("evento", nombre_evento.getText().toString());
                     startActivity(i);
-                    finish();
                 }
             });
         }//////////////////////////////////ingreso 2 Usuario General netro

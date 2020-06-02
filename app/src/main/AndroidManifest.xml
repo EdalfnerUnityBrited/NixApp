@@ -26,7 +26,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UI.proveedor.CompartirServicioImagen"></activity>
+        <activity android:name=".UI.proveedor.Compartir_Proveedor"></activity>
+        <activity android:name=".UI.proveedor.CompartirServicioImagen" />
         <activity android:name=".UI.proveedor.ayuda.Video_Individual" />
         <activity android:name=".UI.usuario.creadorInvitaciones.GenerarCodigoQR" />
         <activity android:name=".UI.proveedor.InfoExpandidaServicio" />
